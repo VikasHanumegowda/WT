@@ -16,5 +16,47 @@
 }
 .twosq
 {
-    width: 165px;
+    width: 200px;
+}
+.line {
+    display: table-cell;
+    vertical-align: middle;
+}
+.checkmark
+{
+    width:24px;
+    height:64px;
+
+}
+.compcheckmark
+{
+    width:176px;
+    height:64px;
+}
+.button {
+    background-color: #C41139;
+    border: none;
+    color: white;
+    border-radius: 2px;
+    padding: 4px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    cursor: pointer;
+    border-color: #904;
+    box-shadow: inset 0 1px 0 #9D0030;
+}
+.button:hover
+{
+    color: rgba(255,255,255,0.9);
+    background-color: #9D0030;
+    border-color: #9D0040;
+    box-shadow: inset 0 1px 0 #9D0040;
+}
+.button:active
+{
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
