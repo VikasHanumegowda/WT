@@ -3,87 +3,103 @@
 	<head>
 		<link rel="stylesheet" href="styles.css">
 	</head>
-	<body style="font-family: sans-serif; display: flex; margin: 0px" >
-		<div style="width: 900px;display: table-column;">
+	<body style="font-family: 'Helvetica'; display: flex; margin: 0px" >
+		<div style="width: 900px; display:block" >
 			<center>
 				<div class="line">
 					<div id="bloc1" style="width: 250px;">
-						<img align="left" style="vertical-align: top;" src="images/one_logo.png">
+                        <a href="page2.html#one"><img align="left" style="vertical-align: top;margin-bottom: 5px;" src="images/one_logo.png"></a>
 					</div>
 					<div id="bloc2">
-						<p align="right" style="vertical-align: text-top;font-size: large; color: #2296DC;">
-							<b>Prefer to talk to someone?Call us toll-free at<br/>
-							1-800-961-1212 | M-F 8am-5pm</b>
-						</p>
+                        <b>
+                            <p align="right" class="p_in_bloc2">Prefer to talk to someone?Call us toll-free at</p>
+                            <p align="right" class="p_in_bloc2">1-800-961-1212 | M-F 8am-5pm</p>
+                        </b>
 					</div>
-					<div id="bloc3">
-						<button class="button">Apply Now</button>
+					<div id="bloc3" style="padding-left: 15px;">
+                        <form action="page2.html#apply_now">
+                            <input class="button" type="submit" value="Apply Now" />
+                        </form>
+						<!--<button class="button" onclick="">Apply Now</button>-->
 					</div>
 				</div>
 			</center><!--
 			--><div style="background-color: #004370; color:#FFFFFF; width: 900px;">
-				<center ><!--style="padding: 40px 16px;">-->
-					<h1>Need money?<br/>See if we can help.</h1>
-					<h3>Personal and auto loans from $1,500 to $25,000.<sup>*</sup></h3>
-					<div class="line" style="width:630px">
-						<button  class="button" id="getinfo" style=" width: 110px;vertical-align:middle;margin-right: 165px;margin-left: 260px;">Get Info</button>
-						<img style="vertical-align:middle;float: right;height:auto;width:95px;" src="images/bbn_logo.png">
+				<center>
+                    <p style="font-size: 52px;margin-top: 65px;margin-bottom: 40px;"><b>Need money?<br/>See if we can help.</b></p>
+					<p style="font-size: 28px; margin-bottom: 40px;">Personal and auto loans from $1,500 to $25,000.<sup>*</sup></p>
+					<div class="line" style="width:700px;">
+
+                        <form action="page2.html#get_info">
+                            <input class="button" style=" width: 110px;vertical-align:middle;margin-right: 215px;margin-left: 295px;margin-bottom: 55px;" type="submit" value="Get Info" />
+                            <img style="vertical-align:middle;float: right;height:auto;width:80px;" src="images/bbn_logo.png">
+                        </form>
+                        <!--<button  class="button" id="getinfo" style=" width: 110px;vertical-align:middle;margin-right: 215px;margin-left: 295px;margin-bottom: 55px;"></button>-->
+
 					</div>
 				</center>
 			</div><!--
-			--><div>
+			--><div style="width: 900px;">
 				<center>
-					<h2 style="color: #0089D6">Why millions have come to One<br/>for financial solutions for over<br/>100 years</h2>
-					<div>
-						<div id="twosq1" class="twosq line"  style="vertical-align: top;">
-							<div>
+                    <div>
+                        <b><p style="color: #0089D6;font-size: 40px; margin-bottom: 50px;">Why millions have come to One<br/>for financial solutions for over<br/>100 years</p></b>
+                    </div>
+                    <div style="width: 620px;">
+						<div  class="twosq"  style="vertical-align: top;">
+							<div class="intwosq">
 								<img align="left" class="checkmark" src="images/checkmark.png">
 							</div>
-							<div>
-								<p align="left" style="float: left;font-size: 14px; margin: 0;"><b>Money As Soon As<br/>Same Day</b></p>
-								<p align="left" style="float: left;font-size: 10px; margin: 0;">Receive your money as soon<br/>as the same day, if approved<br/>by noon.<sup>*</sup></p>
+							<div class="intwosq">
+								<p id="sub_heading" align="left">Money As Soon As<br/>Same Day</p>
+								<p id="textcontenttop" align="left" >Receive your money as soon<br/>as the same day, if approved<br/>by noon.<sup>*</sup></p>
 							</div>
 						</div>
-						<div id="twosq2" class="twosq line" style="vertical-align: top;">
-							<div>
+						<div  class="twosq" style="vertical-align: top;">
+							<div class="intwosq">
 								<img align="left" class="checkmark" src="images/checkmark.png">
 							</div>
-							<div>
-								<p align="left" style="float: left;font-size: 14px; margin: 0;"><b>Fixed Rate</b></p>
-								<p align="left" style="float: left;font-size: 10px; margin: 0;">Fixed monthly payments, no<br/>pre-payment penalty.</p>
+							<div class="intwosq">
+								<p id="sub_heading" align="left">Fixed Rate</p>
+								<p id="textcontenttop" align="left">Fixed monthly payments, no<br/>pre-payment penalty.</p>
 							</div>
 						</div><br/><br/>
-						<div id="twosq3" class="twosq line"  style="vertical-align: top;">
-							<div>
+						<div  class="twosq"  style="vertical-align: top;">
+							<div class="intwosq">
 								<img align="left" class="checkmark" src="images/checkmark.png">
 							</div>
-							<div>
-								<p align="left" style="float: left;font-size: 14px; margin: 0;"><b>Large Branch Network</b></p>
-								<p align="left" style="float: left;font-size: 10px; margin: 0;">Receive personalized service<br/>from more than 6,000<br/>associates in more than<br/>1,700 locations.</p>
+							<div class="intwosq">
+								<p id="sub_heading" align="left">Large Branch Network</p>
+								<p id="textcontentbottom" align="left">Receive personalized service<br/>from more than 6,000<br/>associates in more than<br/>1,700 locations.</p>
 							</div>
 						</div>
-						<div id="twosq4" class="twosq line" style="vertical-align: top;">
-							<div>
+						<div  class="twosq" style="vertical-align: top;">
+							<div class="intwosq">
 								<img align="left" class="checkmark" src="images/checkmark.png">
 							</div>
-							<div>
-								<p align="left" style="float: left;font-size: 14px; margin: 0;"><b>Quick Application<br/>With No Fees</b></p>
-								<p align="left" style="float: left;font-size: 10px; margin: 0;">Apply in minutes. There are<br/>no fees to apply.</p>
+							<div class="intwosq">
+								<p  id="sub_heading" align="left" class="twosqph">Quick Application<br/>With No Fees</p>
+								<p id="textcontentbottom" align="left" >Apply in minutes. There are<br/>no fees to apply.</p>
 							</div>
 						</div>
 
 					</div>
 				</center>
-			</div><!--
-			--><div style="background-color: #0073B4;">
-				<br/>
-			</div><!--
-			--><div style="background-color: #004370;">
+			</div>
 
-					<p style="color :#0073B4;"><a style="color: #FFFFFF" href="">Legal & Privacy</a> &#x25CF; <a style="color: #FFFFFF" href="">Disclosures</a></p>
-					<hr style="color: #0073B4"/>
-					<p style="color: #FFFFFF;">Copyright &copy; 1996-2017, All rights reserved.</p>
+			<div style="background-color: #0073B4;width: 900px; height: 10px;">
+			</div>
 
+			<div style="background-color: #004370;width: 900px;">
+                <center style="margin: 0px;">
+                    <div style="width: 700px;">
+                        <p style="color :#0073B4;text-align: left;font-size: small;margin-top: 20px;">
+                            <a style="color: #FFFFFF;" href="page2.html#legal_&_privacy">Legal & Privacy </a>  &nbsp; &#x25CF; &nbsp;
+                            <a style="color: #FFFFFF" href="page2.html#disclosures"> Disclosures</a>
+                        </p>
+                        <hr style="color: #0073B4"/>
+                        <p style="color: #FFFFFF;text-align: left;font-size: x-small;margin-bottom: 10px;">Copyright &copy; 1996-2017, All rights reserved.</p>
+                    </div>
+                </center>
 			</div>
 		</div>
 	</body>
