@@ -20,7 +20,7 @@
 
 .checkmark
 {
-    height:31px;
+    height:35px;
     width: auto;
 }
 
@@ -34,7 +34,6 @@
 
     background-color: #C41139;
     color: white;
-
     border-radius: 4px;
     padding: 4px 16px;
     text-align: center;
@@ -87,10 +86,13 @@ a, u {
 }
 #textcontentbottom
 {
-    margin-bottom: 90px;
+    margin-bottom: 54px;
+
 }
 
 #textcontentbottom, #textcontenttop
 {
     font-size: 16px;
+    line-height: 20px;
+    color: #585650;
 }
