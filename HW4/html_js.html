@@ -1,0 +1,173 @@
+<html>
+	<head>
+		<title>
+			CSCI571
+		</title>
+	<meta charset="UTF-8"> 
+    <script type="text/javascript"> 
+        function viewXML(what)
+        {
+            var URL = what.URL.value;
+            function loadXML(url)
+            {
+                if(window.XMLHttpRequest)
+                    {
+                        //code for IE7+, Firefox, Chrome, Opera, Safari
+                        xmlhttp=new XMLHttpRequest();                   
+                    }
+                else
+                {
+                    //code for IE6, IE5
+                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xmlhttp.open("GET",url,false);
+                xmlhttp.send();
+                xmlDoc=xmlhttp.responseXML;
+                return xmlDoc;
+            }
+            xmlDoc=loadXML(URL);
+            if(window.ActiveXObject)//if IE, simply execute script (due to async prop)
+                {
+                    if(xmlDoc.parseError.errorCode!=0)
+                        {
+                            var myErr=xmlDoc.parseError;
+                            generateError(xmlDoc);
+                            hWin=window.open("","Error","height=300,width=340");
+                            hWin.document.write(html_text);
+                            hWin.document.close();
+                        }
+                    else{
+                        generateHTML(xmlDoc);
+                        hWin=window.open("","Assignment4","height=800,width=600");
+                        hWin.document.write(html_text);
+                        hWin.document.close();
+                    }
+                }
+            else
+                {
+                    //else if FF, execute script once XML object has loaded
+                    if(xmlDoc.onload=generateHTML(xmlDoc)==false)
+                        console.log("false");
+                    else
+                    {hWin=window.open("","Assignment4","height=800,width=600");
+                    hWin.document.write(html_text);
+                    hWin.document.close();}
+                }
+            
+        }
+        
+        function generateHTML(xmlDoc)
+        {
+            ELEMENT_NODE=1;//MS parser doesn't define Node.ELEMENT_NODE
+            root=xmlDoc.DocumentElement;
+            html_text="<html><head><title>Assignment 4</title></head><body>";
+            
+            planes=xmlDoc.getElementsByTagName("Header");
+            console.log(planes);
+            if(planes.length == 0){
+               
+                html_text+="</body></html>";
+                window.alert("Error in XML file");
+                return false;
+                //die("sorry my fault, didn't mean to but now I am in byte nirvana");
+            }
+            else{
+                
+            planeNodeList=planes.item(0).childNodes;
+            headerValues=planes.item(0).textContent;
+            console.log(headerValues);
+            rows=xmlDoc.getElementsByTagName("Row");
+            if(rows.length==0){
+            html_text+="</body></html>";
+                window.alert("Error in XML file");
+                return false;
+            }else{
+                html_text+="<table border='2'>";
+            html_text+="<tbody>";
+            html_text+="<tr>";
+            x=0;
+            y=0;
+            //output the headers
+            for(i=0;i<planeNodeList.length;i++)
+            {
+                if(planeNodeList.item(i).nodeType==ELEMENT_NODE)
+                    {
+                        header=planeNodeList.item(i).textContent; 
+
+                        if(header=="Airline")
+                            header="Airline";
+                        if(header=="IATA")
+                            header="IATA";
+                        if(header=="Hubs")
+                            header="Hubs";
+                        if(header=="Notes") 
+                            header="Notes";
+                        if(header=="Homepage")
+                            header="Homepage";
+                        if(header=="Plane")
+                            header="Plane";
+
+                        html_text+="<th>"+header+"</th>";
+                    }
+            }
+            html_text+="</tr>";
+            // output out the values
+            for(i=0;i<rows.length;i++)//do for all rows
+            {
+                rowNodeList=rows.item(i).childNodes; //get properties of a plane
+                html_text+="<tr>"; //start a new row of the output table
+                x=460
+                for(j=0;j<rowNodeList.length;j++)
+                { 
+                    if(rowNodeList.item(j).nodeType==ELEMENT_NODE){
+                        if(rowNodeList.item(j).nodeName=="Airline")
+                        {
+                            html_text+="<td>"+rowNodeList.item(j).firstChild.nodeValue+"</td>";
+                        }
+                        if(rowNodeList.item(j).nodeName=="IATA")
+                        {
+                            html_text+="<td>"+rowNodeList.item(j).firstChild.nodeValue+"</td>"
+                        }
+                        if(rowNodeList.item(j).nodeName=="Hubs")
+                        {
+                            unordered=rowNodeList.item(j).childNodes;
+                            html_text+="<td><ul>";
+                            for(k=0;k<unordered.length;k++)
+                                if(k%2!=0)
+                                    html_text+="<li>"+unordered.item(k).textContent+"</li>";
+                            html_text+="</ul></td>";
+                        }
+                        if(rowNodeList.item(j).nodeName=="Notes")
+                        {
+                            html_text+="<td>"+rowNodeList.item(j).textContent+"</td>"
+                        }
+                        if(rowNodeList.item(j).nodeName=="HomePage")
+                        {
+                            html_text+="<td><a href='"+rowNodeList.item(j).textContent+"'>"+rowNodeList.item(j).textContent+"</a></td>"
+                        }
+                        if(rowNodeList.item(j).nodeName=="Plane")
+                        {
+                            html_text+="<td><img src='"+rowNodeList.item(j).textContent+"' width='"+x+"' height='"+x/1.6+"'></td>"; 
+                        }
+                    }
+                }
+                html_text+="</tr>";
+            }
+            html_text+="</tbody>";
+            html_text+="</table>";
+            html_text+="</body></html>";
+            }}
+        }
+    </script>
+	</head>
+	<body>
+		<h1>View the Commercial Aircrafts </h1>
+            Enter XML file
+        <form name="myform" method="POST" id="location">
+            <input type="text" name="URL" maxlength="255"  size="100" value="http://127.0.0.1:50596/airlinelist.xml" />
+            <br />
+            <input type="button" name="submit" value="Submit  Query" onClick="viewXML(this.form)" />
+        </form>
+
+	</body>
+</html>
