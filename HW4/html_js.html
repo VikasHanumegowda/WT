@@ -4,11 +4,18 @@
 			CSCI571 HW4
 		</title>
 	<meta charset="UTF-8"> 
-    <script type="text/javascript"> 
+    <script type="text/javascript">
+
+
 
 		function viewXML(what)
         {
             var URL = what.URL.value;
+            if(URL=="")
+            {
+                alert("Please enter a valid URL");
+                return;
+            }
             function loadXML(url)
             {
                 if(window.XMLHttpRequest)
@@ -18,10 +25,31 @@
                     //code for IE6, IE5
                     xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 
+
                 xmlhttp.open("GET",url,false);
-                xmlhttp.send();
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState === 4) {
+                        var response = JSON.parse(xmlhttp.responseText);
+                        if (xmlhttp.status === 404) {
+                            console.log('not found');
+                        }
+                    }
+                }
+
+               try {
+                   xmlhttp.send();
+               }
+               catch (Exception)
+				{
+				    //alert("File Not Found");
+				    return "-1";
+				}
                 var xmlDoc = xmlhttp.responseText;
-                //console.log(xmlDoc);
+                if (xmlhttp.status === 404) {
+                    console.log('not found');
+                    alert("Sorry! File Not Found");
+                }
+//                console.log(xmlDoc);
                 return xmlDoc;
 
             }
@@ -29,6 +57,10 @@
 
 
             var xmlDoc = loadXML(URL);
+            if (xmlDoc == "-1") {
+                alert('the file does not exist');
+                return;
+            }
             if(window.ActiveXObject)//if IE, simply execute script (due to async prop)
                 {
                     if(xmlDoc.parseError.errorCode!=0)
@@ -51,7 +83,8 @@
                     //else if FF, execute script once XML object has loaded
                     if(xmlDoc.onload=generateHTML(xmlDoc)==false){
                         console.log("false");
-
+                        alert("JSON File doesn't have airlines information");
+						return;
 					}
                     else
                     {
@@ -69,54 +102,50 @@
             html_text="<html><head><title>Assignment 4</title></head><body>";
 			header_data = obj.Mainline.Table.Header.Data;
 			row_elements = obj.Mainline.Table.Row;
+			if (row_elements == undefined)
+			    return false;
             html_text+="<table border='2'>";
             html_text+="<tbody>";
             html_text+="<tr>";
 			for (x in header_data)
 			{
-                html_text+="<th>"+header_data[x]+"</th>";
+                html_text+="<th><b>"+header_data[x]+"</b></th>";
 			}
             html_text+="</tr>";
 			xx=460;
 			for (x in row_elements) {
                 html_text += "<tr>";
-                no_notes = false;
-                if ("Notes" in row_elements[x] == false) {
-                    no_notes = true;
-                }
                 for (y in header_data) {
+                    html_text+="<td>";
                     if (header_data[y] == "Hubs") {
-                        html_text += "<td><ul>";
+                        html_text += "<ul>";
                         for( k in row_elements[x][header_data[y]]){
                             for (i in row_elements[x][header_data[y]][k])
-                            	html_text += "<li>" + row_elements[x][header_data[y]][k][i] + "</li>";
+                                if(i==0)
+								{html_text += "<li><b>" + row_elements[x][header_data[y]][k][i] + "</b></li>";}
+                            	else
+                            	    html_text += "<li>" + row_elements[x][header_data[y]][k][i] + "</li>";
                         }
-                        html_text += "</ul></td>";
+                        html_text += "</ul>";
                     }
-                    else if(header_data[y] == "Notes")
-					{
-                        if(no_notes)
-					    	html_text+="<td></td>";
-					    else
-					        html_text+="<td>"+row_elements[x][header_data[y]]+"</td>";
-					}
                     else if(header_data[y] == "Plane")
 					{
-					    html_text+="<td><img src='"+row_elements[x][header_data[y]]+"' width='"+460+"' height='"+287.5+"'></td>";
+					    html_text+="<img src='"+row_elements[x][header_data[y]]+"' width='"+460+"' height='"+287.5+"'>";
                     }
                     else if(header_data[y] == "HomePage")
                     {
-                        html_text+="<td><center><a href='"+row_elements[x][header_data[y]]+"'>"+row_elements[x][header_data[y]]+"</a></center>";
+                        html_text+="<a href='"+row_elements[x][header_data[y]]+"'>"+row_elements[x][header_data[y]]+"</a>";
                     }
                 else{
-                        html_text+="<td>"+row_elements[x][header_data[y]]+"</td>";
+                        html_text+=""+row_elements[x][header_data[y]]+"";
                     }
+                    html_text+="</td>";
                 }
                 html_text+="</tr>";
             }
             html_text+="</tbody>";
             html_text+="</table>";
-            html_text+="</body></html>";
+            html_text+="<NOSCRIPT></body></html>";
             return true;
 
 
@@ -128,7 +157,7 @@
 			<div style="margin-top: 200px;">
 				<p><b>Enter URL for Airlines List JSON file</b></p>
 				<form name="myform" method="POST" id="location">
-					<input style="margin-bottom: 20px;" type="text" name="URL" maxlength="255"  size="100" value="http://127.0.0.1:50596/airlinelist.json" />
+					<input style="margin-bottom: 20px;" type="text" name="URL" maxlength="255"  size="100" value="airlinelist.json" />
 					<br />
 					<input type="button" name="submit" value="Submit  Query" onClick="viewXML(this.form)" />
 				</form>
