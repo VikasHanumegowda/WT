@@ -13,7 +13,7 @@
             var URL = what.URL.value;
             if(URL=="")
             {
-                alert("Please enter a valid URL");
+                alert("Please enter a valid URL!");
                 return;
             }
             function loadXML(url)
@@ -31,7 +31,7 @@
                     if (xmlhttp.readyState === 4) {
                         var response = JSON.parse(xmlhttp.responseText);
                         if (xmlhttp.status === 404) {
-                            console.log('not found');
+                            console.log('File not found!');
                         }
                     }
                 }
@@ -46,8 +46,8 @@
 				}
                 var xmlDoc = xmlhttp.responseText;
                 if (xmlhttp.status === 404) {
-                    console.log('not found');
-                    alert("Sorry! File Not Found");
+                    console.log('File not found!');
+                    alert("Sorry! File Not Found.");
                 }
 //                console.log(xmlDoc);
                 return xmlDoc;
@@ -58,7 +58,7 @@
 
             var xmlDoc = loadXML(URL);
             if (xmlDoc == "-1") {
-                alert('the file does not exist');
+                alert('File not found!');
                 return;
             }
             if(window.ActiveXObject)//if IE, simply execute script (due to async prop)
