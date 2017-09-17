@@ -54,6 +54,18 @@
           "IATA": "DL",
           "Hubs": {
             "Hub": [
+              "Atlanta",
+              "Amsterdam",
+              "Boston",
+              "Detroit",
+              "Minneapolis/St Paul",
+              "Cincinnati",
+              "New York-JFK",
+              "New York-LaGuardia",
+              "Paris-Charles de Gaulle",
+              "Salt Lake City",
+              "Seattle",
+              "Tokyo-Narita"
             ]
           },
           "Notes": "Founded as Huff Daland Dusters; largest airline in the world based on number of passengers served per year.",
