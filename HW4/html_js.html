@@ -117,7 +117,7 @@
                 html_text += "<tr>";
                 for (y in header_data) {
                     html_text+="<td>";
-                    if (header_data[y] == "Hubs") {
+                    if (header_data[y] == "Hubs" || header_data[y] == "Main Hubs") {
                         html_text += "<ul>";
                         for( k in row_elements[x][header_data[y]]){
                             for (i in row_elements[x][header_data[y]][k])
@@ -128,7 +128,7 @@
                         }
                         html_text += "</ul>";
                     }
-                    else if(header_data[y] == "Plane")
+                    else if(header_data[y] == "Plane" || header_data[y] == "Plane with Logo")
 					{
 					    html_text+="<img src='"+row_elements[x][header_data[y]]+"' width='"+460+"' height='"+287.5+"'>";
                     }
