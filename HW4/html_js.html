@@ -1,33 +1,30 @@
 <html>
-	<head>
-		<title>
-			CSCI571 HW4
-		</title>
-	<meta charset="UTF-8"> 
+<head>
+    <title>
+        CSCI571 HW4
+    </title>
+    <meta charset="UTF-8">
     <script type="text/javascript">
 
 
-
-		function viewXML(what)
-        {
+        function viewXML(what) {
             var URL = what.URL.value;
-            if(URL=="")
-            {
+            if (URL == "") {
                 alert("Please enter a valid URL!");
                 return;
             }
-            function loadXML(url)
-            {
-                if(window.XMLHttpRequest)
-					//code for IE7+, Firefox, Chrome, Opera, Safari
-					xmlhttp=new XMLHttpRequest();
-				else
-                    //code for IE6, IE5
-                    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+
+            function loadXML(url) {
+                if (window.XMLHttpRequest)
+                //code for IE7+, Firefox, Chrome, Opera, Safari
+                    xmlhttp = new XMLHttpRequest();
+                else
+                //code for IE6, IE5
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 
 
-                xmlhttp.open("GET",url,false);
-                xmlhttp.onreadystatechange = function() {
+                xmlhttp.open("GET", url, false);
+                xmlhttp.onreadystatechange = function () {
                     if (xmlhttp.readyState === 4) {
                         var response = JSON.parse(xmlhttp.responseText);
                         if (xmlhttp.status === 404) {
@@ -36,14 +33,13 @@
                     }
                 }
 
-               try {
-                   xmlhttp.send();
-               }
-               catch (Exception)
-				{
-				    //alert("File Not Found");
-				    return "-1";
-				}
+                try {
+                    xmlhttp.send();
+                }
+                catch (Exception) {
+                    //alert("File Not Found");
+                    return "-1";
+                }
                 var xmlDoc = xmlhttp.responseText;
                 if (xmlhttp.status === 404) {
                     console.log('File not found!');
@@ -55,114 +51,110 @@
             }
 
 
-
             var xmlDoc = loadXML(URL);
             if (xmlDoc == "-1") {
                 alert('File not found!');
                 return;
             }
-            if(window.ActiveXObject)//if IE, simply execute script (due to async prop)
-                {
-                    if(xmlDoc.parseError.errorCode!=0)
-                        {
-                            var myErr=xmlDoc.parseError;
-                            generateError(xmlDoc);
-                            hWin=window.open("","Error","height=300,width=340");
-                            hWin.document.write(html_text);
-                            hWin.document.close();
-                        }
-                    else{
-                        generateHTML(xmlDoc);
-                        hWin=window.open("","Assignment4","height=800,width=600");
-                        hWin.document.write(html_text);
-                        hWin.document.close();
-                    }
+            if (window.ActiveXObject)//if IE, simply execute script (due to async prop)
+            {
+                if (xmlDoc.parseError.errorCode != 0) {
+                    var myErr = xmlDoc.parseError;
+                    generateError(xmlDoc);
+                    hWin = window.open("", "Error", "height=300,width=340");
+                    hWin.document.write(html_text);
+                    hWin.document.close();
                 }
-            else
-                {
-                    //else if FF, execute script once XML object has loaded
-                    if(xmlDoc.onload=generateHTML(xmlDoc)==false){
-                        console.log("false");
-                        alert("JSON File doesn't have airlines information");
-						return;
-					}
-                    else
-                    {
-                        hWin=window.open("","Assignment4","height=800,width=600");
-                    	hWin.document.write(html_text);
-                    	hWin.document.close();
-                    }
+                else {
+                    generateHTML(xmlDoc);
+                    hWin = window.open("", "Assignment4", "height=800,width=600");
+                    hWin.document.write(html_text);
+                    hWin.document.close();
                 }
-            
+            }
+            else {
+                //else if FF, execute script once XML object has loaded
+                if (xmlDoc.onload = generateHTML(xmlDoc) == false) {
+                    console.log("false");
+                    alert("JSON File doesn't have airlines information");
+                    return;
+                }
+                else {
+                    hWin = window.open("", "Assignment4", "height=768,width=1200");
+                    hWin.document.write(html_text);
+                    hWin.document.close();
+                }
+            }
+
         }
-        
-        function generateHTML(xmlDoc)
-        {
+
+        function generateHTML(xmlDoc) {
             obj = JSON.parse(xmlDoc);
-            html_text="<html><head><title>Assignment 4</title></head><body>";
-			header_data = obj.Mainline.Table.Header.Data;
-			row_elements = obj.Mainline.Table.Row;
-			if (row_elements == undefined)
-			    return false;
-            html_text+="<table border='2'>";
-            html_text+="<tbody>";
-            html_text+="<tr>";
-			for (x in header_data)
-			{
-                html_text+="<th><b>"+header_data[x]+"</b></th>";
-			}
-            html_text+="</tr>";
-			xx=460;
-			for (x in row_elements) {
+            html_text = "<html><head><title>Assignment 4</title></head><body>";
+            header_data = obj.Mainline.Table.Header.Data;
+            row_elements = obj.Mainline.Table.Row;
+            if (row_elements == undefined)
+                return false;
+            html_text += "<table border='2'>";
+            html_text += "<tbody>";
+            html_text += "<tr>";
+            for (x in header_data) {
+                html_text += "<th><b>" + header_data[x] + "</b></th>";
+            }
+            html_text += "</tr>";
+            xx = 460;
+            for (x in row_elements) {
                 html_text += "<tr>";
                 for (y in header_data) {
-                    html_text+="<td>";
-                    if (header_data[y] == "Hubs" || header_data[y] == "Main Hubs") {
+                    html_text += "<td>";
+                    if (y == 2) {//header_data[y] == "Hubs" || header_data[y] == "Main Hubs") {
                         html_text += "<ul>";
-                        for( k in row_elements[x][header_data[y]]){
+                        for (k in row_elements[x][header_data[y]]) {
                             for (i in row_elements[x][header_data[y]][k])
-                                if(i==0)
-								{html_text += "<li><b>" + row_elements[x][header_data[y]][k][i] + "</b></li>";}
-                            	else
-                            	    html_text += "<li>" + row_elements[x][header_data[y]][k][i] + "</li>";
+                                if (i == 0) {
+                                    html_text += "<li><b>" + row_elements[x][header_data[y]][k][i] + "</b></li>";
+                                }
+                                else
+                                    html_text += "<li>" + row_elements[x][header_data[y]][k][i] + "</li>";
                         }
                         html_text += "</ul>";
                     }
-                    else if(header_data[y] == "Plane" || header_data[y] == "Plane with Logo")
-					{
-					    html_text+="<img src='"+row_elements[x][header_data[y]]+"' width='"+460+"' height='"+287.5+"'>";
-                    }
-                    else if(header_data[y] == "HomePage")
+                    else if (y == 5)//header_data[y] == "Plane" || header_data[y] == "Plane with Logo")
                     {
-                        html_text+="<a href='"+row_elements[x][header_data[y]]+"'>"+row_elements[x][header_data[y]]+"</a>";
+                        html_text += "<img src='" + row_elements[x][header_data[y]] + "' width='" + 460 + "' height='" + 287.5 + "'>";
                     }
-                else{
-                        html_text+=""+row_elements[x][header_data[y]]+"";
+                    else if (y == 4)//header_data[y] == "HomePage")
+                    {
+                        html_text += "<a href='" + row_elements[x][header_data[y]] + "'>" + row_elements[x][header_data[y]] + "</a>";
                     }
-                    html_text+="</td>";
+                    else {
+                        html_text += "" + row_elements[x][header_data[y]] + "";
+                    }
+                    html_text += "</td>";
                 }
-                html_text+="</tr>";
+                html_text += "</tr>";
             }
-            html_text+="</tbody>";
-            html_text+="</table>";
-            html_text+="<NOSCRIPT></body></html>";
+            html_text += "</tbody>";
+            html_text += "</table>";
+            html_text += "<NOSCRIPT></body></html>";
             return true;
 
 
         }
     </script>
-	</head>
-	<body>
-		<center>
-			<div style="margin-top: 200px;">
-				<p><b>Enter URL for Airlines List JSON file</b></p>
-				<form name="myform" method="POST" id="location">
-					<input style="margin-bottom: 20px;" type="text" name="URL" maxlength="255"  size="100" value="airlinelist.json" />
-					<br />
-					<input type="button" name="submit" value="Submit  Query" onClick="viewXML(this.form)" />
-				</form>
-			</div>
-		</center>
-	<NOSCRIPT/>
-	</body>
+</head>
+<body>
+<center>
+    <div style="margin-top: 200px;">
+        <p><b>Enter URL for Airlines List JSON file</b></p>
+        <form name="myform" method="POST" id="location">
+            <input style="margin-bottom: 20px;" type="text" name="URL" maxlength="255" size="100"
+                   value="airlinelist.json"/>
+            <br/>
+            <input type="button" name="submit" value="Submit  Query" onClick="viewXML(this.form)"/>
+        </form>
+    </div>
+</center>
+<NOSCRIPT/>
+</body>
 </html>
