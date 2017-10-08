@@ -17,31 +17,31 @@
             function loadXML(url) {
                 if (window.XMLHttpRequest)
                 //code for IE7+, Firefox, Chrome, Opera, Safari
-                    xmlhttp = new XMLHttpRequest();
+                    xhttp = new XMLHttpRequest();
                 else
                 //code for IE6, IE5
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 
 
-                xmlhttp.open("GET", url, false);
-                xmlhttp.onreadystatechange = function () {
-                    if (xmlhttp.readyState === 4) {
-                        var response = JSON.parse(xmlhttp.responseText);
-                        if (xmlhttp.status === 404) {
+                xhttp.open("GET", url, false);
+                xhttp.onreadystatechange = function () {
+                    if (xhttp.readyState === 4) {
+                        var response = JSON.parse(xhttp.responseText);
+                        if (xhttp.status === 404) {
                             console.log('File not found!');
                         }
                     }
                 }
 
                 try {
-                    xmlhttp.send();
+                    xhttp.send();
                 }
                 catch (Exception) {
                     //alert("File Not Found");
                     return "-1";
                 }
-                var xmlDoc = xmlhttp.responseText;
-                if (xmlhttp.status === 404) {
+                var xmlDoc = xhttp.responseText;
+                if (xhttp.status === 404) {
                     console.log('File not found!');
                     alert("Sorry! File Not Found.");
                 }
