@@ -8,16 +8,15 @@
                 border-collapse: collapse;
                 padding: 0;
                 text-align: center;
-                margin: 0px;
+                margin: 0;
                 border-width: 1px;
                 border-style: solid;
                 border-color: #888;
                 width: 100%;
             }
             th{
-                height: 100%;
                 background: #D0D0D0;
-                max-width: 50%px;
+                width: 50%;
                 border: solid;
                 border-color: #808080;
                 border-width: 1px;
@@ -28,8 +27,16 @@
                 min-width:650px;
             }
             td {
+                background: #F0F0F0;
+                width: 50%;
+                border: solid;
+                border-color: #808080;
+                border-width: 1px;
                 padding: 0;
-                width:50%;
+            }
+            span img{
+                height: 19px;
+                width: auto;
             }
         </style>
     </head>
@@ -68,11 +75,23 @@
                     echo "<script type='text/javascript'>alert('Please enter a symbol');</script>";
                 }
                 else: {
+                    date_default_timezone_set("America/Los_Angeles");
                     $symbol = test_input($_POST["STS"]);
                     $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&apikey=OGY0S9LG8J8ADNZW";
                     $response = file_get_contents($url);
                     $response = json_decode($response,true);
                     $date = $response["Meta Data"]["3. Last Refreshed"];
+                    $format = '%.2f';
+                    $close = $response["Time Series (Daily)"][$date]["4. close"];
+                    $open = $response["Time Series (Daily)"][$date]["1. open"];
+                    $prev_date = date('Y-m-d', strtotime($date .' -1 day'));
+                    $prev_close = $response["Time Series (Daily)"][$prev_date]["4. close"];
+                    $change = sprintf($format,abs(floatval($close)-floatval($prev_close)));
+                    $change_percent = sprintf($format,100.0*$change/floatval($prev_close));
+                    $pos_change = false;
+                    if(floatval($prev_close)<=floatval($close)):
+                        $pos_change=true;
+                    endif;
                     if (key_exists("Error Message",$response) and startsWith($response["Error Message"],"Invalid")===true):
                     {
                         echo "<table>";
@@ -80,18 +99,23 @@
                         echo "</table>";
                     }
                     else:
-                    {   #$response["Time Series (Daily)"]["2017-10-06"]["1. open"]
+                    {
                         echo "<table>";
                         echo "<tr><th>Stock Ticker Symbol</th><td>".$symbol."</td></tr>";
-                        echo "<tr><th>Close</th><td>".$response["Time Series (Daily)"][$date]["4. close"]."</td></tr>";
-                        echo "<tr><th>Open</th><td>".$response["Time Series (Daily)"][$date]["1. open"]."</td></tr>";
-//                        #echo "<tr><th>Previous Close</th><td>". ."</td></tr>";
-//                        echo "<tr><th>Change</th><td>". ."</td></tr>";
-//                        echo "<tr><th>Change Precent</th><td>". ."</td></tr>";
-//                        echo "<tr><th>Day's Range</th><td>". ."</td></tr>";
-                        echo "<tr><th>Volume</th><td>".$response["Time Series (Daily)"][$date]["5. volume"]."</td></tr>";
+                        echo "<tr><th>Close</th><td>".$close."</td></tr>";
+                        echo "<tr><th>Open</th><td>".$open."</td></tr>";
+                        echo "<tr><th>Previous Close</th><td>".$prev_close."</td></tr>";
+                        if($pos_change):
+                            echo "<tr><th>Change</th><td>".$change."<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png\"/></span></td></tr><tr><th>Change Percent</th><td>".$change_percent."%<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png\"/></span></td></tr>";
+                        else:
+                            echo "<tr><th>Change</th><td>".$change."<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr><tr><th>Change Percent</th><td>".$change_percent."<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr>";
+                        endif;
+                        $format="%.4f-%.4f";
+                        echo "<tr><th>Day's Range</th><td>".sprintf($format,$response["Time Series (Daily)"][$date]["3. low"],$response["Time Series (Daily)"][$date]["4. close"])."</td></tr>";
+                        echo "<tr><th>Volume</th><td>".number_format(floatval($response["Time Series (Daily)"][$date]["5. volume"]),0,".",",")."</td></tr>";
                         echo "<tr><th>Timestamp</th><td>".$date."</td></tr>";
 //                        echo "<tr><th>Indicators</th><td>". ."</td></tr>";
+//                        Price (the default), SMA, EMA, STOCH, RSI, ADX, CCI, BBANDS and MACD
                         echo "</table>";
                     }
                     endif;
