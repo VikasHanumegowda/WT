@@ -43,85 +43,619 @@
         <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
         <script type="text/javascript">
-            function bringin_data(url) {
-//                var xhttp = new XMLHttpRequest();
-//                xhttp.onreadystatechange = function() {
-//                    if (this.readyState == 4 && this.status == 200) {
-//                        // Action to be performed when the document is read;
-//                    }
-//                };
-//                xhttp.open("GET",url , false);
-//                xhttp.send();
-//                var xmlDoc = xhttp.responseText;
-//                obj = JSON.parse(xmlDoc);
-                Highcharts.chart('container', {
-                    chart: {
-                        type: 'area'
-                    },
-                    title: {
-                        text: 'US and USSR nuclear stockpiles'
-                    },
-                    subtitle: {
-                        text: 'Source: <a href="http://thebulletin.metapress.com/content/c4120650912x74k7/fulltext.pdf">' +
-                        'thebulletin.metapress.com</a>'
-                    },
-                    xAxis: {
-                        allowDecimals: false,
-                        labels: {
-                            formatter: function () {
-                                return this.value; // clean, unformatted number for year
-                            }
-                        }
-                    },
-                    yAxis: {
-                        title: {
-                            text: 'Nuclear weapon states'
-                        },
-                        labels: {
-                            formatter: function () {
-                                return this.value / 1000 + 'k';
-                            }
-                        }
-                    },
-                    tooltip: {
-                        pointFormat: '{series.name} produced <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
-                    },
-                    plotOptions: {
-                        area: {
-                            pointStart: 1940,
-                            marker: {
-                                enabled: false,
-                                symbol: 'circle',
-                                radius: 2,
-                                states: {
-                                    hover: {
-                                        enabled: true
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    series: [{
-                        name: 'USA',
-                        data: [null, null, null, null, null, 6, 11, 32, 110, 235, 369, 640,
-                            1005, 1436, 2063, 3057, 4618, 6444, 9822, 15468, 20434, 24126,
-                            27387, 29459, 31056, 31982, 32040, 31233, 29224, 27342, 26662,
-                            26956, 27912, 28999, 28965, 27826, 25579, 25722, 24826, 24605,
-                            24304, 23464, 23708, 24099, 24357, 24237, 24401, 24344, 23586,
-                            22380, 21004, 17287, 14747, 13076, 12555, 12144, 11009, 10950,
-                            10871, 10824, 10577, 10527, 10475, 10421, 10358, 10295, 10104]
-                    }, {
-                        name: 'USSR/Russia',
-                        data: [null, null, null, null, null, null, null, null, null, null,
-                            5, 25, 50, 120, 150, 200, 426, 660, 869, 1060, 1605, 2471, 3322,
-                            4238, 5221, 6129, 7089, 8339, 9399, 10538, 11643, 13092, 14478,
-                            15915, 17385, 19055, 21205, 23044, 25393, 27935, 30062, 32049,
-                            33952, 35804, 37431, 39197, 45000, 43000, 41000, 39000, 37000,
-                            35000, 33000, 31000, 29000, 27000, 25000, 24000, 23000, 22000,
-                            21000, 20000, 19000, 18000, 18000, 17000, 16000]
-                    }]
-                });
+            function addMonths(date, months) {
+                var parts =date.split('/');
+                //please put attention to the month (parts[0]), Javascript counts months from 0:
+                // January - 0, February - 1, etc
+                var mydate = new Date(parts[2],parts[0]-1,parts[1]);
+                date.setMonth(mydate.getMonth() + months);
+                return date;
+            }
 
+            function formatDate(date) {
+                var monthNames = [
+                    "January", "February", "March",
+                    "April", "May", "June", "July",
+                    "August", "September", "October",
+                    "November", "December"
+                ];
+
+                var day = date.getDate();
+                var monthIndex = date.getMonth();
+                var year = date.getFullYear();
+
+                return day + ' ' + monthNames[monthIndex] + ' ' + year;
+            }
+
+            function bringin_data(url="",indicator="",symbol) {
+                console.log("URL:"+url);
+                console.log("before indicator"+indicator);
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Action to be performed when the document is read;
+                    }
+                };
+
+                xhttp.open("GET", url, false);
+                xhttp.send();
+                var xmlDoc = xhttp.responseText;
+                obj = JSON.parse(xmlDoc);
+
+
+                console.log("hello"+obj);
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth()+1; //January is 0!
+                var yyyy = today.getFullYear();
+                if(dd<10){
+                    dd='0'+dd;
+                }
+                if(mm<10){
+                    mm='0'+mm;
+                }
+                var todays = dd+'/'+mm+'/'+yyyy;
+                console.log(today);
+                //ray("Price", "SMA", "EMA", "STOCH", "RSI", "ADX", "CCI", "BBANDS", "MACD");
+                if(indicator=='Price')
+                {
+                    options = {
+                        title: {
+                            text: "Stock Price ("+todays+")"
+                        },
+                        subtitle: {
+                            text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            tickInterval: 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value: %m/%d}',
+                                rotation: 45,
+                                align: 'middle'
+                            }
+
+                        },
+                        yAxis: [{
+                            title: {
+                                text: 'Stock Price'
+                            },
+                            gridLineWidth: 0
+                        }, {
+                            title: {
+                                text: 'Volume'
+                            },
+                            opposite: true
+                        }],
+                        legend: {
+                            layout: 'vertical',
+                            backgroundColor: '#FFF',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                    Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;
+                            }
+                        },
+                        plotOptions: {
+                        },
+                        series: [{
+                            color: '#FF0000',
+                            type: 'area',
+                            name: symbol,
+                            pointStart: Date.UTC(2017, 3, 1),
+                            pointInterval: 7 * 24 * 3600 * 1000,
+                            data: []
+                        },
+                            {
+                                color: '#FFFFFF',
+                                type: 'column',
+                                name: symbol+' Volume',
+                                pointStart: Date.UTC(2017, 3, 1),
+                                pointInterval: 7 * 24 * 3600 * 1000,
+                                data: [],
+                                yAxis: 1
+                            }]
+                    };
+                    series = [];
+                    volumes = [];
+                    for(x in obj["Time Series (Daily)"])
+                    {
+                        series.push(parseFloat(obj["Time Series (Daily)"][x]["4. close"]));
+                        volumes.push(parseFloat(obj["Time Series (Daily)"][x]["5. volume"]))
+                    }
+                    options.series[0].data=series;
+                    options.series[1].data=volumes;
+                    Highcharts.chart('container', options);
+                }
+                else if(indicator=="SMA")
+                {
+                    console.log(obj["Meta Data"]["2: Indicator"]);
+                    console.log(obj["Technical Analysis: SMA"]["2017-10-06"]["SMA"]);
+                    console.log(obj["Technical Analysis: SMA"]);
+                    options = {
+                        title: {
+                            text: obj["Meta Data"]["2: Indicator"]
+                        },
+                        subtitle: {
+                            text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            tickInterval: 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value: %m/%d}',
+                                rotation: 45,
+                                align: 'middle'
+                            }
+
+                        },
+                        yAxis: [{
+                            title: {
+                                text: 'SMA'
+                            }
+                        }],
+                        legend: {
+                            layout: 'vertical',
+                            backgroundColor: '#FFF',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                    Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                            }
+                        },
+                        plotOptions: {
+                        },
+                        series: [{
+                            color: '#FF0000',
+                            name: symbol,
+                            pointStart: Date.UTC(2017, 3, 1),
+                            pointInterval: 24 * 36e5,
+                            data: []
+                        }]
+                    };
+                    series = new Array();
+                    for(x in obj["Technical Analysis: SMA"])
+                    {
+                        series.push(parseFloat(obj["Technical Analysis: SMA"][x]["SMA"]));
+                    }
+                    options.series[0].data=series;
+                    Highcharts.chart('container', options);
+                }
+                else if(indicator=="EMA")
+                {
+                    options = {
+                        title: {
+                            text: obj["Meta Data"]["2: Indicator"]
+                        },
+                        subtitle: {
+                            text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            tickInterval: 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value: %m/%d}',
+                                rotation: 45,
+                                align: 'middle'
+                            }
+
+                        },
+                        yAxis: [{
+                            title: {
+                                text: 'EMA'
+                            }
+                        }],
+                        legend: {
+                            layout: 'vertical',
+                            backgroundColor: '#FFF',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                    Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                            }
+                        },
+                        plotOptions: {
+                        },
+                        series: [{
+                            color: '#FF0000',
+                            name: symbol,
+                            pointStart: Date.UTC(2017, 3, 1),
+                            pointInterval: 24 * 36e5,
+                            data: []
+                        }]
+                    };
+                    series = new Array();
+                    for(x in obj["Technical Analysis: EMA"])
+                    {
+                        series.push(parseFloat(obj["Technical Analysis: EMA"][x]["EMA"]));
+                    }
+                    options.series[0].data=series;
+                    Highcharts.chart('container', options);
+                }
+                else if(indicator=="STOCH")
+                {
+                    options = {
+                        title: {
+                            text: obj["Meta Data"]["2: Indicator"]
+                        },
+                        subtitle: {
+                            text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            tickInterval: 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value: %m/%d}',
+                                rotation: 45,
+                                align: 'middle'
+                            }
+
+                        },
+                        yAxis: [{
+                            title: {
+                                text: 'STOCH'
+                            }
+                        }],
+                        legend: {
+                            layout: 'vertical',
+                            backgroundColor: '#FFF',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                    Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                            }
+                        },
+                        plotOptions: {
+                        },
+                        series: [{
+                            color: '#FF0000',
+                            name: symbol+' SlowD',
+                            pointStart: Date.UTC(2017, 3, 1),
+                            pointInterval: 24 * 36e5,
+                            data: []
+                        },
+                            {
+                                color: '#00FF00',
+                                name: symbol+' SlowK',
+                                pointStart: Date.UTC(2017, 3, 1),
+                                pointInterval: 24 * 36e5,
+                                data: []
+                            }]
+                    };
+                    seriesd = new Array();
+                    seriesk = new Array();
+                    for(x in obj["Technical Analysis: STOCH"])
+                    {
+                        seriesd.push(parseFloat(obj["Technical Analysis: STOCH"][x]["SlowD"]));
+                        seriesk.push(parseFloat(obj["Technical Analysis: STOCH"][x]["SlowK"]));
+                    }
+                    options.series[0].data=seriesd;
+                    options.series[1].data=seriesk;
+                    Highcharts.chart('container', options);
+                }
+                else if(indicator=="RSI")
+                {
+                    options = {
+                        title: {
+                            text: obj["Meta Data"]["2: Indicator"]
+                        },
+                        subtitle: {
+                            text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            tickInterval: 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value: %m/%d}',
+                                rotation: 45,
+                                align: 'middle'
+                            }
+
+                        },
+                        yAxis: [{
+                            title: {
+                                text: 'RSI'
+                            }
+                        }],
+                        legend: {
+                            layout: 'vertical',
+                            backgroundColor: '#FFF',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                    Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                            }
+                        },
+                        plotOptions: {
+                        },
+                        series: [{
+                            color: '#FF0000',
+                            name: symbol+' RSI',
+                            pointStart: Date.UTC(2017, 3, 1),
+                            pointInterval: 24 * 36e5,
+                            data: []
+                        }]
+                    };
+                    series = new Array();
+                    for(x in obj["Technical Analysis: RSI"])
+                    {
+                        series.push(parseFloat(obj["Technical Analysis: RSI"][x]["RSI"]));
+                    }
+                    options.series[0].data=series;
+                    Highcharts.chart('container', options);
+                }
+                else if(indicator=="ADX")
+                {
+                    options = {
+                        title: {
+                            text: obj["Meta Data"]["2: Indicator"]
+                        },
+                        subtitle: {
+                            text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            tickInterval: 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value: %m/%d}',
+                                rotation: 45,
+                                align: 'middle'
+                            }
+
+                        },
+                        yAxis: [{
+                            title: {
+                                text: 'ADX'
+                            }
+                        }],
+                        legend: {
+                            layout: 'vertical',
+                            backgroundColor: '#FFF',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                    Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                            }
+                        },
+                        plotOptions: {
+                        },
+                        series: [{
+                            color: '#FF0000',
+                            name: symbol+' ADX',
+                            pointStart: Date.UTC(2017, 3, 1),
+                            pointInterval: 24 * 36e5,
+                            data: []
+                        }]
+                    };
+                    series = new Array();
+                    for(x in obj["Technical Analysis: ADX"])
+                    {
+                        series.push(parseFloat(obj["Technical Analysis: ADX"][x]["ADX"]));
+                    }
+                    options.series[0].data=series;
+                    Highcharts.chart('container', options);
+                }
+                else if(indicator=="CCI")
+                {
+                    options = {
+                        title: {
+                            text: obj["Meta Data"]["2: Indicator"]
+                        },
+                        subtitle: {
+                            text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            tickInterval: 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value: %m/%d}',
+                                rotation: 45,
+                                align: 'middle'
+                            }
+
+                        },
+                        yAxis: [{
+                            title: {
+                                text: 'CCI'
+                            }
+                        }],
+                        legend: {
+                            layout: 'vertical',
+                            backgroundColor: '#FFF',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                    Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                            }
+                        },
+                        plotOptions: {
+                        },
+                        series: [{
+                            color: '#FF0000',
+                            name: symbol+' CCI',
+                            pointStart: Date.UTC(2017, 3, 1),
+                            pointInterval: 24 * 36e5,
+                            data: []
+                        }]
+                    };
+                    series = new Array();
+                    for(x in obj["Technical Analysis: CCI"])
+                    {
+                        series.push(parseFloat(obj["Technical Analysis: CCI"][x]["CCI"]));
+                    }
+                    options.series[0].data=series;
+                    Highcharts.chart('container', options);
+                }
+                else if(indicator=="BBANDS")
+                {
+                    options = {
+                        title: {
+                            text: obj["Meta Data"]["2: Indicator"]
+                        },
+                        subtitle: {
+                            text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            tickInterval: 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value: %m/%d}',
+                                rotation: 45,
+                                align: 'middle'
+                            }
+
+                        },
+                        yAxis: [{
+                            title: {
+                                text: 'BBANDS'
+                            }
+                        }],
+                        legend: {
+                            layout: 'vertical',
+                            backgroundColor: '#FFF',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                    Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                            }
+                        },
+                        plotOptions: {
+                        },
+                        series: [{
+                            color: '#FF0000',
+                            name: symbol+' Real Middle Band',
+                            pointStart: Date.UTC(2017, 3, 1),
+                            pointInterval: 24 * 36e5,
+                            data: []
+                        },
+                            {
+                                color: '#00FF00',
+                                name: symbol+' Real Lower Band',
+                                pointStart: Date.UTC(2017, 3, 1),
+                                pointInterval: 24 * 36e5,
+                                data: []
+                            },
+                            {
+                                color: '#0000FF',
+                                name: symbol+' Real Upper Band',
+                                pointStart: Date.UTC(2017, 3, 1),
+                                pointInterval: 24 * 36e5,
+                                data: []
+                            }]
+                    };
+                    seriesm = new Array();
+                    seriesl = new Array();
+                    seriesu = new Array();
+                    for(x in obj["Technical Analysis: BBANDS"])
+                    {
+                        seriesm.push(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Middle Band"]));
+                        seriesl.push(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Lower Band"]));
+                        seriesu.push(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Upper Band"]));
+                    }
+                    options.series[0].data=seriesm;
+                    options.series[1].data=seriesl;
+                    options.series[2].data=seriesu;
+                    Highcharts.chart('container', options);
+                }
+                else if(indicator=="MACD")
+                {
+                    options = {
+                        title: {
+                            text: obj["Meta Data"]["2: Indicator"]
+                        },
+                        subtitle: {
+                            text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                        },
+                        xAxis: {
+                            type: 'datetime',
+                            tickInterval: 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value: %m/%d}',
+                                rotation: 45,
+                                align: 'middle'
+                            }
+
+                        },
+                        yAxis: [{
+                            title: {
+                                text: 'MACD'
+                            }
+                        }],
+                        legend: {
+                            layout: 'vertical',
+                            backgroundColor: '#FFF',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+                        tooltip: {
+                            formatter: function () {
+                                return '<b>' + this.series.name + '</b><br/>' +
+                                    Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                            }
+                        },
+                        plotOptions: {
+                        },
+                        series: [{
+                            color: '#FF0000',
+                            name: symbol+' MACD_Signal',
+                            pointStart: Date.UTC(2017, 3, 1),
+                            pointInterval: 24 * 36e5,
+                            data: []
+                        },
+                            {
+                                color: '#00FF00',
+                                name: symbol+' MACD',
+                                pointStart: Date.UTC(2017, 3, 1),
+                                pointInterval: 24 * 36e5,
+                                data: []
+                            },
+                            {
+                                color: '#0000FF',
+                                name: symbol+' MACD_Hist',
+                                pointStart: Date.UTC(2017, 3, 1),
+                                pointInterval: 24 * 36e5,
+                                data: []
+                            }]
+                    };
+                    seriesm = new Array();
+                    seriesl = new Array();
+                    seriesu = new Array();
+                    for(x in obj["Technical Analysis: MACD"])
+                    {
+                        seriesm.push(parseFloat(obj["Technical Analysis: MACD"][x]["MACD_Signal"]));
+                        seriesl.push(parseFloat(obj["Technical Analysis: MACD"][x]["MACD"]));
+                        seriesu.push(parseFloat(obj["Technical Analysis: MACD"][x]["MACD_Hist"]));
+                    }
+                    options.series[0].data=seriesm;
+                    options.series[1].data=seriesl;
+                    options.series[2].data=seriesu;
+                    Highcharts.chart('container', options);
+                }
             }
         </script>
     </head>
@@ -161,12 +695,10 @@
                 $output="";
                 foreach($list as $x)
                 {
-                    if($x=="Price"):
-                        $output.="<a href='' value='https://www.alphavantage.co/query?
-function=TIME_SERIES_DAILY&symbol=".$symbol."&interval=weekly&time_period=10&series_type=open&apikey=OGY0S9LG8J8ADNZW' onclick='bringin_data(this.value)'>".$x."</a>    ";
+                    if($x==="Price"):
+                        $output.="<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=".$symbol."&interval=weekly&time_period=10&series_type=open&apikey=OGY0S9LG8J8ADNZW\",\"".$x."\",\"".$symbol."\")'>".$x."</p></u>";
                     else:
-                        $output.="<a href='https://www.alphavantage.co/query?
-function=".$x."&symbol=".$symbol."&interval=weekly&time_period=10&series_type=open&apikey=OGY0S9LG8J8ADNZW'>".$x."</a>    ";
+                        $output.="<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=".$x."&symbol=".$symbol."&interval=weekly&time_period=10&series_type=open&apikey=OGY0S9LG8J8ADNZW\",\"".$x."\",\"".$symbol."\")'>".$x."</p></u>";
                     endif;
                 }
                 return $output;
@@ -179,6 +711,7 @@ function=".$x."&symbol=".$symbol."&interval=weekly&time_period=10&series_type=op
                     $symbol = test_input($_POST["STS"]);
                     $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&apikey=OGY0S9LG8J8ADNZW";
                     $response = file_get_contents($url);
+                    $str_response = $response;
                     $response = json_decode($response,true);
 
                     if (key_exists("Error Message",$response) and startsWith($response["Error Message"],"Invalid")===true):
@@ -220,7 +753,10 @@ function=".$x."&symbol=".$symbol."&interval=weekly&time_period=10&series_type=op
                         echo "<tr><th>Volume</th><td>".number_format(floatval($response["Time Series (Daily)"][$date]["5. volume"]),0,".",",")."</td></tr>";
                         echo "<tr><th>Timestamp</th><td>".$date."</td></tr>";
                         echo "<tr><th>Indicators</th><td>".print_indicators_list($symbol)."</td></tr>";
-                        echo "</table>";?>
+                        echo "</table>";
+                        echo '<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
+                        echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=".$symbol."&interval=weekly&time_period=10&series_type=open&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"".$symbol."\");</script>";
+                        ?>
                         <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     <?php
                     }
