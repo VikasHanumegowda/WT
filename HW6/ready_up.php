@@ -16,7 +16,7 @@
             }
             th{
                 background: #D0D0D0;
-                width: 50%;
+                width: 35%;
                 border: solid;
                 border-color: #808080;
                 border-width: 1px;
@@ -28,7 +28,7 @@
             }
             td {
                 background: #F0F0F0;
-                width: 50%;
+                width: 65%;
                 border: solid;
                 border-color: #808080;
                 border-width: 1px;
@@ -38,56 +38,29 @@
                 height: 19px;
                 width: auto;
             }
+            a img {
+                width: 10%;
+                height:auto;
+            }
         </style>
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <script src="https://code.highcharts.com/modules/exporting.js"></script>
-
         <script type="text/javascript">
-            function addMonths(date, months) {
-                var parts =date.split('/');
-                //please put attention to the month (parts[0]), Javascript counts months from 0:
-                // January - 0, February - 1, etc
-                var mydate = new Date(parts[2],parts[0]-1,parts[1]);
-                date.setMonth(mydate.getMonth() + months);
-                return date;
-            }
-
-            function formatDate(date) {
-                var monthNames = [
-                    "January", "February", "March",
-                    "April", "May", "June", "July",
-                    "August", "September", "October",
-                    "November", "December"
-                ];
-
-                var day = date.getDate();
-                var monthIndex = date.getMonth();
-                var year = date.getFullYear();
-
-                return day + ' ' + monthNames[monthIndex] + ' ' + year;
-            }
-
             function bringin_data(url="",indicator="",symbol) {
                 console.log("URL:"+url);
-//                console.log("before indicator"+indicator);
-
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         // Action to be performed when the document is read;
                     }
                 };
-
                 xhttp.open("GET", url, false);
                 xhttp.send();
                 var xmlDoc = xhttp.responseText;
                 obj = JSON.parse(xmlDoc);
-
-
-                //console.log("hello"+obj);
                 var today = new Date();
                 var dd = today.getDate();
-                var mm = today.getMonth()+1; //January is 0!
+                var mm = today.getMonth()+1;
                 var yyyy = today.getFullYear();
                 if(dd<10){
                     dd='0'+dd;
@@ -96,8 +69,6 @@
                     mm='0'+mm;
                 }
                 var todays = dd+'/'+mm+'/'+yyyy;
-                //console.log(today);
-                //ray("Price", "SMA", "EMA", "STOCH", "RSI", "ADX", "CCI", "BBANDS", "MACD");
                 if(indicator=='Price')
                 {
                     options = {
@@ -674,7 +645,6 @@
                 <p>* - <i>Mandatory fields.</i></p>
             </div>
             <?php
-
             function startsWith($haystack, $needle)
             {
                 $length = strlen($needle);
@@ -723,27 +693,15 @@
                     else:
                     {
                         date_default_timezone_set("America/Los_Angeles");
-
                         $date = $response["Meta Data"]["3. Last Refreshed"];
-                        echo "1".$date;
                         $date = new DateTime($date);
                         $date = date_format($date,"Y-m-d");
-                        echo "2".$date;
                         $close = $response["Time Series (Daily)"][$date]["4. close"];
                         $open = $response["Time Series (Daily)"][$date]["1. open"];
-                        $prev_date = date( 'Y-m-d', strtotime( $date . ' -1 day' ) );//not working ashte
-                        echo "4 before ".$prev_date;
+                        $prev_date = date( 'Y-m-d', strtotime( $date . ' -1 day' ) );
                         while(key_exists($prev_date,$response["Time Series (Daily)"])==false)
-                        {
-                            $prev_date = date( 'Y-m-d', strtotime( $prev_date . ' -1 day' ) );//not working ashte
-                            echo "4 in loop ".$prev_date;
-                        }
-//                        echo "3".$str_prev_date+"<br/>";
-//                        $prev_date = date('Y-m-d', $str_prev_date);
-                        echo "4 after".$prev_date;
+                            $prev_date = date( 'Y-m-d', strtotime( $prev_date . ' -1 day' ) );
                         $prev_close = $response["Time Series (Daily)"][$prev_date]["4. close"];
-
-                        echo "5".$date;
                         $format = '%.2f';
                         $change = sprintf($format,abs(floatval($close)-floatval($prev_close)));
                         $change_percent = sprintf($format,100.0*$change/floatval($prev_close));
@@ -770,6 +728,8 @@
                         echo "<tr><th>Indicators</th><td>".print_indicators_list($symbol)."</td></tr>";
                         echo "</table>";
                         echo '<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
+                        echo '<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
+                        echo '<a href='.$_SERVER["PHP_SELF"].'?expand=true style="text-align: center; margin-left: auto; margin-right: auto;"><div><p>Click to show stock news</p><br><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a>';
                         echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=".$symbol."&interval=weekly&time_period=10&series_type=open&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"".$symbol."\");</script>";
                         ?>
                         <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
@@ -779,8 +739,18 @@
                 }
                 endif;
             }
-            endif; ?>
+            endif;
 
-    <NOSCRIPT>
+//            function expand_function()
+//            {
+//                echo "I just ran the expand function!!";
+//            }
+//            if(isset($_GET["expand"]))
+//            {
+//                expand_function();
+//            }
+
+            ?>
+        <NOSCRIPT>
     </body>
 </html>
