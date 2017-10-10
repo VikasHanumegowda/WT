@@ -69,7 +69,7 @@
 
             function bringin_data(url="",indicator="",symbol) {
                 console.log("URL:"+url);
-                console.log("before indicator"+indicator);
+//                console.log("before indicator"+indicator);
 
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
@@ -84,7 +84,7 @@
                 obj = JSON.parse(xmlDoc);
 
 
-                console.log("hello"+obj);
+                //console.log("hello"+obj);
                 var today = new Date();
                 var dd = today.getDate();
                 var mm = today.getMonth()+1; //January is 0!
@@ -96,7 +96,7 @@
                     mm='0'+mm;
                 }
                 var todays = dd+'/'+mm+'/'+yyyy;
-                console.log(today);
+                //console.log(today);
                 //ray("Price", "SMA", "EMA", "STOCH", "RSI", "ADX", "CCI", "BBANDS", "MACD");
                 if(indicator=='Price')
                 {
@@ -725,11 +725,26 @@
                         date_default_timezone_set("America/Los_Angeles");
 
                         $date = $response["Meta Data"]["3. Last Refreshed"];
-                        $format = '%.2f';
+                        echo "1".$date;
+                        $date = new DateTime($date);
+                        $date = date_format($date,"Y-m-d");
+                        echo "2".$date;
                         $close = $response["Time Series (Daily)"][$date]["4. close"];
                         $open = $response["Time Series (Daily)"][$date]["1. open"];
-                        $prev_date = date('Y-m-d', strtotime($date .' -1 day'));
+                        $prev_date = date( 'Y-m-d', strtotime( $date . ' -1 day' ) );//not working ashte
+                        echo "4 before ".$prev_date;
+                        while(key_exists($prev_date,$response["Time Series (Daily)"])==false)
+                        {
+                            $prev_date = date( 'Y-m-d', strtotime( $prev_date . ' -1 day' ) );//not working ashte
+                            echo "4 in loop ".$prev_date;
+                        }
+//                        echo "3".$str_prev_date+"<br/>";
+//                        $prev_date = date('Y-m-d', $str_prev_date);
+                        echo "4 after".$prev_date;
                         $prev_close = $response["Time Series (Daily)"][$prev_date]["4. close"];
+
+                        echo "5".$date;
+                        $format = '%.2f';
                         $change = sprintf($format,abs(floatval($close)-floatval($prev_close)));
                         $change_percent = sprintf($format,100.0*$change/floatval($prev_close));
                         $pos_change = false;
@@ -749,7 +764,7 @@
 <tr><th>Change Percent</th><td>".$change_percent."<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr>";
                         endif;
                         $format="%.4f-%.4f";
-                        echo "<tr><th>Day's Range</th><td>".sprintf($format,$response["Time Series (Daily)"][$date]["3. low"],$response["Time Series (Daily)"][$date]["4. close"])."</td></tr>";
+                        echo "<tr><th>Day's Range</th><td>".sprintf($format,$response["Time Series (Daily)"][$date]["3. low"],$response["Time Series (Daily)"][$date]["2. high"])."</td></tr>";
                         echo "<tr><th>Volume</th><td>".number_format(floatval($response["Time Series (Daily)"][$date]["5. volume"]),0,".",",")."</td></tr>";
                         echo "<tr><th>Timestamp</th><td>".$date."</td></tr>";
                         echo "<tr><th>Indicators</th><td>".print_indicators_list($symbol)."</td></tr>";
