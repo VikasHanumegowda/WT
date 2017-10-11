@@ -133,8 +133,11 @@
                     };
                     series = [];
                     volumes = [];
+                    count = 0;
                     for(x in obj["Time Series (Daily)"])
                     {
+                        count +=1;
+                        console.log(count+" "+x);
                         series.push(parseFloat(obj["Time Series (Daily)"][x]["4. close"]));
                         volumes.push(parseFloat(obj["Time Series (Daily)"][x]["5. volume"]))
                     }
@@ -192,8 +195,10 @@
                         }]
                     };
                     series = new Array();
+                    count= 0;
                     for(x in obj["Technical Analysis: SMA"])
                     {
+                        console.log(count+" "+x);
                         series.push(parseFloat(obj["Technical Analysis: SMA"][x]["SMA"]));
                     }
                     options.series[0].data=series;
