@@ -1,5 +1,7 @@
 <html>
 <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
     <title>
         Homework 6
     </title>
@@ -105,7 +107,7 @@
                                 tickInterval: 7 * 24 * 3600 * 1000,
                                 labels: {
                                     format: '{value: %m/%d}',
-                                    rotation: 0,
+                                    rotation: 45,
                                     align: 'middle'
                                 }
                             },
@@ -126,27 +128,33 @@
                                 align: 'right',
                                 verticalAlign: 'middle'
                             },
-                            tooltip: {
-                                formatter: function () {
-                                    return '<b>' + this.series.name + '</b><br/>' +
-                                        Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;
+//                            tooltip: {
+//                                formatter: function () {
+//                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+//                                }
+//                            },
+                            plotOptions: {
+                                area: {
+                                    threshold: null
+                                },
+                                line: {
+                                    threshold: null
                                 }
                             },
-                            plotOptions: {},
                             series: [{
                                 color: '#FF0000',
                                 type: 'area',
                                 name: symbol,
-                                pointStart: Date.UTC(2017, 5, 1),
-                                pointInterval: 24 * 3600 * 1000,
 
+                                pointStart: Date(2017, 3, 1),
+                                pointInterval: 24 * 3600 * 1000,
                                 data: []
                             },
                                 {
                                     color: '#FFFFFF',
                                     type: 'column',
                                     name: symbol + ' Volume',
-                                    pointStart: Date.UTC(2017, 5, 1),
+                                    pointStart: Date.UTC(2017, 3, 1),
                                     pointInterval: 24 * 3600 * 1000,
                                     data: [],
                                     yAxis: 1
@@ -160,6 +168,8 @@
                             console.log(count + " " + x);
                             series.unshift(parseFloat(obj["Time Series (Daily)"][x]["4. close"]));
                             volumes.unshift(parseFloat(obj["Time Series (Daily)"][x]["5. volume"]))
+                            if(count == 200)
+                                break;
                         }
                         options.series[0].data = series;
                         options.series[1].data = volumes;
@@ -696,7 +706,7 @@ function print_indicators_list($symbol)
     $output = "";
     foreach ($list as $x) {
         if ($x === "Price"):
-            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=compact&&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
+            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
         elseif ($x === 'STOCH'):
             $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&outputsize=compact&time_period=10&slowkmatype=1&slowdmatype=1&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
         elseif ($x === 'BBANDS'):
@@ -771,7 +781,7 @@ if (isset($_POST["Search"])): {
             echo '<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo '<a href=' . $_SERVER["PHP_SELF"] . '?expand=true style="text-align: center; margin-left: auto; margin-right: auto;"><div><p>Click to show stock news</p><br><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a>';
             echo '<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
-            echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"" . $symbol . "\");</script>";
+            echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&time_period=10&outputsize=full&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"" . $symbol . "\");</script>";
             ?>
             <!--<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
             <?php
