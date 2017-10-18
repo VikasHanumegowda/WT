@@ -731,8 +731,8 @@ if (isset($_POST["Search"])): {
             echo "<tr><th>Indicators</th><td>" . print_indicators_list($symbol) . "</td></tr>";
             echo "</table>";
             echo '<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
-            echo '<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo '<a href=' . $_SERVER["PHP_SELF"] . '?expand=true style="text-align: center; margin-left: auto; margin-right: auto;"><div><p>Click to show stock news</p><br><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a>';
+            echo '<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=weekly&time_period=10&series_type=open&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"" . $symbol . "\");</script>";
             ?>
             <!--<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
