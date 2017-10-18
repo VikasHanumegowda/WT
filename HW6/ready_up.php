@@ -91,7 +91,10 @@
                     var xmlDoc = xhttp.responseText;
                     obj = JSON.parse(xmlDoc);
                     var today = new Date();
-                    console.log(today);
+                    var day = today.getDate();
+                    var monthIndex = today.getMonth();
+                    var year = today.getFullYear();
+                    console.log(today,day,monthIndex,year);
                     var today_str = formatDate(today);
                     console.log(today_str);
                     if (indicator == 'Price') {
@@ -128,11 +131,11 @@
                                 align: 'right',
                                 verticalAlign: 'middle'
                             },
-//                            tooltip: {
-//                                formatter: function () {
-//                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
-//                                }
-//                            },
+                            tooltip: {
+                                formatter: function () {
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+                                }
+                            },
                             plotOptions: {
                                 area: {
                                     threshold: null
@@ -145,8 +148,7 @@
                                 color: '#FF0000',
                                 type: 'area',
                                 name: symbol,
-
-                                pointStart: Date(2017, 3, 1),
+                                pointStart: Date.UTC(2017, monthIndex-6, day),
                                 pointInterval: 24 * 3600 * 1000,
                                 data: []
                             },
@@ -154,7 +156,7 @@
                                     color: '#FFFFFF',
                                     type: 'column',
                                     name: symbol + ' Volume',
-                                    pointStart: Date.UTC(2017, 3, 1),
+                                    pointStart: Date.UTC(2017, monthIndex-6, day),
                                     pointInterval: 24 * 3600 * 1000,
                                     data: [],
                                     yAxis: 1
@@ -168,7 +170,7 @@
                             console.log(count + " " + x);
                             series.unshift(parseFloat(obj["Time Series (Daily)"][x]["4. close"]));
                             volumes.unshift(parseFloat(obj["Time Series (Daily)"][x]["5. volume"]))
-                            if(count == 200)
+                            if(count == 184)
                                 break;
                         }
                         options.series[0].data = series;
