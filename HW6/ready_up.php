@@ -9,7 +9,7 @@
         table {
             border-collapse: collapse;
             padding: 0;
-            text-align: center;
+
             margin: 0;
             border-width: 1px;
             border-style: solid;
@@ -20,6 +20,7 @@
         th {
             background: #D0D0D0;
             width: 35%;
+            text-align: left;
             border: solid;
             border-color: #808080;
             border-width: 1px;
@@ -34,6 +35,7 @@
         td {
             background: #F0F0F0;
             width: 65%;
+            text-align: center;
             border: solid;
             border-color: #808080;
             border-width: 1px;
@@ -45,7 +47,8 @@
             width: auto;
         }
 
-        a img {
+        a img{
+            margin:0px;
             width: 10%;
             height: auto;
         }
@@ -53,19 +56,13 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script type="text/javascript">
-        function convertToServerTimeZone(datestr) {
-
-            //EST
-            offset = -5.0
-
-            clientDate = new Date(datestr);
-            utc = clientDate.getTime() + (clientDate.getTimezoneOffset() * 60000);
-
-            serverDate = new Date(utc + (3600000 * offset));
-
-            alert(serverDate.toLocaleString());
-
-
+        function togglefunc(){
+            if(document.getElementById('container2').style.display == 'none'){
+                document.getElementById('container2').style.display = 'block';
+            }
+            else{
+                document.getElementById('container2').style.display = 'none';
+            }
         }
 
         function formatDate(date) {
@@ -804,26 +801,26 @@ if (isset($_POST["Search"])): {
         echo "<script type='text/javascript'>alert('Please enter a symbol');</script>";
     } else: {
         $symbol = test_input($_POST["STS"]);
-        $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&apikey=OGY0S9LG8J8ADNZW";
-        $response = file_get_contents($url);
-        $str_response = $response;
-        $response = json_decode($response, true);
+        $url_for_alphavantage_initial = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&apikey=OGY0S9LG8J8ADNZW";
+        $response_from_alphavantage_initial = file_get_contents($url_for_alphavantage_initial);
+        $str_response = $response_from_alphavantage_initial;
+        $response_from_alphavantage_initial = json_decode($response_from_alphavantage_initial, true);
 
-        if (key_exists("Error Message", $response) and startsWith($response["Error Message"], "Invalid") === true): {
+        if (key_exists("Error Message", $response_from_alphavantage_initial) and startsWith($response_from_alphavantage_initial["Error Message"], "Invalid") === true): {
             echo "<table>";
             echo "<tr><th>Error</th><td>Error: NO record has been found, please enter a valid symbol</td></tr>";
             echo "</table>";
         } else: {
-            date_default_timezone_set("America/Los_Angeles");
-            $date = $response["Meta Data"]["3. Last Refreshed"];
+            date_default_timezone_set("America/New_York");
+            $date = $response_from_alphavantage_initial["Meta Data"]["3. Last Refreshed"];
             $date = new DateTime($date);
             $date = date_format($date, "Y-m-d");
-            $close = $response["Time Series (Daily)"][$date]["4. close"];
-            $open = $response["Time Series (Daily)"][$date]["1. open"];
+            $close = $response_from_alphavantage_initial["Time Series (Daily)"][$date]["4. close"];
+            $open = $response_from_alphavantage_initial["Time Series (Daily)"][$date]["1. open"];
             $prev_date = date('Y-m-d', strtotime($date . ' -1 day'));
-            while (key_exists($prev_date, $response["Time Series (Daily)"]) == false)
+            while (key_exists($prev_date, $response_from_alphavantage_initial["Time Series (Daily)"]) == false)
                 $prev_date = date('Y-m-d', strtotime($prev_date . ' -1 day'));
-            $prev_close = $response["Time Series (Daily)"][$prev_date]["4. close"];
+            $prev_close = $response_from_alphavantage_initial["Time Series (Daily)"][$prev_date]["4. close"];
             $format = '%.2f';
             $change = sprintf($format, abs(floatval($close) - floatval($prev_close)));
             $change_percent = sprintf($format, 100.0 * $change / floatval($prev_close));
@@ -844,14 +841,16 @@ if (isset($_POST["Search"])): {
 <tr><th>Change Percent</th><td>" . $change_percent . "<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr>";
             endif;
             $format = "%.4f-%.4f";
-            echo "<tr><th>Day's Range</th><td>" . sprintf($format, $response["Time Series (Daily)"][$date]["3. low"], $response["Time Series (Daily)"][$date]["2. high"]) . "</td></tr>";
-            echo "<tr><th>Volume</th><td>" . number_format(floatval($response["Time Series (Daily)"][$date]["5. volume"]), 0, ".", ",") . "</td></tr>";
+            echo "<tr><th>Day's Range</th><td>" . sprintf($format, $response_from_alphavantage_initial["Time Series (Daily)"][$date]["3. low"], $response_from_alphavantage_initial["Time Series (Daily)"][$date]["2. high"]) . "</td></tr>";
+            echo "<tr><th>Volume</th><td>" . number_format(floatval($response_from_alphavantage_initial["Time Series (Daily)"][$date]["5. volume"]), 0, ".", ",") . "</td></tr>";
             echo "<tr><th>Timestamp</th><td>" . $date . "</td></tr>";
             echo "<tr><th>Indicators</th><td>" . print_indicators_list($symbol) . "</td></tr>";
             echo "</table>";
-            echo '<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
-            echo '<a href=' . $_SERVER["PHP_SELF"] . '?expand=true style="text-align: center; margin-left: auto; margin-right: auto;"><div><p>Click to show stock news</p><br><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a>';
-            echo '<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
+            echo "<br/>";
+            echo '<div id="container" style="border: 1px solid #888;min-width: 310px; height: 400px; margin: 0 auto"></div>';
+            echo "<br/>";
+            echo '<div id="toggler_button" style="margin: 8px;"><a href="javascript:;" onclick=togglefunc() style="text-align: center; margin-left: auto; margin-right: auto;"><div><p>Click to show stock news</p><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a></div>';
+            echo '<div id="container2" style="display:none;border: 1px solid #888;min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"" . $symbol . "\");</script>";
             ?>
             <?php
