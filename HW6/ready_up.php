@@ -712,23 +712,23 @@ function print_indicators_list($symbol)
     $output = "";
     foreach ($list as $x) {
         if ($x === "Price"):
-            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
+            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         elseif ($x === 'STOCH'):
-            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&outputsize=compact&time_period=10&slowkmatype=1&slowdmatype=1&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
+            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&outputsize=compact&time_period=10&slowkmatype=1&slowdmatype=1&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         elseif ($x === 'BBANDS'):
-            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=5&series_type=close&nbdevup=3&nbdevdn=3&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
+            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=5&series_type=close&nbdevup=3&nbdevdn=3&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         elseif ($x === 'SMA'):
-            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
+            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         elseif ($x === 'EMA'):
-            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
+            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         elseif ($x === 'RSI'):
-            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
+            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         elseif ($x === 'ADX'):
-            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
+            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         elseif ($x === 'CCI'):
-            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
+            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         elseif ($x === 'MACD'):
-            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
+            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         endif;
     }
     return $output;
@@ -787,7 +787,7 @@ if (isset($_POST["Search"])): {
             echo '<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo '<a href=' . $_SERVER["PHP_SELF"] . '?expand=true style="text-align: center; margin-left: auto; margin-right: auto;"><div><p>Click to show stock news</p><br><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a>';
             echo '<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
-            echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&time_period=10&outputsize=full&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"" . $symbol . "\");</script>";
+            echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"" . $symbol . "\");</script>";
             ?>
             <!--<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
             <?php
