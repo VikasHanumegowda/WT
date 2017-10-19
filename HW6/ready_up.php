@@ -59,15 +59,17 @@
         function togglefunc() {
             if (document.getElementById('container2').style.display == 'none') {
                 document.getElementById('container2').style.display = 'block';
+                document.getElementById('toggler_button').innerHTML = "<a href=\"javascript:;\" onclick=togglefunc() style=\"text-align: center; margin-left: auto; margin-right: auto;\"><div><p>Click to hide stock news</p><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Up.png\"/></div></a>";
             }
             else {
                 document.getElementById('container2').style.display = 'none';
+                document.getElementById('toggler_button').innerHTML = "<a href=\"javascript:;\" onclick=togglefunc() style=\"text-align: center; margin-left: auto; margin-right: auto;\"><div><p>Click to show stock news</p><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png\"/></div></a>";
             }
         }
 
         function build_news_div() {
-            var array = "<?php echo $array ?>" ;
-            console.log(array);
+//            var array = "<?php //echo $array ?>//" ;
+//            console.log(array);
         }
 
         function formatDate(date) {
