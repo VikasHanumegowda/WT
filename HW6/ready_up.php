@@ -118,11 +118,15 @@
                                 title: {
                                     text: 'Stock Price'
                                 },
+                                max : null,
+                                tickAmount: 8,
                                 gridLineWidth: 0
                             }, {
                                 title: {
                                     text: 'Volume'
                                 },
+                                max : null,
+                                tickAmount: 8,
                                 opposite: true
                             }],
                             legend: {
@@ -153,7 +157,7 @@
                                 data: []
                             },
                                 {
-                                    color: '#FFFFFF',
+                                    color: '#F0F0F0',
                                     type: 'column',
                                     name: symbol + ' Volume',
                                     pointStart: Date.UTC(2017, monthIndex-6, day),
@@ -708,23 +712,23 @@ function print_indicators_list($symbol)
     $output = "";
     foreach ($list as $x) {
         if ($x === "Price"):
-            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
+            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
         elseif ($x === 'STOCH'):
-            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&outputsize=compact&time_period=10&slowkmatype=1&slowdmatype=1&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
+            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&outputsize=compact&time_period=10&slowkmatype=1&slowdmatype=1&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
         elseif ($x === 'BBANDS'):
-            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=5&series_type=close&nbdevup=3&nbdevdn=3&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
+            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=5&series_type=close&nbdevup=3&nbdevdn=3&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
         elseif ($x === 'SMA'):
-            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
+            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
         elseif ($x === 'EMA'):
-            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
+            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
         elseif ($x === 'RSI'):
-            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
+            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
         elseif ($x === 'ADX'):
-            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
+            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
         elseif ($x === 'CCI'):
-            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
+            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></a>";
         elseif ($x === 'MACD'):
-            $output .= "<u><p style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</p></u>";
+            $output .= "<u><a style='display:inline; margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         endif;
     }
     return $output;
