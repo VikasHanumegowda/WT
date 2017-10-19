@@ -53,7 +53,7 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script type="text/javascript">
-        function convertToServerTimeZone(datestr){
+        function convertToServerTimeZone(datestr) {
 
             //EST
             offset = -5.0
@@ -61,12 +61,13 @@
             clientDate = new Date(datestr);
             utc = clientDate.getTime() + (clientDate.getTimezoneOffset() * 60000);
 
-            serverDate = new Date(utc + (3600000*offset));
+            serverDate = new Date(utc + (3600000 * offset));
 
-            alert (serverDate.toLocaleString());
+            alert(serverDate.toLocaleString());
 
 
         }
+
         function formatDate(date) {
             var monthNames = [
                 "01", "02", "03",
@@ -94,9 +95,7 @@
                     var day = today.getDate();
                     var monthIndex = today.getMonth();
                     var year = today.getFullYear();
-                    console.log(today,day,monthIndex,year);
                     var today_str = formatDate(today);
-                    console.log(today_str);
                     if (indicator == 'Price') {
                         options = {
                             title: {
@@ -118,15 +117,15 @@
                                 title: {
                                     text: 'Stock Price'
                                 },
-                                max : null,
                                 tickAmount: 8,
                                 gridLineWidth: 0
                             }, {
                                 title: {
                                     text: 'Volume'
                                 },
-                                max : null,
+                                max: null,
                                 tickAmount: 8,
+                                gridLineWidth: 0,
                                 opposite: true
                             }],
                             legend: {
@@ -152,7 +151,7 @@
                                 color: '#FF0000',
                                 type: 'area',
                                 name: symbol,
-                                pointStart: Date.UTC(2017, monthIndex-6, day),
+                                pointStart: Date.UTC(2017, monthIndex - 6, day),
                                 pointInterval: 24 * 3600 * 1000,
                                 data: []
                             },
@@ -160,7 +159,7 @@
                                     color: '#F0F0F0',
                                     type: 'column',
                                     name: symbol + ' Volume',
-                                    pointStart: Date.UTC(2017, monthIndex-6, day),
+                                    pointStart: Date.UTC(2017, monthIndex - 6, day),
                                     pointInterval: 24 * 3600 * 1000,
                                     data: [],
                                     yAxis: 1
@@ -171,10 +170,9 @@
                         count = 0;
                         for (x in obj["Time Series (Daily)"]) {
                             count += 1;
-                            console.log(count + " " + x);
                             series.unshift(parseFloat(obj["Time Series (Daily)"][x]["4. close"]));
                             volumes.unshift(parseFloat(obj["Time Series (Daily)"][x]["5. volume"]))
-                            if(count == 184)
+                            if (count == 184)
                                 break;
                         }
                         options.series[0].data = series;
@@ -182,9 +180,6 @@
                         Highcharts.chart('container', options);
                     }
                     else if (indicator == "SMA") {
-                        console.log(obj["Meta Data"]["2: Indicator"]);
-                        console.log(obj["Technical Analysis: SMA"]["2017-10-06"]["SMA"]);
-                        console.log(obj["Technical Analysis: SMA"]);
                         options = {
                             title: {
                                 text: obj["Meta Data"]["2: Indicator"]
@@ -197,15 +192,17 @@
                                 tickInterval: 7 * 24 * 3600 * 1000,
                                 labels: {
                                     format: '{value: %m/%d}',
-                                    rotation: 0,
+                                    rotation: 45,
                                     align: 'middle'
                                 }
-
                             },
                             yAxis: [{
                                 title: {
                                     text: 'SMA'
-                                }
+                                },
+                                max: null,
+                                tickAmount: 8,
+                                gridLineWidth: 0
                             }],
                             legend: {
                                 layout: 'vertical',
@@ -215,15 +212,21 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return '<b>' + this.series.name + '</b><br/>' +
-                                        Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
                                 }
                             },
-                            plotOptions: {},
+                            plotOptions: {
+                                area: {
+                                    threshold: null
+                                },
+                                line: {
+                                    threshold: null
+                                }
+                            },
                             series: [{
                                 color: '#FF0000',
                                 name: symbol,
-                                pointStart: Date.UTC(2017, 5, 1),
+                                pointStart: Date.UTC(2017, monthIndex - 6, day),
                                 pointInterval: 24 * 3600 * 1000,
                                 data: []
                             }]
@@ -231,9 +234,10 @@
                         series = new Array();
                         count = 0;
                         for (x in obj["Technical Analysis: SMA"]) {
-                            console.log(count + " " + x);
                             count += 1;
                             series.unshift(parseFloat(obj["Technical Analysis: SMA"][x]["SMA"]));
+                            if (count == 184)
+                                break;
                         }
                         options.series[0].data = series;
                         Highcharts.chart('container', options);
@@ -254,14 +258,14 @@
                                     rotation: 45,
                                     align: 'middle'
                                 }
-
-
-                            }
-                            ,
+                            },
                             yAxis: [{
                                 title: {
                                     text: 'EMA'
-                                }
+                                },
+                                max: null,
+                                tickAmount: 8,
+                                gridLineWidth: 0
                             }],
                             legend: {
                                 layout: 'vertical',
@@ -271,15 +275,21 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return '<b>' + this.series.name + '</b><br/>' +
-                                        Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
                                 }
                             },
-                            plotOptions: {},
+                            plotOptions: {
+                                area: {
+                                    threshold: null
+                                },
+                                line: {
+                                    threshold: null
+                                }
+                            },
                             series: [{
                                 color: '#FF0000',
                                 name: symbol,
-                                pointStart: Date.UTC(2017, 5, 1),
+                                pointStart: Date.UTC(2017, monthIndex - 6, day),
                                 pointInterval: 24 * 3600 * 1000,
                                 data: []
                             }]
@@ -287,9 +297,10 @@
                         series = new Array();
                         count = 0;
                         for (x in obj["Technical Analysis: EMA"]) {
-                            console.log(count + " " + x);
                             count += 1;
                             series.unshift(parseFloat(obj["Technical Analysis: EMA"][x]["EMA"]));
+                            if (count == 184)
+                                break;
                         }
                         options.series[0].data = series;
                         Highcharts.chart('container', options);
@@ -310,12 +321,14 @@
                                     rotation: 45,
                                     align: 'middle'
                                 }
-
                             },
                             yAxis: [{
                                 title: {
                                     text: 'STOCH'
-                                }
+                                },
+                                max: null,
+                                tickAmount: 8,
+                                gridLineWidth: 0
                             }],
                             legend: {
                                 layout: 'vertical',
@@ -325,22 +338,28 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return '<b>' + this.series.name + '</b><br/>' +
-                                        Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
                                 }
                             },
-                            plotOptions: {},
+                            plotOptions: {
+                                area: {
+                                    threshold: null
+                                },
+                                line: {
+                                    threshold: null
+                                }
+                            },
                             series: [{
                                 color: '#FF0000',
                                 name: symbol + ' SlowD',
-                                pointStart: Date.UTC(2017, 5, 1),
+                                pointStart: Date.UTC(2017, monthIndex - 6, day),
                                 pointInterval: 24 * 3600 * 1000,
                                 data: []
                             },
                                 {
                                     color: '#00FF00',
                                     name: symbol + ' SlowK',
-                                    pointStart: Date.UTC(2017, 5, 1),
+                                    pointStart: Date.UTC(2017, monthIndex - 6, day),
                                     pointInterval: 24 * 3600 * 1000,
                                     data: []
                                 }]
@@ -349,10 +368,11 @@
                         seriesk = new Array();
                         count = 0;
                         for (x in obj["Technical Analysis: STOCH"]) {
-                            console.log(count + " " + x);
                             count += 1;
                             seriesd.unshift(parseFloat(obj["Technical Analysis: STOCH"][x]["SlowD"]));
                             seriesk.unshift(parseFloat(obj["Technical Analysis: STOCH"][x]["SlowK"]));
+                            if (count == 184)
+                                break;
                         }
                         options.series[0].data = seriesd;
                         options.series[1].data = seriesk;
@@ -374,12 +394,14 @@
                                     rotation: 45,
                                     align: 'middle'
                                 }
-
                             },
                             yAxis: [{
                                 title: {
                                     text: 'RSI'
-                                }
+                                },
+                                max: null,
+                                tickAmount: 8,
+                                gridLineWidth: 0
                             }],
                             legend: {
                                 layout: 'vertical',
@@ -389,15 +411,21 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return '<b>' + this.series.name + '</b><br/>' +
-                                        Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
                                 }
                             },
-                            plotOptions: {},
+                            plotOptions: {
+                                area: {
+                                    threshold: null
+                                },
+                                line: {
+                                    threshold: null
+                                }
+                            },
                             series: [{
                                 color: '#FF0000',
                                 name: symbol + ' RSI',
-                                pointStart: Date.UTC(2017, 5, 1),
+                                pointStart: Date.UTC(2017, monthIndex - 6, day),
                                 pointInterval: 24 * 3600 * 1000,
                                 data: []
                             }]
@@ -405,9 +433,10 @@
                         series = new Array();
                         count = 0;
                         for (x in obj["Technical Analysis: RSI"]) {
-                            console.log(count + " " + x);
                             count += 1;
                             series.unshift(parseFloat(obj["Technical Analysis: RSI"][x]["RSI"]));
+                            if (count == 184)
+                                break;
                         }
                         options.series[0].data = series;
                         Highcharts.chart('container', options);
@@ -428,12 +457,14 @@
                                     rotation: 45,
                                     align: 'middle'
                                 }
-
                             },
                             yAxis: [{
                                 title: {
                                     text: 'ADX'
-                                }
+                                },
+                                max: null,
+                                tickAmount: 8,
+                                gridLineWidth: 0
                             }],
                             legend: {
                                 layout: 'vertical',
@@ -443,15 +474,21 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return '<b>' + this.series.name + '</b><br/>' +
-                                        Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
                                 }
                             },
-                            plotOptions: {},
+                            plotOptions: {
+                                area: {
+                                    threshold: null
+                                },
+                                line: {
+                                    threshold: null
+                                }
+                            },
                             series: [{
                                 color: '#FF0000',
                                 name: symbol + ' ADX',
-                                pointStart: Date.UTC(2017, 5, 1),
+                                pointStart: Date.UTC(2017, monthIndex - 6, day),
                                 pointInterval: 24 * 3600 * 1000,
                                 data: []
                             }]
@@ -459,9 +496,10 @@
                         series = new Array();
                         count = 0;
                         for (x in obj["Technical Analysis: ADX"]) {
-                            console.log(count + " " + x);
                             count += 1;
                             series.unshift(parseFloat(obj["Technical Analysis: ADX"][x]["ADX"]));
+                            if (count == 184)
+                                break;
                         }
                         options.series[0].data = series;
                         Highcharts.chart('container', options);
@@ -482,12 +520,14 @@
                                     rotation: 45,
                                     align: 'middle'
                                 }
-
                             },
                             yAxis: [{
                                 title: {
                                     text: 'CCI'
-                                }
+                                },
+                                max: null,
+                                tickAmount: 8,
+                                gridLineWidth: 0
                             }],
                             legend: {
                                 layout: 'vertical',
@@ -497,15 +537,21 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return '<b>' + this.series.name + '</b><br/>' +
-                                        Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
                                 }
                             },
-                            plotOptions: {},
+                            plotOptions: {
+                                area: {
+                                    threshold: null
+                                },
+                                line: {
+                                    threshold: null
+                                }
+                            },
                             series: [{
                                 color: '#FF0000',
                                 name: symbol + ' CCI',
-                                pointStart: Date.UTC(2017, 5, 1),
+                                pointStart: Date.UTC(2017, monthIndex - 6, day),
                                 pointInterval: 24 * 3600 * 1000,
                                 data: []
                             }]
@@ -513,9 +559,10 @@
                         series = new Array();
                         count = 0;
                         for (x in obj["Technical Analysis: CCI"]) {
-                            console.log(count + " " + x);
                             count += 1;
                             series.unshift(parseFloat(obj["Technical Analysis: CCI"][x]["CCI"]));
+                            if (count == 184)
+                                break;
                         }
                         options.series[0].data = series;
                         Highcharts.chart('container', options);
@@ -536,12 +583,14 @@
                                     rotation: 45,
                                     align: 'middle'
                                 }
-
                             },
                             yAxis: [{
                                 title: {
                                     text: 'BBANDS'
-                                }
+                                },
+                                max: null,
+                                tickAmount: 8,
+                                gridLineWidth: 0
                             }],
                             legend: {
                                 layout: 'vertical',
@@ -551,29 +600,35 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return '<b>' + this.series.name + '</b><br/>' +
-                                        Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
                                 }
                             },
-                            plotOptions: {},
+                            plotOptions: {
+                                area: {
+                                    threshold: null
+                                },
+                                line: {
+                                    threshold: null
+                                }
+                            },
                             series: [{
                                 color: '#FF0000',
                                 name: symbol + ' Real Middle Band',
-                                pointStart: Date.UTC(2017, 5, 1),
+                                pointStart: Date.UTC(2017, monthIndex - 6, day),
                                 pointInterval: 24 * 3600 * 1000,
                                 data: []
                             },
                                 {
                                     color: '#00FF00',
                                     name: symbol + ' Real Lower Band',
-                                    pointStart: Date.UTC(2017, 5, 1),
+                                    pointStart: Date.UTC(2017, monthIndex - 6, day),
                                     pointInterval: 24 * 3600 * 1000,
                                     data: []
                                 },
                                 {
                                     color: '#0000FF',
                                     name: symbol + ' Real Upper Band',
-                                    pointStart: Date.UTC(2017, 5, 1),
+                                    pointStart: Date.UTC(2017, monthIndex - 6, day),
                                     pointInterval: 24 * 3600 * 1000,
                                     data: []
                                 }]
@@ -583,11 +638,12 @@
                         seriesu = new Array();
                         count = 0;
                         for (x in obj["Technical Analysis: BBANDS"]) {
-                            console.log(count + " " + x);
                             count += 1;
                             seriesm.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Middle Band"]));
                             seriesl.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Lower Band"]));
                             seriesu.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Upper Band"]));
+                            if (count == 184)
+                                break;
                         }
                         options.series[0].data = seriesm;
                         options.series[1].data = seriesl;
@@ -610,12 +666,14 @@
                                     rotation: 45,
                                     align: 'middle'
                                 }
-
                             },
                             yAxis: [{
                                 title: {
                                     text: 'MACD'
-                                }
+                                },
+                                max: null,
+                                tickAmount: 8,
+                                gridLineWidth: 0
                             }],
                             legend: {
                                 layout: 'vertical',
@@ -625,29 +683,35 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return '<b>' + this.series.name + '</b><br/>' +
-                                        Highcharts.dateFormat('%m/%d', this.x) + ': ' + this.y;//check this again
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
                                 }
                             },
-                            plotOptions: {},
+                            plotOptions: {
+                                area: {
+                                    threshold: null
+                                },
+                                line: {
+                                    threshold: null
+                                }
+                            },
                             series: [{
                                 color: '#FF0000',
                                 name: symbol + ' MACD_Signal',
-                                pointStart: Date.UTC(2017, 5, 1),
+                                pointStart: Date.UTC(2017, monthIndex - 6, day),
                                 pointInterval: 24 * 3600 * 1000,
                                 data: []
                             },
                                 {
                                     color: '#00FF00',
                                     name: symbol + ' MACD',
-                                    pointStart: Date.UTC(2017, 5, 1),
+                                    pointStart: Date.UTC(2017, monthIndex - 6, day),
                                     pointInterval: 24 * 3600 * 1000,
                                     data: []
                                 },
                                 {
                                     color: '#0000FF',
                                     name: symbol + ' MACD_Hist',
-                                    pointStart: Date.UTC(2017, 5, 1),
+                                    pointStart: Date.UTC(2017, monthIndex - 6, day),
                                     pointInterval: 24 * 3600 * 1000,
                                     data: []
                                 }]
@@ -657,11 +721,12 @@
                         seriesu = new Array();
                         count = 0;
                         for (x in obj["Technical Analysis: MACD"]) {
-                            console.log(count + " " + x);
                             count += 1;
                             seriesm.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD_Signal"]));
                             seriesl.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD"]));
                             seriesu.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD_Hist"]));
+                            if (count == 184)
+                                break;
                         }
                         options.series[0].data = seriesm;
                         options.series[1].data = seriesl;
@@ -789,7 +854,6 @@ if (isset($_POST["Search"])): {
             echo '<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"" . $symbol . "\");</script>";
             ?>
-            <!--<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
             <?php
         }
         endif;
@@ -798,14 +862,6 @@ if (isset($_POST["Search"])): {
 }
 endif;
 
-//            function expand_function()
-//            {
-//                echo "I just ran the expand function!!";
-//            }
-//            if(isset($_GET["expand"]))
-//            {
-//                expand_function();
-//            }
 
 ?>
 <NOSCRIPT>
