@@ -59,17 +59,12 @@
         function togglefunc() {
             if (document.getElementById('container2').style.display == 'none') {
                 document.getElementById('container2').style.display = 'block';
-                document.getElementById('toggler_button').innerHTML = "<a href=\"javascript:;\" onclick=togglefunc() style=\"text-align: center; margin-left: auto; margin-right: auto;\"><div><p>Click to hide stock news</p><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Up.png\"/></div></a>";
+                document.getElementById('toggler_button').innerHTML = "Click to hide stock news<br/><a href=\"javascript:;\" onclick=\"togglefunc()\" style=\"text-align: center; margin-left: auto; margin-right: auto;\"><div><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Up.png\"/></div></a>";
             }
             else {
                 document.getElementById('container2').style.display = 'none';
-                document.getElementById('toggler_button').innerHTML = "<a href=\"javascript:;\" onclick=togglefunc() style=\"text-align: center; margin-left: auto; margin-right: auto;\"><div><p>Click to show stock news</p><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png\"/></div></a>";
+                document.getElementById('toggler_button').innerHTML = "Click to show stock news<br/><a href=\"javascript:;\" onclick=\"togglefunc()\" style=\"text-align: center; margin-left: auto; margin-right: auto;\"><div><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png\"/></div></a>";
             }
-        }
-
-        function build_news_div() {
-//            var array = "<?php //echo $array ?>//" ;
-//            console.log(array);
         }
 
         function formatDate(date) {
@@ -140,7 +135,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -216,7 +211,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -279,7 +274,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -342,7 +337,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -415,7 +410,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -478,7 +473,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -541,7 +536,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -604,7 +599,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -687,7 +682,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -822,25 +817,18 @@ if (isset($_POST["Search"])): {
         $response_json = json_encode($response);
         $array = json_decode($response_json);
 
-//            $item_array = array(1,2,3,4,5);
-//            $title_array = array(1,2,3,4,5);
-//            $link_array = array(1,2,3,4,5);
-//            $pubDate_array = array(1,2,3,4,5);
-//            foreach($news_obj as $x) {
-//                for($i =0; $i <5;$i++)
-//                {
-//                    $item_array[$i] = $x->item[$i];
-//                    $title_array[$i]=$item_array[$i]->title;
-//                    $link_array[$i]=$item_array[$i]->link;
-//                    $pubDate_array[$i]=$item_array[$i]->pubDate;
-//
-//                    print_r($item_array[$i]);
-//                    print_r("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-//                }
-//                print_r("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-//            }
-        $array_of_tuples = array();
-
+        $item_array = array(1, 2, 3, 4, 5);
+        $title_array = array(1, 2, 3, 4, 5);
+        $link_array = array(1, 2, 3, 4, 5);
+        $pubDate_array = array(1, 2, 3, 4, 5);
+        foreach ($news_obj as $x) {
+            for ($i = 0; $i < 5; $i++) {
+                $item_array[$i] = $x->item[$i];
+                $title_array[$i] = $item_array[$i]->title;
+                $link_array[$i] = $item_array[$i]->link;
+                $pubDate_array[$i] = $item_array[$i]->pubDate;
+            }
+        }
         $response_from_alphavantage_initial = json_decode($response_from_alphavantage_initial, true);
 
         if (key_exists("Error Message", $response_from_alphavantage_initial)
@@ -887,18 +875,29 @@ if (isset($_POST["Search"])): {
             echo "<br/>";
             echo '<div id="container" style="border: 1px solid #888;min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo "<br/>";
-            echo '<div id="toggler_button" style="margin: 8px;"><a href="javascript:;" onclick=togglefunc() style="text-align: center; margin-left: auto; margin-right: auto;"><div><p>Click to show stock news</p><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a></div>';
-            echo '<div id="container2" style="display:none;border: 1px solid #888;min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"" . $symbol . "\");</script>";
-            echo "<script type='text/javascript'>function build_news_div() {var array = '" . $array . "';console.log(array);}build_news_div();</script>";
-
+            echo '<div id="toggler_button" style="text-align: center; margin: 8px auto;">Click to show stock news<br/><a href="javascript:;" onclick="togglefunc()" style="text-align: center; margin-left: auto; margin-right: auto;"><div><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a></div>';
         }
         endif;
     }
-    endif;
+    endif; ?>
+    <div id="container2" style="display:none;min-width: 310px; max-height: 400px; margin: 0 auto">
+        <table>
+            <?php for ($ii = 0; $ii < 5; $ii++) { ?>
+                <tr>
+                    <td style="text-align: left;"><a target="_blank" style="display:inline; margin-right: 15px; "
+                           href="<?php echo $link_array[$ii]; ?>"><?php echo $title_array[$ii]; ?></a>
+                        Publication Time: <?php echo $pubDate_array[$ii]; ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
+    <?php
 }
 endif;
 ?>
+
+
 <NOSCRIPT>
 </body>
 </html>
