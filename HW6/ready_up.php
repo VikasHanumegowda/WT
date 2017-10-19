@@ -47,8 +47,8 @@
             width: auto;
         }
 
-        a img{
-            margin:0px;
+        a img {
+            margin: 0px;
             width: 10%;
             height: auto;
         }
@@ -56,13 +56,18 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script type="text/javascript">
-        function togglefunc(){
-            if(document.getElementById('container2').style.display == 'none'){
+        function togglefunc() {
+            if (document.getElementById('container2').style.display == 'none') {
                 document.getElementById('container2').style.display = 'block';
             }
-            else{
+            else {
                 document.getElementById('container2').style.display = 'none';
             }
+        }
+
+        function build_news_div() {
+            var array = "<?php echo $array ?>" ;
+            console.log(array);
         }
 
         function formatDate(date) {
@@ -796,6 +801,12 @@ function print_indicators_list($symbol)
     return $output;
 }
 
+function give_news_table_str($title_arr, $link_arr, $date_arr)
+{
+    $output = "";
+    return string;
+}
+
 if (isset($_POST["Search"])): {
     if ($_POST["STS"] == ""): {
         echo "<script type='text/javascript'>alert('Please enter a symbol');</script>";
@@ -803,10 +814,35 @@ if (isset($_POST["Search"])): {
         $symbol = test_input($_POST["STS"]);
         $url_for_alphavantage_initial = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&apikey=OGY0S9LG8J8ADNZW";
         $response_from_alphavantage_initial = file_get_contents($url_for_alphavantage_initial);
-        $str_response = $response_from_alphavantage_initial;
+        $url_for_news = "https://seekingalpha.com/api/sa/combined/" . $symbol . ".xml";
+        $response = file_get_contents($url_for_news);
+        $news_obj = simplexml_load_string($response);
+        $response_json = json_encode($response);
+        $array = json_decode($response_json);
+
+//            $item_array = array(1,2,3,4,5);
+//            $title_array = array(1,2,3,4,5);
+//            $link_array = array(1,2,3,4,5);
+//            $pubDate_array = array(1,2,3,4,5);
+//            foreach($news_obj as $x) {
+//                for($i =0; $i <5;$i++)
+//                {
+//                    $item_array[$i] = $x->item[$i];
+//                    $title_array[$i]=$item_array[$i]->title;
+//                    $link_array[$i]=$item_array[$i]->link;
+//                    $pubDate_array[$i]=$item_array[$i]->pubDate;
+//
+//                    print_r($item_array[$i]);
+//                    print_r("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+//                }
+//                print_r("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+//            }
+        $array_of_tuples = array();
+
         $response_from_alphavantage_initial = json_decode($response_from_alphavantage_initial, true);
 
-        if (key_exists("Error Message", $response_from_alphavantage_initial) and startsWith($response_from_alphavantage_initial["Error Message"], "Invalid") === true): {
+        if (key_exists("Error Message", $response_from_alphavantage_initial)
+            and startsWith($response_from_alphavantage_initial["Error Message"], "Invalid") === true): {
             echo "<table>";
             echo "<tr><th>Error</th><td>Error: NO record has been found, please enter a valid symbol</td></tr>";
             echo "</table>";
@@ -852,16 +888,14 @@ if (isset($_POST["Search"])): {
             echo '<div id="toggler_button" style="margin: 8px;"><a href="javascript:;" onclick=togglefunc() style="text-align: center; margin-left: auto; margin-right: auto;"><div><p>Click to show stock news</p><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a></div>';
             echo '<div id="container2" style="display:none;border: 1px solid #888;min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"" . $symbol . "\");</script>";
-            ?>
-            <?php
+            echo "<script type='text/javascript'>function build_news_div() {var array = '" . $array . "';console.log(array);}build_news_div();</script>";
+
         }
         endif;
     }
     endif;
 }
 endif;
-
-
 ?>
 <NOSCRIPT>
 </body>
