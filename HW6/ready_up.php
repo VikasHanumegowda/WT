@@ -56,6 +56,99 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script type="text/javascript">
+//        function  func_for_init(obj, symbol) {
+//            obj = JSON.parse(obj);
+//            var today = new Date();
+//            var day = today.getDate();
+//            var monthIndex = today.getMonth();
+//            var today_str = formatDate(today);
+//            options = {
+//                title: {
+//                    text: 'Stock Price (' + today_str + ')'
+//                },
+//                subtitle: {
+//                    text: '<a href=\'https://www.alphavantage.co/\'>Source: Alpha Vantage</a>'
+//                },
+//                xAxis: {
+//                    endOnTick: true,
+//                    startOnTick: true,
+//                    showFirstLabel: true,
+//                    type: 'datetime',
+//                    tickInterval: 7 * 24 * 3600 * 1000,
+//                    labels: {
+//                        format: '{value: %m/%d}',
+//                        rotation: 45,
+//                        align: 'middle'
+//                    }
+//                },
+//                yAxis: [{
+//                    title: {
+//                        text: 'Stock Price'
+//                    },
+//                    tickAmount: 8,
+//                    gridLineWidth: 0
+//                }, {
+//                    title: {
+//                        text: 'Volume'
+//                    },
+//                    max: null,
+//                    tickAmount: 8,
+//                    gridLineWidth: 0,
+//                    opposite: true
+//                }],
+//                legend: {
+//                    layout: 'vertical',
+//                    backgroundColor: '#FFF',
+//                    align: 'right',
+//                    verticalAlign: 'middle'
+//                },
+//                tooltip: {
+//                    formatter: function () {
+//                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style=\"color:' + this.series.color + ';\">\u25CF</span>' + this.series.name + ': ' + this.y;
+//                    }
+//                },
+//                plotOptions: {
+//                    area: {
+//                        threshold: null
+//                    },
+//                    line: {
+//                        threshold: null
+//                    }
+//                },
+//                series: [{
+//                    color: '#FF0000',
+//                    type: 'area',
+//                    name: symbol,
+//                    pointStart: Date.UTC(2017, monthIndex - 6, day),
+//                    pointInterval: 24 * 3600 * 1000,
+//                    data: []
+//                },
+//                    {
+//                        color: '#F0F0F0',
+//                        type: 'column',
+//                        name: symbol + ' Volume',
+//                        pointStart: Date.UTC(2017, monthIndex - 6, day),
+//                        pointInterval: 24 * 3600 * 1000,
+//                        data: [],
+//                        yAxis: 1
+//                    }]
+//            };
+//            series = [];
+//            volumes = [];
+//            count = 0;
+//            for (x in obj['Time Series (Daily)']) {
+//                count += 1;
+//                var today_date = new Date(x);
+//                console.log(x,count);
+//                series.unshift(parseFloat(obj['Time Series (Daily)'][x]['4. close']));
+//                volumes.unshift(parseFloat(obj['Time Series (Daily)'][x]['5. volume']));
+//                if (count == 184)
+//                    break;
+//            }
+//            options.series[0].data = series;
+//            options.series[1].data = volumes;
+//            Highcharts.chart('container', options);
+//        }
         function  func_for_init(obj, symbol) {
             obj = JSON.parse(obj);
             var today = new Date();
@@ -189,7 +282,9 @@
                     var monthIndex = today.getMonth();
                     var year = today.getFullYear();
                     var today_str = formatDate(today);
-                    if (indicator == 'Price') {
+                    //this is for second clicks and will not be called or made use of during the webpage loading from the server
+                    //Please go through  the code again aince I parse the whole volume/price json in PHP only
+                    if (indicator == 'r') {
                         options = {
                             title: {
                                 text: 'Stock Price (' + today_str + ')'
@@ -877,7 +972,7 @@ function print_indicators_list($symbol)
     $output = "";
     foreach ($list as $x) {
         if ($x === "Price"):
-            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
+            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"" . "r" . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         elseif ($x === 'STOCH'):
             $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&outputsize=compact&time_period=10&slowkmatype=1&slowdmatype=1&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
         elseif ($x === 'BBANDS'):
