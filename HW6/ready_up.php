@@ -56,6 +56,100 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script type="text/javascript">
+        function  func_for_init(obj, symbol) {
+            obj = JSON.parse(obj);
+            var today = new Date();
+            var day = today.getDate();
+            var monthIndex = today.getMonth();
+            var today_str = formatDate(today);
+            options = {
+                title: {
+                    text: 'Stock Price (' + today_str + ')'
+                },
+                subtitle: {
+                    text: '<a href=\'https://www.alphavantage.co/\'>Source: Alpha Vantage</a>'
+                },
+                xAxis: {
+                    endOnTick: true,
+                    startOnTick: true,
+                    showFirstLabel: true,
+                    type: 'datetime',
+                    tickInterval: 7 * 24 * 3600 * 1000,
+                    labels: {
+                        format: '{value: %m/%d}',
+                        rotation: 45,
+                        align: 'middle'
+                    }
+                },
+                yAxis: [{
+                    title: {
+                        text: 'Stock Price'
+                    },
+                    tickAmount: 8,
+                    gridLineWidth: 0
+                }, {
+                    title: {
+                        text: 'Volume'
+                    },
+                    max: null,
+                    tickAmount: 8,
+                    gridLineWidth: 0,
+                    opposite: true
+                }],
+                legend: {
+                    layout: 'vertical',
+                    backgroundColor: '#FFF',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                },
+                tooltip: {
+                    formatter: function () {
+                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style=\"color:' + this.series.color + ';\">\u25CF</span>' + this.series.name + ': ' + this.y;
+                    }
+                },
+                plotOptions: {
+                    area: {
+                        threshold: null
+                    },
+                    line: {
+                        threshold: null
+                    }
+                },
+                series: [{
+                    color: '#FF0000',
+                    type: 'area',
+                    name: symbol,
+                    pointStart: Date.UTC(2017, monthIndex - 6, day),
+                    pointInterval: 24 * 3600 * 1000,
+                    data: []
+                },
+                    {
+                        color: '#F0F0F0',
+                        type: 'column',
+                        name: symbol + ' Volume',
+                        pointStart: Date.UTC(2017, monthIndex - 6, day),
+                        pointInterval: 24 * 3600 * 1000,
+                        data: [],
+                        yAxis: 1
+                    }]
+            };
+            series = [];
+            volumes = [];
+            count = 0;
+            for (x in obj['Time Series (Daily)']) {
+                count += 1;
+                var today_date = new Date(x);
+                console.log(x,count);
+                series.unshift(parseFloat(obj['Time Series (Daily)'][x]['4. close']));
+                volumes.unshift(parseFloat(obj['Time Series (Daily)'][x]['5. volume']));
+                if (count == 184)
+                    break;
+            }
+            options.series[0].data = series;
+            options.series[1].data = volumes;
+            Highcharts.chart('container', options);
+        }
+
         function togglefunc() {
             if (document.getElementById('container2').style.display == 'none') {
                 document.getElementById('container2').style.display = 'block';
@@ -172,11 +266,11 @@
                         count = 0;
                         for (x in obj['Time Series (Daily)']) {
                             count += 1;
-//                            var today_date = new Date(x);
-//                            console.log(x, today_date.getDay());
+                            var today_date = new Date(x);
+//                            console.log(x,count);
 //                            if (today_date.getDay() !== 6 || today_date.getDay() !== 0) {
-                            series.unshift(parseFloat(obj['Time Series (Daily)'][x]['4. close']));
-                            volumes.unshift(parseFloat(obj['Time Series (Daily)'][x]['5. volume']));
+                            series.unshift(Array(today_date,parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
+                            volumes.unshift(Array(today_date,parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
 //                            }
                             if (count == 184)
                                 break;
@@ -812,13 +906,15 @@ if (isset($_POST["Search"])): {
     } else: {
         echo "<script type='text/javascript'>hell = document.getElementById('STS');hell.value = \"" . $_POST['STS'] . "\"; </script>";
         $symbol = test_input($_POST["STS"]);
-        $url_for_alphavantage_initial = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&apikey=OGY0S9LG8J8ADNZW";
-        $response_from_alphavantage_initial = file_get_contents($url_for_alphavantage_initial);
+        //https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW
+        $url_for_alphavantage_initial = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW";
+        $response_from_alphavantage_initial1 = file_get_contents($url_for_alphavantage_initial)or
+        die ("Failed opening ".$url_for_alphavantage_initial);
         $url_for_news = "https://seekingalpha.com/api/sa/combined/" . $symbol . ".xml";
-        $response = file_get_contents($url_for_news);
+        $response = file_get_contents($url_for_news)or
+        die ("Failed opening ".$url_for_news);
         $news_obj = simplexml_load_string($response);
-        $response_json = json_encode($response);
-        $array = json_decode($response_json);
+
 
         $item_array = array(1, 2, 3, 4, 5);
         $title_array = array(1, 2, 3, 4, 5);
@@ -832,7 +928,7 @@ if (isset($_POST["Search"])): {
                 $pubDate_array[$i] = $item_array[$i]->pubDate;
             }
         }
-        $response_from_alphavantage_initial = json_decode($response_from_alphavantage_initial, true);
+        $response_from_alphavantage_initial = json_decode($response_from_alphavantage_initial1, true);
 
         if (key_exists("Error Message", $response_from_alphavantage_initial)
             and startsWith($response_from_alphavantage_initial["Error Message"], "Invalid") === true): {
@@ -867,7 +963,7 @@ if (isset($_POST["Search"])): {
 <tr><th>Change Percent</th><td>" . $change_percent . "%<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png\"/></span></td></tr>";
             else:
                 echo "<tr><th>Change</th><td>" . $change . "<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr>
-<tr><th>Change Percent</th><td>" . $change_percent . "<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr>";
+<tr><th>Change Percent</th><td>" . $change_percent . "%<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr>";
             endif;
             $format = "%.4f-%.4f";
             echo "<tr><th>Day's Range</th><td>" . sprintf($format, $response_from_alphavantage_initial["Time Series (Daily)"][$date]["3. low"], $response_from_alphavantage_initial["Time Series (Daily)"][$date]["2. high"]) . "</td></tr>";
@@ -879,7 +975,7 @@ if (isset($_POST["Search"])): {
             echo "<br/>";
             echo '<div id="container" style="border: 1px solid #888;min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo "<br/>";
-            echo "<script type='text/javascript'></script>";
+            echo "<script type='text/javascript'>func_for_init(".json_encode($response_from_alphavantage_initial1) .",'".$symbol."');</script>";
             echo '<div id="toggler_button" style="text-align: center; margin: 8px auto;">Click to show stock news<br/><a href="javascript:;" onclick="togglefunc()" style="text-align: center; margin-left: auto; margin-right: auto;"><div><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a></div>';
         }
         endif;
