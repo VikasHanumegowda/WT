@@ -56,99 +56,6 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script type="text/javascript">
-//        function  func_for_init(obj, symbol) {
-//            obj = JSON.parse(obj);
-//            var today = new Date();
-//            var day = today.getDate();
-//            var monthIndex = today.getMonth();
-//            var today_str = formatDate(today);
-//            options = {
-//                title: {
-//                    text: 'Stock Price (' + today_str + ')'
-//                },
-//                subtitle: {
-//                    text: '<a href=\'https://www.alphavantage.co/\'>Source: Alpha Vantage</a>'
-//                },
-//                xAxis: {
-//                    endOnTick: true,
-//                    startOnTick: true,
-//                    showFirstLabel: true,
-//                    type: 'datetime',
-//                    tickInterval: 7 * 24 * 3600 * 1000,
-//                    labels: {
-//                        format: '{value: %m/%d}',
-//                        rotation: 45,
-//                        align: 'middle'
-//                    }
-//                },
-//                yAxis: [{
-//                    title: {
-//                        text: 'Stock Price'
-//                    },
-//                    tickAmount: 8,
-//                    gridLineWidth: 0
-//                }, {
-//                    title: {
-//                        text: 'Volume'
-//                    },
-//                    max: null,
-//                    tickAmount: 8,
-//                    gridLineWidth: 0,
-//                    opposite: true
-//                }],
-//                legend: {
-//                    layout: 'vertical',
-//                    backgroundColor: '#FFF',
-//                    align: 'right',
-//                    verticalAlign: 'middle'
-//                },
-//                tooltip: {
-//                    formatter: function () {
-//                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style=\"color:' + this.series.color + ';\">\u25CF</span>' + this.series.name + ': ' + this.y;
-//                    }
-//                },
-//                plotOptions: {
-//                    area: {
-//                        threshold: null
-//                    },
-//                    line: {
-//                        threshold: null
-//                    }
-//                },
-//                series: [{
-//                    color: '#FF0000',
-//                    type: 'area',
-//                    name: symbol,
-//                    pointStart: Date.UTC(2017, monthIndex - 6, day),
-//                    pointInterval: 24 * 3600 * 1000,
-//                    data: []
-//                },
-//                    {
-//                        color: '#F0F0F0',
-//                        type: 'column',
-//                        name: symbol + ' Volume',
-//                        pointStart: Date.UTC(2017, monthIndex - 6, day),
-//                        pointInterval: 24 * 3600 * 1000,
-//                        data: [],
-//                        yAxis: 1
-//                    }]
-//            };
-//            series = [];
-//            volumes = [];
-//            count = 0;
-//            for (x in obj['Time Series (Daily)']) {
-//                count += 1;
-//                var today_date = new Date(x);
-//                console.log(x,count);
-//                series.unshift(parseFloat(obj['Time Series (Daily)'][x]['4. close']));
-//                volumes.unshift(parseFloat(obj['Time Series (Daily)'][x]['5. volume']));
-//                if (count == 184)
-//                    break;
-//            }
-//            options.series[0].data = series;
-//            options.series[1].data = volumes;
-//            Highcharts.chart('container', options);
-//        }
         function  func_for_init(obj, symbol) {
             obj = JSON.parse(obj);
             var today = new Date();
@@ -242,6 +149,104 @@
             options.series[1].data = volumes;
             Highcharts.chart('container', options);
         }
+//        function  func_for_init(obj, symbol) {
+//            obj = JSON.parse(obj);
+//            var today = new Date();
+//            var day = today.getDate();
+//            var monthIndex = today.getMonth();
+//            var today_str = formatDate(today);
+//            options = {
+//                title: {
+//                    text: 'Stock Price (' + today_str + ')'
+//                },
+//                subtitle: {
+//                    text: '<a href=\'https://www.alphavantage.co/\'>Source: Alpha Vantage</a>'
+//                },
+//                xAxis: {
+//                    endOnTick: true,
+//                    startOnTick: true,
+//                    showFirstLabel: true,
+//                    tickPositions:[],
+//                    type: 'datetime',
+//                    tickInterval: 7 * 24 * 3600 * 1000,
+//                    labels: {
+//                        format: '{value: %m/%d}',
+//                        rotation: 45,
+//                        align: 'middle'
+//                    }
+//                },
+//                yAxis: [{
+//                    title: {
+//                        text: 'Stock Price'
+//                    },
+//                    tickAmount: 8,
+//                    gridLineWidth: 0
+//                }, {
+//                    title: {
+//                        text: 'Volume'
+//                    },
+//                    max: null,
+//                    tickAmount: 8,
+//                    gridLineWidth: 0,
+//                    opposite: true
+//                }],
+//                legend: {
+//                    layout: 'vertical',
+//                    backgroundColor: '#FFF',
+//                    align: 'right',
+//                    verticalAlign: 'middle'
+//                },
+//                tooltip: {
+//                    formatter: function () {
+//                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style=\"color:' + this.series.color + ';\">\u25CF</span>' + this.series.name + ': ' + this.y;
+//                    }
+//                },
+//                plotOptions: {
+//                    area: {
+//                        threshold: null
+//                    },
+//                    line: {
+//                        threshold: null
+//                    }
+//                },
+//                series: [{
+//                    color: '#FF0000',
+//                    type: 'area',
+//                    name: symbol,
+//                    pointStart: Date.UTC(2017, monthIndex - 6, day),
+//                    pointInterval: 24 * 3600 * 1000,
+//                    data: []
+//                },
+//                    {
+//                        color: '#F0F0F0',
+//                        type: 'column',
+//                        name: symbol + ' Volume',
+//                        pointStart: Date.UTC(2017, monthIndex - 6, day),
+//                        pointInterval: 24 * 3600 * 1000,
+//                        data: [],
+//                        yAxis: 1
+//                    }]
+//            };
+//            series = [];
+//            volumes = [];
+//            cat = [];
+//            count = 0;
+//            for (x in obj['Time Series (Daily)']) {
+//                count += 1;
+//                var today_date = new Date(x);
+//                console.log(x,count);
+//                cat.unshift(x);
+//                series.unshift(Array(x, parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
+//                volumes.unshift(Array(x, parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
+//                if (count == 184)
+//                    break;
+//            }
+//            console.log(cat);
+//            options.xAxis.tickPositions = cat;
+//            options.series[0].data = series;
+//            options.series[1].data = volumes;
+//            Highcharts.chart('container', options);
+//        }
 
         function togglefunc() {
             if (document.getElementById('container2').style.display == 'none') {
