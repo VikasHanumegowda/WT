@@ -920,11 +920,17 @@ if (isset($_POST["Search"])): {
         $symbol = test_input($_POST["STS"]);
         //https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW
         $url_for_alphavantage_initial = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW";
-        $response_from_alphavantage_initial1 = file_get_contents($url_for_alphavantage_initial)or
-        die ("Failed opening ".$url_for_alphavantage_initial);
+        $response_from_alphavantage_initial1 = @file_get_contents($url_for_alphavantage_initial);
+        if ($response_from_alphavantage_initial1===false) {
+            echo "<script type='text/javascript'>  alert('Failed opening " . $url_for_alphavantage_initial . "');</script>";
+            exit();
+        }
         $url_for_news = "https://seekingalpha.com/api/sa/combined/" . $symbol . ".xml";
-        $response = file_get_contents($url_for_news)or
-        die ("Failed opening ".$url_for_news);
+        $response = @file_get_contents($url_for_news);
+        if ($response===false) {
+            echo "<script type='text/javascript'>  alert('Failed opening " . $url_for_news . "');</script>";
+            exit();
+        }
         $news_obj = simplexml_load_string($response);
 
 
