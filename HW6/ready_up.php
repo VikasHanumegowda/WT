@@ -1047,7 +1047,7 @@ if (isset($_POST["Search"])): {
                 $prev_date = date('Y-m-d', strtotime($prev_date . ' -1 day'));
             $prev_close = $response_from_alphavantage_initial["Time Series (Daily)"][$prev_date]["4. close"];
             $format = '%.2f';
-            $change = sprintf($format, abs(floatval($close) - floatval($prev_close)));
+            $change = sprintf($format, floatval($close) - floatval($prev_close));
             $change_percent = sprintf($format, 100.0 * $change / floatval($prev_close));
             $pos_change = false;
             if (floatval($prev_close) <= floatval($close)):
