@@ -98,12 +98,15 @@
                     if (indicator == 'Price') {
                         options = {
                             title: {
-                                text: "Stock Price (" + today_str + ")"
+                                text: 'Stock Price (' + today_str + ')'
                             },
                             subtitle: {
-                                text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                                text: '<a href=\'https://www.alphavantage.co/\'>Source: Alpha Vantage</a>'
                             },
                             xAxis: {
+                                endOnTick: true,
+                                startOnTick: true,
+                                showFirstLabel: true,
                                 type: 'datetime',
                                 tickInterval: 7 * 24 * 3600 * 1000,
                                 labels: {
@@ -135,7 +138,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style=\"color:' + this.series.color + ';\">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -167,10 +170,14 @@
                         series = [];
                         volumes = [];
                         count = 0;
-                        for (x in obj["Time Series (Daily)"]) {
+                        for (x in obj['Time Series (Daily)']) {
                             count += 1;
-                            series.unshift(parseFloat(obj["Time Series (Daily)"][x]["4. close"]));
-                            volumes.unshift(parseFloat(obj["Time Series (Daily)"][x]["5. volume"]))
+//                            var today_date = new Date(x);
+//                            console.log(x, today_date.getDay());
+//                            if (today_date.getDay() !== 6 || today_date.getDay() !== 0) {
+                            series.unshift(parseFloat(obj['Time Series (Daily)'][x]['4. close']));
+                            volumes.unshift(parseFloat(obj['Time Series (Daily)'][x]['5. volume']));
+//                            }
                             if (count == 184)
                                 break;
                         }
@@ -211,7 +218,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -274,7 +281,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -337,7 +344,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -410,7 +417,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -473,7 +480,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -536,7 +543,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -599,7 +606,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -682,7 +689,7 @@
                             },
                             tooltip: {
                                 formatter: function () {
-                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:'+this.series.color+';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                                    return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
                                 }
                             },
                             plotOptions: {
@@ -747,7 +754,7 @@
     <form method=POST action=<?php echo $_SERVER["PHP_SELF"]; ?>>
         <div>
             <p style="font-size: 20px;display: inline-block;">Enter Stock Ticker Symbol:*</p>
-            <input style="display: inline-block; width: 50%;" type="text" name="STS"><br>
+            <input id="STS" style="display: inline-block; width: 50%;" type="text" name="STS"><br>
             <input style="font-size: 20px; margin-left: 245px;margin-right: 10px;" type="submit" value="Search"
                    name="Search" id="Search">
             <input style="font-size: 20px;" type="button" value="Clear" name="Clear">
@@ -798,16 +805,12 @@ function print_indicators_list($symbol)
     return $output;
 }
 
-function give_news_table_str($title_arr, $link_arr, $date_arr)
-{
-    $output = "";
-    return string;
-}
 
 if (isset($_POST["Search"])): {
     if ($_POST["STS"] == ""): {
         echo "<script type='text/javascript'>alert('Please enter a symbol');</script>";
     } else: {
+        echo "<script type='text/javascript'>hell = document.getElementById('STS');hell.value = \"" . $_POST['STS'] . "\"; </script>";
         $symbol = test_input($_POST["STS"]);
         $url_for_alphavantage_initial = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&apikey=OGY0S9LG8J8ADNZW";
         $response_from_alphavantage_initial = file_get_contents($url_for_alphavantage_initial);
@@ -872,10 +875,11 @@ if (isset($_POST["Search"])): {
             echo "<tr><th>Timestamp</th><td>" . $date . "</td></tr>";
             echo "<tr><th>Indicators</th><td>" . print_indicators_list($symbol) . "</td></tr>";
             echo "</table>";
+            echo "";
             echo "<br/>";
             echo '<div id="container" style="border: 1px solid #888;min-width: 310px; height: 400px; margin: 0 auto"></div>';
             echo "<br/>";
-            echo "<script type='text/javascript'>bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"Price\",\"" . $symbol . "\");</script>";
+            echo "<script type='text/javascript'></script>";
             echo '<div id="toggler_button" style="text-align: center; margin: 8px auto;">Click to show stock news<br/><a href="javascript:;" onclick="togglefunc()" style="text-align: center; margin-left: auto; margin-right: auto;"><div><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a></div>';
         }
         endif;
@@ -886,7 +890,7 @@ if (isset($_POST["Search"])): {
             <?php for ($ii = 0; $ii < 5; $ii++) { ?>
                 <tr>
                     <td style="text-align: left;"><a target="_blank" style="display:inline; margin-right: 15px; "
-                           href="<?php echo $link_array[$ii]; ?>"><?php echo $title_array[$ii]; ?></a>
+                                                     href="<?php echo $link_array[$ii]; ?>"><?php echo $title_array[$ii]; ?></a>
                         Publication Time: <?php echo $pubDate_array[$ii]; ?></td>
                 </tr>
             <?php } ?>
