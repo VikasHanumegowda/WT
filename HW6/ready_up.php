@@ -56,16 +56,18 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script type="text/javascript">
-       function myFunction() {
+        function myFunction() {
 
-               document.getElementById('outer').style.display = 'none';
-               document.getElementById('STS').value = '';
+            document.getElementById('outer').style.display = 'none';
+            document.getElementById('STS').value = '';
 
         }
-        function  func_for_init(obj, symbol) {
+
+        function func_for_init(obj, symbol, date) {
             obj = JSON.parse(obj);
-            var today = new Date();
-            var day = today.getDate();
+            console.log(date+"date\n");
+            var today = new Date(date);
+            var day = today.getDate()+1;
             var monthIndex = today.getMonth();
             var today_str = formatDate(today);
             options = {
@@ -145,7 +147,7 @@
             for (x in obj['Time Series (Daily)']) {
                 count += 1;
                 var today_date = new Date(x);
-                console.log(x,count);
+                console.log(x, count);
                 series.unshift(parseFloat(obj['Time Series (Daily)'][x]['4. close']));
                 volumes.unshift(parseFloat(obj['Time Series (Daily)'][x]['5. volume']));
                 if (count == 184)
@@ -175,14 +177,14 @@
                 "11", "12"
             ];
 
-            var day = date.getDate();
+            var day = date.getDate() + 1;
             var monthIndex = date.getMonth();
             var year = date.getFullYear();
 
             return day + '/' + monthNames[monthIndex] + '/' + year;
         }
 
-        function bringin_data(url="", indicator="", symbol) {
+        function bringin_data(url="", indicator="", symbol, date) {
             console.log("URL:" + url);
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
@@ -190,8 +192,8 @@
                     // Action to be performed when the document is read;
                     var xmlDoc = xhttp.responseText;
                     obj = JSON.parse(xmlDoc);
-                    var today = new Date();
-                    var day = today.getDate();
+                    var today = new Date(date);
+                    var day = today.getDate()+1;
                     var monthIndex = today.getMonth();
                     var year = today.getFullYear();
                     var today_str = formatDate(today);
@@ -277,8 +279,8 @@
                             var today_date = new Date(x);
 //                            console.log(x,count);
 //                            if (today_date.getDay() !== 6 || today_date.getDay() !== 0) {
-                            series.unshift(Array(today_date,parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
-                            volumes.unshift(Array(today_date,parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
+                            series.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
+                            volumes.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
 //                            }
                             if (count == 184)
                                 break;
@@ -860,160 +862,162 @@
             <input id="STS" style="display: inline-block; width: 50%;" type="text" name="STS"><br>
             <input style="font-size: 20px; margin-left: 245px;margin-right: 10px;" type="submit" value="Search"
                    name="Search" id="Search">
-            <input style="font-size: 20px;" type="button" value="Clear" name="Clear" onclick="myFunction()" >
+            <input style="font-size: 20px;" type="button" value="Clear" name="Clear" onclick="myFunction()">
         </div>
     </form>
     <p>* - <i>Mandatory fields.</i></p>
 </div>
 
-<div id = "outer">
+<div id="outer">
 
-<?php
-function startsWith($haystack, $needle)
-{
-    $length = strlen($needle);
-    return (substr($haystack, 0, $length) === $needle);
-}
-
-function test_input($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
-function print_indicators_list($symbol)
-{
-    $list = array("Price", "SMA", "EMA", "STOCH", "RSI", "ADX", "CCI", "BBANDS", "MACD");
-    $output = "";
-    foreach ($list as $x) {
-        if ($x === "Price"):
-            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"" . "r" . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
-        elseif ($x === 'STOCH'):
-            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&outputsize=compact&time_period=10&slowkmatype=1&slowdmatype=1&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
-        elseif ($x === 'BBANDS'):
-            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=5&series_type=close&nbdevup=3&nbdevdn=3&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
-        elseif ($x === 'SMA'):
-            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
-        elseif ($x === 'EMA'):
-            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
-        elseif ($x === 'RSI'):
-            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
-        elseif ($x === 'ADX'):
-            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
-        elseif ($x === 'CCI'):
-            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
-        elseif ($x === 'MACD'):
-            $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\")'>" . $x . "</a></u>";
-        endif;
-    }
-    return $output;
-}
-
-
-if (isset($_POST["Search"])): {
-    if ($_POST["STS"] == ""): {
-        echo "<script type='text/javascript'>alert('Please enter a symbol');</script>";
-    } else: {
-        echo "<script type='text/javascript'>hell = document.getElementById('STS');hell.value = \"" . $_POST['STS'] . "\"; </script>";
-        $symbol = test_input($_POST["STS"]);
-        //https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW
-        $url_for_alphavantage_initial = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW";
-        $response_from_alphavantage_initial1 = @file_get_contents($url_for_alphavantage_initial);
-        if ($response_from_alphavantage_initial1===false) {
-            echo "<script type='text/javascript'>  alert('Failed opening " . $url_for_alphavantage_initial . "');</script>";
-            exit();
-        }
-        $url_for_news = "https://seekingalpha.com/api/sa/combined/" . $symbol . ".xml";
-        $response = @file_get_contents($url_for_news);
-        if ($response===false) {
-            echo "<script type='text/javascript'>  alert('Failed opening " . $url_for_news . "');</script>";
-            exit();
-        }
-        $news_obj = simplexml_load_string($response);
-
-
-        $item_array = array(1, 2, 3, 4, 5);
-        $title_array = array(1, 2, 3, 4, 5);
-        $link_array = array(1, 2, 3, 4, 5);
-        $pubDate_array = array(1, 2, 3, 4, 5);
-        foreach ($news_obj as $x) {
-            for ($i = 0; $i < 5; $i++) {
-                $item_array[$i] = $x->item[$i];
-                $title_array[$i] = $item_array[$i]->title;
-                $link_array[$i] = $item_array[$i]->link;
-                $pubDate_array[$i] = $item_array[$i]->pubDate;
-            }
-        }
-        $response_from_alphavantage_initial = json_decode($response_from_alphavantage_initial1, true);
-
-        if (key_exists("Error Message", $response_from_alphavantage_initial)
-            and startsWith($response_from_alphavantage_initial["Error Message"], "Invalid") === true): {
-            echo "<table>";
-            echo "<tr><th>Error</th><td>Error: NO record has been found, please enter a valid symbol</td></tr>";
-            echo "</table>";
-        } else: {
-            date_default_timezone_set("America/New_York");
-            $date = $response_from_alphavantage_initial["Meta Data"]["3. Last Refreshed"];
-            $date = new DateTime($date);
-            $date = date_format($date, "Y-m-d");
-            $close = $response_from_alphavantage_initial["Time Series (Daily)"][$date]["4. close"];
-            $open = $response_from_alphavantage_initial["Time Series (Daily)"][$date]["1. open"];
-            $prev_date = date('Y-m-d', strtotime($date . ' -1 day'));
-            while (key_exists($prev_date, $response_from_alphavantage_initial["Time Series (Daily)"]) == false)
-                $prev_date = date('Y-m-d', strtotime($prev_date . ' -1 day'));
-            $prev_close = $response_from_alphavantage_initial["Time Series (Daily)"][$prev_date]["4. close"];
-            $format = '%.2f';
-            $change = sprintf($format, floatval($close) - floatval($prev_close));
-            $change_percent = sprintf($format, 100.0 * $change / floatval($prev_close));
-            $pos_change = false;
-            if (floatval($prev_close) <= floatval($close)):
-                $pos_change = true;
-            endif;
-            echo "<table>";
-            echo "<tr><th>Stock Ticker Symbol</th><td>" . $symbol . "</td></tr>";
-            echo "<tr><th>Close</th><td>" . $close . "</td></tr>";
-            echo "<tr><th>Open</th><td>" . $open . "</td></tr>";
-            echo "<tr><th>Previous Close</th><td>" . $prev_close . "</td></tr>";
-            if ($pos_change):
-                echo "<tr><th>Change</th><td>" . $change . "<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png\"/></span></td></tr>
-<tr><th>Change Percent</th><td>" . $change_percent . "%<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png\"/></span></td></tr>";
-            else:
-                echo "<tr><th>Change</th><td>" . $change . "<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr>
-<tr><th>Change Percent</th><td>" . $change_percent . "%<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr>";
-            endif;
-            $format = "%.4f-%.4f";
-            echo "<tr><th>Day's Range</th><td>" . sprintf($format, $response_from_alphavantage_initial["Time Series (Daily)"][$date]["3. low"], $response_from_alphavantage_initial["Time Series (Daily)"][$date]["2. high"]) . "</td></tr>";
-            echo "<tr><th>Volume</th><td>" . number_format(floatval($response_from_alphavantage_initial["Time Series (Daily)"][$date]["5. volume"]), 0, ".", ",") . "</td></tr>";
-            echo "<tr><th>Timestamp</th><td>" . $date . "</td></tr>";
-            echo "<tr><th>Indicators</th><td>" . print_indicators_list($symbol) . "</td></tr>";
-            echo "</table>";
-            echo "";
-            echo "<br/>";
-            echo '<div id="container" style="border: 1px solid #888;min-width: 310px; height: 400px; margin: 0 auto"></div>';
-            echo "<br/>";
-            echo "<script type='text/javascript'>func_for_init(".json_encode($response_from_alphavantage_initial1) .",'".$symbol."');</script>";
-            echo '<div id="toggler_button" style="text-align: center; margin: 8px auto;">Click to show stock news<br/><a href="javascript:;" onclick="togglefunc()" style="text-align: center; margin-left: auto; margin-right: auto;"><div><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a></div>';
-        }
-        endif;
-    }
-    endif; ?>
-    <div id="container2" style="display:none;min-width: 310px; max-height: 400px; margin: 0 auto">
-        <table>
-            <?php for ($ii = 0; $ii < 5; $ii++) { ?>
-                <tr>
-                    <td style="text-align: left;"><a target="_blank" style="display:inline; margin-right: 15px; "
-                                                     href="<?php echo $link_array[$ii]; ?>"><?php echo $title_array[$ii]; ?></a>
-                        Publication Time: <?php echo $pubDate_array[$ii]; ?></td>
-                </tr>
-            <?php } ?>
-        </table>
-    </div>
     <?php
-}
-endif;
-?>
+    function startsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        return (substr($haystack, 0, $length) === $needle);
+    }
+
+    function test_input($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+
+    function print_indicators_list($symbol, $date)
+    {
+        echo $date;
+        $list = array("Price", "SMA", "EMA", "STOCH", "RSI", "ADX", "CCI", "BBANDS", "MACD");
+        $output = "";
+        foreach ($list as $x) {
+            if ($x === "Price"):
+                $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW\",\"" . "r" . "\",\"" . $symbol . "\",\"" . $date . "\")'>" . $x . "</a></u>";
+            elseif ($x === 'STOCH'):
+                $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&outputsize=compact&time_period=10&slowkmatype=1&slowdmatype=1&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\",\"" . $date . "\")'>" . $x . "</a></u>";
+            elseif ($x === 'BBANDS'):
+                $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=5&series_type=close&nbdevup=3&nbdevdn=3&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\",\"" . $date . "\")'>" . $x . "</a></u>";
+            elseif ($x === 'SMA'):
+                $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\",\"" . $date . "\")'>" . $x . "</a></u>";
+            elseif ($x === 'EMA'):
+                $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\",\"" . $date . "\")'>" . $x . "</a></u>";
+            elseif ($x === 'RSI'):
+                $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\",\"" . $date . "\")'>" . $x . "</a></u>";
+            elseif ($x === 'ADX'):
+                $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\",\"" . $date . "\")'>" . $x . "</a></u>";
+            elseif ($x === 'CCI'):
+                $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\",\"" . $date . "\")'>" . $x . "</a></u>";
+            elseif ($x === 'MACD'):
+                $output .= "<u onMouseOver=\"this.style.color='#444'\"  onMouseOut=\"this.style.color='#00F'\" style='color: blue; cursor: pointer; display:inline;'><a style=' margin: 0 8px;' onclick='bringin_data(url=\"https://www.alphavantage.co/query?function=" . $x . "&symbol=" . $symbol . "&interval=daily&time_period=10&series_type=close&apikey=OGY0S9LG8J8ADNZW\",\"" . $x . "\",\"" . $symbol . "\",\"" . $date . "\")'>" . $x . "</a></u>";
+            endif;
+        }
+        return $output;
+    }
+
+
+    if (isset($_POST["Search"])): {
+        if ($_POST["STS"] == ""): {
+            echo "<script type='text/javascript'>alert('Please enter a symbol');</script>";
+        } else: {
+            echo "<script type='text/javascript'>hell = document.getElementById('STS');hell.value = \"" . $_POST['STS'] . "\"; </script>";
+            $symbol = test_input($_POST["STS"]);
+            //https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW
+            $url_for_alphavantage_initial = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW";
+            $response_from_alphavantage_initial1 = @file_get_contents($url_for_alphavantage_initial);
+            if ($response_from_alphavantage_initial1 === false) {
+                echo "<script type='text/javascript'>  alert('Failed opening " . $url_for_alphavantage_initial . "');</script>";
+                exit();
+            }
+            $url_for_news = "https://seekingalpha.com/api/sa/combined/" . $symbol . ".xml";
+            $response = @file_get_contents($url_for_news);
+            if ($response === false) {
+                echo "<script type='text/javascript'>  alert('Failed opening " . $url_for_news . "');</script>";
+                exit();
+            }
+            $news_obj = simplexml_load_string($response);
+
+
+            $item_array = array(1, 2, 3, 4, 5);
+            $title_array = array(1, 2, 3, 4, 5);
+            $link_array = array(1, 2, 3, 4, 5);
+            $pubDate_array = array(1, 2, 3, 4, 5);
+            foreach ($news_obj as $x) {
+                for ($i = 0; $i < 5; $i++) {
+                    $item_array[$i] = $x->item[$i];
+                    $title_array[$i] = $item_array[$i]->title;
+                    $link_array[$i] = $item_array[$i]->link;
+                    $pubDate_array[$i] = $item_array[$i]->pubDate;
+                }
+            }
+            $response_from_alphavantage_initial = json_decode($response_from_alphavantage_initial1, true);
+
+            if (key_exists("Error Message", $response_from_alphavantage_initial)
+                and startsWith($response_from_alphavantage_initial["Error Message"], "Invalid") === true): {
+                echo "<table>";
+                echo "<tr><th>Error</th><td>Error: NO record has been found, please enter a valid symbol</td></tr>";
+                echo "</table>";
+            } else: {
+                date_default_timezone_set("America/New_york");
+                $date1 = $response_from_alphavantage_initial["Meta Data"]["3. Last Refreshed"];
+                echo $date1;
+                $date = new DateTime($date1);
+                $date = date_format($date, "Y-m-d");
+                $close = $response_from_alphavantage_initial["Time Series (Daily)"][$date]["4. close"];
+                $open = $response_from_alphavantage_initial["Time Series (Daily)"][$date]["1. open"];
+                $prev_date = date('Y-m-d', strtotime($date . ' -1 day'));
+                while (key_exists($prev_date, $response_from_alphavantage_initial["Time Series (Daily)"]) == false)
+                    $prev_date = date('Y-m-d', strtotime($prev_date . ' -1 day'));
+                $prev_close = $response_from_alphavantage_initial["Time Series (Daily)"][$prev_date]["4. close"];
+                $format = '%.2f';
+                $change = sprintf($format, floatval($close) - floatval($prev_close));
+                $change_percent = sprintf($format, 100.0 * $change / floatval($prev_close));
+                $pos_change = false;
+                if (floatval($prev_close) <= floatval($close)):
+                    $pos_change = true;
+                endif;
+                echo "<table>";
+                echo "<tr><th>Stock Ticker Symbol</th><td>" . $symbol . "</td></tr>";
+                echo "<tr><th>Close</th><td>" . $close . "</td></tr>";
+                echo "<tr><th>Open</th><td>" . $open . "</td></tr>";
+                echo "<tr><th>Previous Close</th><td>" . $prev_close . "</td></tr>";
+                if ($pos_change):
+                    echo "<tr><th>Change</th><td>" . $change . "<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png\"/></span></td></tr>
+<tr><th>Change Percent</th><td>" . $change_percent . "%<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png\"/></span></td></tr>";
+                else:
+                    echo "<tr><th>Change</th><td>" . $change . "<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr>
+<tr><th>Change Percent</th><td>" . $change_percent . "%<span><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png\"/></span></td></tr>";
+                endif;
+                $format = "%.4f-%.4f";
+                echo "<tr><th>Day's Range</th><td>" . sprintf($format, $response_from_alphavantage_initial["Time Series (Daily)"][$date]["3. low"], $response_from_alphavantage_initial["Time Series (Daily)"][$date]["2. high"]) . "</td></tr>";
+                echo "<tr><th>Volume</th><td>" . number_format(floatval($response_from_alphavantage_initial["Time Series (Daily)"][$date]["5. volume"]), 0, ".", ",") . "</td></tr>";
+                echo "<tr><th>Timestamp</th><td>" . $date . "</td></tr>";
+                echo "<tr><th>Indicators</th><td>" . print_indicators_list($symbol, $date1) . "</td></tr>";
+                echo "</table>";
+                echo "";
+                echo "<br/>";
+                echo '<div id="container" style="border: 1px solid #888;min-width: 310px; height: 400px; margin: 0 auto"></div>';
+                echo "<br/>";
+                echo "<script type='text/javascript'>func_for_init(" . json_encode($response_from_alphavantage_initial1) . ",'" . $symbol . "','" . $date1 . "');</script>";
+                echo '<div id="toggler_button" style="text-align: center; margin: 8px auto;">Click to show stock news<br/><a href="javascript:;" onclick="togglefunc()" style="text-align: center; margin-left: auto; margin-right: auto;"><div><img src="http://cs-server.usc.edu:45678/hw/hw6/images/Gray_Arrow_Down.png"/></div></a></div>';
+            }
+            endif;
+        }
+        endif; ?>
+        <div id="container2" style="display:none;min-width: 310px; max-height: 400px; margin: 0 auto">
+            <table>
+                <?php for ($ii = 0; $ii < 5; $ii++) { ?>
+                    <tr>
+                        <td style="text-align: left;"><a target="_blank" style="display:inline; margin-right: 15px; "
+                                                         href="<?php echo $link_array[$ii]; ?>"><?php echo $title_array[$ii]; ?></a>
+                            Publication Time: <?php echo $pubDate_array[$ii]; ?></td>
+                    </tr>
+                <?php } ?>
+            </table>
+        </div>
+        <?php
+    }
+    endif;
+    ?>
 
 </div>
 <NOSCRIPT>
