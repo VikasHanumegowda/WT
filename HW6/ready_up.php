@@ -62,7 +62,7 @@
             document.getElementById('STS').value = '';
 
         }
-
+        //http://localhost/~vikashanumegowda/WT/HW6/ready_up.php
         function func_for_init(obj, symbol, date) {
             obj = JSON.parse(obj);
             console.log(date+"date\n");
