@@ -887,7 +887,7 @@
 
     function print_indicators_list($symbol, $date)
     {
-        echo $date;
+//        echo $date;
         $list = array("Price", "SMA", "EMA", "STOCH", "RSI", "ADX", "CCI", "BBANDS", "MACD");
         $output = "";
         foreach ($list as $x) {
@@ -959,7 +959,7 @@
             } else: {
                 date_default_timezone_set("America/New_york");
                 $date1 = $response_from_alphavantage_initial["Meta Data"]["3. Last Refreshed"];
-                echo $date1;
+//                echo $date1;
                 $date = new DateTime($date1);
                 $date = date_format($date, "Y-m-d");
                 $close = $response_from_alphavantage_initial["Time Series (Daily)"][$date]["4. close"];
