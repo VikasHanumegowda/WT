@@ -9,8 +9,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var AppComponent = (function () {
     function AppComponent() {
-        this.title = 'app';
     }
+    AppComponent.prototype.makeCalls = function () {
+        var xmlHttp = new XMLHttpRequest();
+        console.log('XMLHTTP');
+        xmlHttp.open('GET', 'http://dev.markitondemand.com/MODApis/Api/v2/Lookup/json?input=Apple', false); // false for synchronous request
+        xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                console.log('XMLHTTP');
+                alert(xmlHttp.responseText);
+            }
+        };
+    };
     AppComponent = __decorate([
         core_1.Component({
             selector: 'app-root',
