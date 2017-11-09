@@ -1,0 +1,15 @@
+
+body
+{
+    background-image: url("background.png");
+
+}
+label {
+    font-weight: normal !important;
+}
+th {
+    background-color: #DDDDDD;
+}
+.panel-heading {
+    background-color: #BBBBBB;
+}
