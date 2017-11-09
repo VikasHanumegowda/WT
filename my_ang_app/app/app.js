@@ -5,21 +5,7 @@ var app = angular.module('stockApp', ['ngAnimate']);
 app.controller('myCtrl', function($scope, $http){
 
 
-    $scope.querySearch = function(query) {
-        return $http.get("http://dev.markitondemand.com/MODApis/Api/v2/Lookup/json?input="+"query")
-            .then(function (response) {
-                // response.data.forEach(function (element) {
-                    console.log(response.data);
-                    return response.data;
-                // })
-            });
-    }
-    $scope.querySearch = function(query){
-        return $http.get("https://api.github.com/search/users", {params: {q: query}})
-            .then(function(response){
-                return response.data.items;
-            })
-    }
+
 
     function escapeHtml(text) {
         return text
@@ -40,6 +26,7 @@ app.controller('myCtrl', function($scope, $http){
 
     $scope.symbol_typed = "";
     $scope.symbol="";
+
     $scope.submit = function () {
         symbol = $("#inputSymbol").val();//value from the input text field
         $scope.symbol = symbol;
