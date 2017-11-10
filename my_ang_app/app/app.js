@@ -1,10 +1,16 @@
 
 
-var app = angular.module('stockApp', ['ngAnimate']);
+var app = angular.module('stockApp', ['ngAnimate','ngMaterial']);
 
 app.controller('myCtrl', function($scope, $http){
 
-
+    this.querySearch = function(query){
+        return $http.get("http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/?symbol="+query+"&second=mark")
+            .then(function(response){
+                console.log("hello");
+                return JSON.parse(response.data);
+            })
+    }
 
 
     function escapeHtml(text) {
@@ -52,31 +58,39 @@ app.controller('myCtrl', function($scope, $http){
             params:{"symbol": $scope.symbol, "second": "news"}
         }).then(function successCallback(response) {
             $scope.news = response.data.channel.item;
-            console.log($scope.news);
+            console.log($scope.news[0]);
+
 
             // angular.forEach($scope.userData, function(entry) {
             //     entry.isFav = $scope.isStarred(entry.id);
             // });
+
+
             $http({
                 method:'GET',
-                url:"http://www.sodium-task-95910.appspot.com/?",
-                params:{"data": keyword, "type": "page"}
+                url:"http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+                params:{"symbol": $scope.symbol, "second": "tsd"}
             }).then(function successCallback(response) {
-                $scope.pageData = response.data.data;
-                console.log(response.data.data);
-                $scope.pagePage=response.data.paging;
-                if( !$scope.pagePage)
-                {
-                    $scope.pageAppend['hasNext']=false;
-                    $scope.pageAppend['hasPrev']=false;
-                }
-                else {
-                    $scope.pageAppend=$scope.append($scope.pagePage,"page");
-                    console.log(response.data.paging);
-                }
-                angular.forEach($scope.pageData, function(entry) {
-                    entry.isFav = $scope.isStarred(entry.id);
-                });
+                $scope.tsd = response.data;
+                console.log("tsd");
+                console.log($scope.tsd);
+                // $scope.pageData = response.data.data;
+                // console.log(response.data.data);
+                // $scope.pagePage=response.data.paging;
+                // if( !$scope.pagePage)
+                // {
+                //     $scope.pageAppend['hasNext']=false;
+                //     $scope.pageAppend['hasPrev']=false;
+                // }
+                // else {
+                //     $scope.pageAppend=$scope.append($scope.pagePage,"page");
+                //     console.log(response.data.paging);
+                // }
+                // angular.forEach($scope.pageData, function(entry) {
+                //     entry.isFav = $scope.isStarred(entry.id);
+                // });
+
+
             //     $http({
             //         method:'GET',
             //         url:"http://www.sodium-task-95910.appspot.com/?",
@@ -144,7 +158,7 @@ app.controller('myCtrl', function($scope, $http){
             //             });
             //         });
             //     });
-            // });
+            });
         });
     }
 

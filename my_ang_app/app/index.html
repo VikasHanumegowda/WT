@@ -10,14 +10,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.css" />
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css "
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="app.css">
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+
 
 </head>
 <body>
@@ -34,13 +44,22 @@
                 </div>
                 <div class="pull-left col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
+                    <!--<md-autocomplete flex-->
+                                     <!--md-selected-item="myCtrl.selectedItem"-->
+                                     <!--md-search-text="myCtrl.searchText"-->
+                                     <!--md-items="item in myCtrl.querySearch(myCtrl.searchText)"-->
+                                     <!--md-item-text="item.Symbol"-->
+                                     <!--md-delay="300"-->
+                                     <!--md-floating-label="Search Github Users">-->
+                        <!--<div layout="row" class="item" layout-align="start center">-->
+                            <!--<span md-highlight-text="myCtrl.searchText">{{item.Symbol}}</span>-->
+                        <!--</div>-->
+                    <!--</md-autocomplete>-->
 
                     <input type="text" id="inputSymbol" class="pull-left col-xs-12 col-sm-12 col-md-12 col-lg-12"
                            ng-model="symbol_typed" placeholder="e.g. AAPL" style="margin-right: 4%;" data-toggle="tooltip"
                            data-placement="bottom" title="Please type a ticker symbol."><br/>
-                    <div layout="row" class="item" layout-align="start center">
-                        <span md-highlight-text="myCtrl.searchText">{{item}}</span>
-                    </div>
+
                     <label for="inputSymbol">Please enter a stock ticker symbol.</label>
                 </div>
                 <button id="submit" type="submit" class="btn-primary btn" ng-click='submit()' ng-disabled="symbol_typed===''"><span
@@ -117,14 +136,6 @@
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-animate.min.js"></script>
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
-<!--<script src="//code.angularjs.org/1.5.0/angular.js"></script>-->
-<!--<script src="//code.angularjs.org/1.5.0/angular-aria.js"></script>-->
-<!--<script src="//code.angularjs.org/1.5.0/angular-animate.js"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
