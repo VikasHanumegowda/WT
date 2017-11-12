@@ -145,14 +145,14 @@
                 <hr>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-left">
                     Stock Details
-                    <div class="pull-right">
-                        <button type="button" class="btn btn-default" style="padding: 4px; height: 30px; width: 30px;">
+                    <div class="pull-right" style="">
+                        <button type="button" class="btn btn-default" style="display: inline-block; padding: 4px; height: 30px; width: 30px;">
                             <span
                                     class="glyphicon glyphicon-star-empty"
                                     style="border: thick"></span>
                         </button>
                         <button type="button" class="btn btn-default"
-                                ng-disabled="disable_facebook_button" style="padding: 4px; height: 30px; width: 30px;">
+                                ng-disabled="disable_facebook_button" style="display: inline-block; padding: 4px; height: 30px; width: 30px;">
                             <img style="height: 20px; width: 20px; "
                                  src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png">
 
@@ -165,22 +165,22 @@
                         </div>
                     </div>
                     <div>
-                        <table>
-                            <tr><td>Stock Ticker Symbol</td><td></td></tr>
-                            <tr><td>Close</td><td></td></tr>
-                            <tr><td>Open</td><td></td></tr>
-                            <tr><td>Previous Close</td><td></td></tr>
+                        <table class="table table-striped">
+                            <tr><th>Stock Ticker Symbol</th><td></td></tr>
+                            <tr><th>Close</th><td></td></tr>
+                            <tr><th>Open</th><td></td></tr>
+                            <tr><th>Previous Close</th><td></td></tr>
                             <!--if ($pos_change):-->
-                            <!--<tr><td>Change</td><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td></tr>-->
-                            <!--<tr><td>Change Percent</td><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td></tr>-->
+                            <!--<tr><th>Change</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td></tr>-->
+                            <!--<tr><th>Change Percent</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td></tr>-->
                             <!--else:-->
-                            <tr><td>Change</td><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span></td></tr>
-                            <tr><td>Change Percent</td><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span></td></tr>
+                            <tr><th>Change</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span></td></tr>
+                            <tr><th>Change Percent</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span></td></tr>
 
-                            <tr><td>Day's Range</td><td></td></tr>
-                            <tr><td>Volume</td><td></td></tr>
-                            <tr><td>Timestamp</td><td></td></tr>
-                            <tr><td>Indicators</td><td></td></tr>
+                            <tr><th>Day's Range</th><td></td></tr>
+                            <tr><th>Volume</th><td></td></tr>
+                            <tr><th>Timestamp</th><td></td></tr>
+                            <tr><th>Indicators</th><td></th></tr>
                         </table>
                     </div>
                 </div>
