@@ -145,17 +145,16 @@
                 <hr>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-left">
                     Stock Details
-                    <div class="pull-right" style="">
-                        <button type="button" class="btn btn-default" style="display: inline-block; padding: 4px; height: 30px; width: 30px;">
+                    <div class="pull-right" style="margin-bottom: 10px;" >
+                        <button type="button" class="btn btn-default" style="padding: 4px; height: 30px; width: 30px;">
                             <span
                                     class="glyphicon glyphicon-star-empty"
                                     style="border: thick"></span>
                         </button>
                         <button type="button" class="btn btn-default"
-                                ng-disabled="disable_facebook_button" style="display: inline-block; padding: 4px; height: 30px; width: 30px;">
+                                ng-disabled="disable_facebook_button" style="padding: 4px; height: 30px; width: 30px;">
                             <img style="height: 20px; width: 20px; "
                                  src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png">
-
                         </button>
                     </div>
                     <div class="progress" id="progressbarTable" ng-if="progress_bar_for_stock_details_active"
@@ -167,36 +166,34 @@
                     <div>
                         <table class="table table-striped">
                             <tr><th>Stock Ticker Symbol</th><td></td></tr>
-                            <tr><th>Close</th><td></td></tr>
-                            <tr><th>Open</th><td></td></tr>
-                            <tr><th>Previous Close</th><td></td></tr>
+                            <tr><th>Last Price</th><td></td></tr> <!--Close-->
                             <!--if ($pos_change):-->
                             <!--<tr><th>Change</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td></tr>-->
-                            <!--<tr><th>Change Percent</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td></tr>-->
                             <!--else:-->
-                            <tr><th>Change</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span></td></tr>
-                            <tr><th>Change Percent</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span></td></tr>
-
+                            <tr><th>Change (Change Percent)</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span></td></tr>
+                            <tr><th>Timestamp</th><td></td></tr>
+                            <tr><th>Open</th><td></td></tr>
+                            <tr><th>Previous Close</th><td></td></tr>
                             <tr><th>Day's Range</th><td></td></tr>
                             <tr><th>Volume</th><td></td></tr>
-                            <tr><th>Timestamp</th><td></td></tr>
-                            <tr><th>Indicators</th><td></th></tr>
                         </table>
                     </div>
                 </div>
                 <div class="class=col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#">Price</a></li>
-                        <li><a href="#">SMA</a></li>
-                        <li><a href="#">EMA</a></li>
-                        <li><a href="#">STOCH</a></li>
-                        <li><a href="#">RSI</a></li>
-                        <li><a href="#">ADX</a></li>
-                        <li><a href="#">CCI</a></li>
-                        <li><a href="#">BBANDS</a></li>
-                        <li><a href="#">MACD</a></li>
+                        <li ng-class="{active:isSet(1)}"><a href="#" ng-click="clickSetTab(1)">Price</a></li>
+                        <li ng-class="{active:isSet(2)}"><a href="#" ng-click="clickSetTab(2)">SMA</a></li>
+                        <li ng-class="{active:isSet(3)}"><a href="#" ng-click="clickSetTab(3)">EMA</a></li>
+                        <li ng-class="{active:isSet(4)}"><a href="#" ng-click="clickSetTab(4)">STOCH</a></li>
+                        <li ng-class="{active:isSet(5)}"><a href="#" ng-click="clickSetTab(5)">RSI</a></li>
+                        <li ng-class="{active:isSet(6)}"><a href="#" ng-click="clickSetTab(6)">ADX</a></li>
+                        <li ng-class="{active:isSet(7)}"><a href="#" ng-click="clickSetTab(7)">CCI</a></li>
+                        <li ng-class="{active:isSet(8)}"><a href="#" ng-click="clickSetTab(8)">BBANDS</a></li>
+                        <li ng-class="{active:isSet(9)}"><a href="#" ng-click="clickSetTab(9)">MACD</a></li>
                     </ul>
+                    <div id="container">
 
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,9 +7,6 @@ body
 label {
     font-weight: normal !important;
 }
-th {
-    background-color: #DDDDDD;
-}
 .panel-heading {
     background-color: #BBBBBB;
     width: 100%;

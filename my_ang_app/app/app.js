@@ -6,7 +6,8 @@ app.controller('myCtrl', function ($scope, $http) {
     $scope.disable_show_details_button = true;
     $scope.show_fav  =true;
     $scope.show_details = false;
-
+    $scope.id_for_upper_tabs = 1;
+    $scope.id_for_indicators = 1;
     $scope.isSetUpper = function(id) {       //true or false
         if($scope.id_for_upper_tabs == id)
             return true;
@@ -17,6 +18,17 @@ app.controller('myCtrl', function ($scope, $http) {
     $scope.clickSetUpperTab=function(id)  //set tab on click
     {
         $scope.id_for_upper_tabs=id;
+    }
+    $scope.isSet = function(id) {       //true or false
+        if($scope.id_for_indicators == id)
+            return true;
+        else
+            return false;
+    }
+
+    $scope.clickSetTab=function(id)  //set tab on click
+    {
+        $scope.id_for_indicators=id;
     }
 
     $scope.flip_to_fav = function(){
@@ -81,130 +93,130 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.activeProgressbar = true;
         // var lat= $scope.lat;
         // var long=$scope.long;
-        $http({
-            method: 'GET',
-            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-            params: {"symbol": $scope.symbol, "second": "news"}
-        }).then(function successCallback(response) {
-            $scope.news = response.data.channel.item;
-            console.log($scope.news[0]);
-
-
-            // angular.forEach($scope.userData, function(entry) {
-            //     entry.isFav = $scope.isStarred(entry.id);
-            // });
-
-
-        });
-        $http({
-            method: 'GET',
-            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-            params: {"symbol": $scope.symbol, "second": "tsd"}
-        }).then(function successCallback(response) {
-            $scope.tsd = response.data;
-            console.log("tsd");
-            console.log($scope.tsd);
-
-            // angular.forEach($scope.pageData, function(entry) {
-            //     entry.isFav = $scope.isStarred(entry.id);
-            // });
-
-
-        });
-        $http({
-            method: 'GET',
-            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-            params: {"symbol": $scope.symbol, "second": "stoch"}
-        }).then(function successCallback(response) {
-            $scope.stoch = response.data;
-            console.log("stoch");
-            console.log($scope.stoch);
-
-            //         angular.forEach($scope.eventData, function(entry) {
-            //             entry.isFav = $scope.isStarred(entry.id);
-            //         });
-            //         //    console.log( response.data );
-        });
-        $http({
-            method: 'GET',
-            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-            params: {"symbol": $scope.symbol, "second": "bbands"}
-        }).then(function successCallback(response) {
-            $scope.bbands = response.data;
-            console.log("bbands");
-            console.log($scope.bbands);
-            //             angular.forEach($scope.placeData, function(entry) {
-            //                 entry.isFav = $scope.isStarred(entry.id);
-            //             });
-            //             //   console.log( response.data );
-        });
-        $http({
-            method: 'GET',
-            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-            params: {"symbol": $scope.symbol, "second": "sma"}
-        }).then(function successCallback(response) {
-            $scope.sma = response.data;
-            console.log("sma");
-            console.log($scope.sma);
-            //                 angular.forEach($scope.groupData, function(entry) {
-            //                     entry.isFav = $scope.isStarred(entry.id);
-            //                 });
-        });
-        $http({
-            method: 'GET',
-            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-            params: {"symbol": $scope.symbol, "second": "ema"}
-        }).then(function successCallback(response) {
-            $scope.ema = response.data;
-            console.log("ema");
-            console.log($scope.ema);
-            //                 /*Rendering Starts*/
-            //                 $scope.setData($scope.id);
-        });
-        $http({
-            method: 'GET',
-            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-            params: {"symbol": $scope.symbol, "second": "rsi"}
-        }).then(function successCallback(response) {
-            $scope.rsi = response.data;
-            console.log("rsi");
-            console.log($scope.rsi);
-            //                 /*Rendering Starts*/
-            //                 $scope.setData($scope.id);
-        });
-        $http({
-            method: 'GET',
-            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-            params: {"symbol": $scope.symbol, "second": "adx"}
-        }).then(function successCallback(response) {
-            $scope.adx = response.data;
-            console.log("adx");
-            console.log($scope.adx);
-            //                 /*Rendering Starts*/
-            //                 $scope.setData($scope.id);
-        });
-        $http({
-            method: 'GET',
-            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-            params: {"symbol": $scope.symbol, "second": "cci"}
-        }).then(function successCallback(response) {
-            $scope.cci = response.data;
-            console.log("cci");
-            console.log($scope.cci);
-            //                 /*Rendering Starts*/
-            //                 $scope.setData($scope.id);
-        });
-        $http({
-            method: 'GET',
-            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-            params: {"symbol": $scope.symbol, "second": "macd"}
-        }).then(function successCallback(response) {
-            $scope.macd = response.data;
-            console.log("macd");
-            console.log($scope.macd);
-            //                 /*Rendering Starts*/
-            //                 $scope.setData($scope.id);
-        });
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": $scope.symbol, "second": "news"}
+        // }).then(function successCallback(response) {
+        //     $scope.news = response.data.channel.item;
+        //     console.log($scope.news[0]);
+        //
+        //
+        //     // angular.forEach($scope.userData, function(entry) {
+        //     //     entry.isFav = $scope.isStarred(entry.id);
+        //     // });
+        //
+        //
+        // });
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": $scope.symbol, "second": "tsd"}
+        // }).then(function successCallback(response) {
+        //     $scope.tsd = response.data;
+        //     console.log("tsd");
+        //     console.log($scope.tsd);
+        //
+        //     // angular.forEach($scope.pageData, function(entry) {
+        //     //     entry.isFav = $scope.isStarred(entry.id);
+        //     // });
+        //
+        //
+        // });
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": $scope.symbol, "second": "stoch"}
+        // }).then(function successCallback(response) {
+        //     $scope.stoch = response.data;
+        //     console.log("stoch");
+        //     console.log($scope.stoch);
+        //
+        //     //         angular.forEach($scope.eventData, function(entry) {
+        //     //             entry.isFav = $scope.isStarred(entry.id);
+        //     //         });
+        //     //         //    console.log( response.data );
+        // });
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": $scope.symbol, "second": "bbands"}
+        // }).then(function successCallback(response) {
+        //     $scope.bbands = response.data;
+        //     console.log("bbands");
+        //     console.log($scope.bbands);
+        //     //             angular.forEach($scope.placeData, function(entry) {
+        //     //                 entry.isFav = $scope.isStarred(entry.id);
+        //     //             });
+        //     //             //   console.log( response.data );
+        // });
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": $scope.symbol, "second": "sma"}
+        // }).then(function successCallback(response) {
+        //     $scope.sma = response.data;
+        //     console.log("sma");
+        //     console.log($scope.sma);
+        //     //                 angular.forEach($scope.groupData, function(entry) {
+        //     //                     entry.isFav = $scope.isStarred(entry.id);
+        //     //                 });
+        // });
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": $scope.symbol, "second": "ema"}
+        // }).then(function successCallback(response) {
+        //     $scope.ema = response.data;
+        //     console.log("ema");
+        //     console.log($scope.ema);
+        //     //                 /*Rendering Starts*/
+        //     //                 $scope.setData($scope.id);
+        // });
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": $scope.symbol, "second": "rsi"}
+        // }).then(function successCallback(response) {
+        //     $scope.rsi = response.data;
+        //     console.log("rsi");
+        //     console.log($scope.rsi);
+        //     //                 /*Rendering Starts*/
+        //     //                 $scope.setData($scope.id);
+        // });
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": $scope.symbol, "second": "adx"}
+        // }).then(function successCallback(response) {
+        //     $scope.adx = response.data;
+        //     console.log("adx");
+        //     console.log($scope.adx);
+        //     //                 /*Rendering Starts*/
+        //     //                 $scope.setData($scope.id);
+        // });
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": $scope.symbol, "second": "cci"}
+        // }).then(function successCallback(response) {
+        //     $scope.cci = response.data;
+        //     console.log("cci");
+        //     console.log($scope.cci);
+        //     //                 /*Rendering Starts*/
+        //     //                 $scope.setData($scope.id);
+        // });
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": $scope.symbol, "second": "macd"}
+        // }).then(function successCallback(response) {
+        //     $scope.macd = response.data;
+        //     console.log("macd");
+        //     console.log($scope.macd);
+        //     //                 /*Rendering Starts*/
+        //     //                 $scope.setData($scope.id);
+        // });
 
 
     }
