@@ -7,6 +7,18 @@ app.controller('myCtrl', function ($scope, $http) {
     $scope.show_fav  =true;
     $scope.show_details = false;
 
+    $scope.isSetUpper = function(id) {       //true or false
+        if($scope.id_for_upper_tabs == id)
+            return true;
+        else
+            return false;
+    }
+
+    $scope.clickSetUpperTab=function(id)  //set tab on click
+    {
+        $scope.id_for_upper_tabs=id;
+    }
+
     $scope.flip_to_fav = function(){
         $scope.show_fav  =true;
         $scope.show_details = false;
