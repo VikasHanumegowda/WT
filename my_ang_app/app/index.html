@@ -9,7 +9,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css "
@@ -23,15 +22,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.css" />
 
     <!--<script>$scope.show_fav = true;</script>-->
 </head>
 <body>
-<div ng-controller="myCtrl" class="container-fluid col-xs-10 col-sm-10 col-md-12 col-lg-12">
+<div ng-controller="myCtrl" class="container-fluid col-xs-10 col-sm-10 col-md-12 col-lg-12" >
     <!--top block-->
     <div style="color: black; margin-top: 10px;"
          class="well form-group col-md-offset-1 col-lg-offset-1 col-xs-12 col-sm-12 col-md-10 col-lg-10">
@@ -43,12 +41,24 @@
                     <label>Enter Stock Ticker Symbol:<span style="color:#FF0000">*</span></label>
                 </div>
                 <div class="pull-left col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <!--<md-autocomplete flex-->
+                            <!--md-selected-item="myCtrl.selectedItem"-->
+                            <!--md-search-text="myCtrl.searchText"-->
+                            <!--md-items="item in myCtrl.querySearch(myCtrl.searchText)"-->
+                            <!--md-item-text="item.Symbol"-->
+                            <!--md-delay="300"-->
+                            <!--placeholder="e.g. AAPL"-->
+                            <!--&gt;-->
+                        <!--<md-item-template>-->
+                            <!--<span md-highlight-text="myCtrl.searchText" md-highlight-flags="^i">{{item.Symbol}}</span>-->
+                        <!--</md-item-template>-->
+                    <!--</md-autocomplete>-->
                     <input type="text" id="inputSymbol" class="pull-left col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                           ng-model="symbol_typed" placeholder="e.g. AAPL" style="margin-right: 4%;"
-                           data-toggle="tooltip"
-                           data-placement="bottom" title="Please type a ticker symbol."><br/>
-
-                    <label for="inputSymbol">Please enter a stock ticker symbol.</label>
+                    ng-model="symbol_typed" placeholder="e.g. AAPL" style="margin-right: 4%;"
+                    data-toggle="tooltip"
+                    data-placement="bottom" title="Please type a ticker symbol.">
+                    <br/>
+                    <label>Please enter a stock ticker symbol.</label>
                 </div>
                 <button id="submit" type="submit" class="btn-primary btn" ng-click='submit()'
                         ng-disabled="symbol_typed===''"><span
@@ -145,7 +155,7 @@
                 <hr>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-left">
                     Stock Details
-                    <div class="pull-right" style="margin-bottom: 10px;" >
+                    <div class="pull-right" style="margin-bottom: 10px;">
                         <button type="button" class="btn btn-default" style="padding: 4px; height: 30px; width: 30px;">
                             <span
                                     class="glyphicon glyphicon-star-empty"
@@ -165,17 +175,43 @@
                     </div>
                     <div>
                         <table class="table table-striped">
-                            <tr><th>Stock Ticker Symbol</th><td></td></tr>
-                            <tr><th>Last Price</th><td></td></tr> <!--Close-->
+                            <tr>
+                                <th>Stock Ticker Symbol</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Last Price</th>
+                                <td></td>
+                            </tr> <!--Close-->
                             <!--if ($pos_change):-->
                             <!--<tr><th>Change</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td></tr>-->
                             <!--else:-->
-                            <tr><th>Change (Change Percent)</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span></td></tr>
-                            <tr><th>Timestamp</th><td></td></tr>
-                            <tr><th>Open</th><td></td></tr>
-                            <tr><th>Previous Close</th><td></td></tr>
-                            <tr><th>Day's Range</th><td></td></tr>
-                            <tr><th>Volume</th><td></td></tr>
+                            <tr>
+                                <th>Change (Change Percent)</th>
+                                <td><span><img style="height: 20px; width: 20px; "
+                                               src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Timestamp</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Open</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Previous Close</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Day's Range</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>Volume</th>
+                                <td></td>
+                            </tr>
                         </table>
                     </div>
                 </div>

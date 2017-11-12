@@ -90,7 +90,7 @@
         $response_from_auto = @file_get_contents($url_for_auto);
         $fileContents = str_replace(array("\n", "\r", "\t"), '', $response_from_auto);
 //        $fileContents = trim(str_replace('"', "'", $fileContents));
-        echo json_encode($fileContents);
+        echo $fileContents;
     }
 
 ?>

@@ -41,12 +41,24 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.show_details = true;
     }
 
-    $scope.querySearch = function (query) {
-        return $http.get("http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/?symbol=" + query + "&second=mark")
-            .then(function (response) {
-                console.log("hello");
-                return JSON.parse(response.data);
-            })
+    // $scope.querySearch = function (query) {
+    //     return $http.get("http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/?symbol=" + query + "&second=mark")
+    //         .then(function (response) {
+    //             console.log(JSON.parse(response.data));
+    //             return JSON.parse(response.data);
+    //         })
+    // }
+    $scope.querySearch = function(query){
+        $scope.arr = [];
+        console.log("in query search before ajax call");
+        $http.get("http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/?symbol="+query+"&second=mark")
+            .then(function(response){
+                $scope.arr = response.data;
+                // $scope.arr;
+            });
+        console.log("in query search after ajax call");
+
+        return $scope.arr;
     }
 
 
