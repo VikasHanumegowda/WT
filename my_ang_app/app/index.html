@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="stockApp">
+<html lang="en" ng-app="stockApp" ng-cloak>
 <html lang="en">
 <head>
 
@@ -26,7 +26,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.1/angular-material.min.css"/>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
 
@@ -34,7 +35,7 @@
     <!--<script>$scope.show_fav = true;</script>-->
 </head>
 <body>
-<div ng-controller="myCtrl" class="container-fluid col-xs-10 col-sm-10 col-md-12 col-lg-12" >
+<div ng-controller="myCtrl" class="container-fluid col-xs-10 col-sm-10 col-md-12 col-lg-12">
     <!--top block-->
     <div style="color: black; margin-top: 10px;"
          class="well form-group col-md-offset-1 col-lg-offset-1 col-xs-12 col-sm-12 col-md-10 col-lg-10">
@@ -47,9 +48,9 @@
                 </div>
                 <div class="pull-left col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <input type="text" id="inputSymbol" class="pull-left col-xs-12 col-sm-12 col-md-12 col-lg-12"
-                    ng-model="symbol_typed" placeholder="e.g. AAPL" style="margin-right: 4%;"
-                    data-toggle="tooltip"
-                    data-placement="bottom" title="Please type a ticker symbol.">
+                           ng-model="symbol_typed" placeholder="e.g. AAPL" style="margin-right: 4%;"
+                           data-toggle="tooltip"
+                           data-placement="bottom" title="Please type a ticker symbol.">
                     <br/>
                     <label>Please enter a stock ticker symbol.</label>
                 </div>
@@ -146,82 +147,87 @@
                             class="glyphicon glyphicon-link"></span> News Feeds</a></li>
                 </ul>
                 <hr>
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-left">
-                    Stock Details
-                    <div class="pull-right" style="margin-bottom: 10px;">
-                        <button type="button" class="btn btn-default" style="padding: 4px; height: 30px; width: 30px;">
-                            <span
-                                    class="glyphicon glyphicon-star-empty"
-                                    style="border: thick"></span>
-                        </button>
-                        <button type="button" class="btn btn-default"
-                                ng-disabled="disable_facebook_button" style="padding: 4px; height: 30px; width: 30px;">
-                            <img style="height: 20px; width: 20px; "
-                                 src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png">
-                        </button>
-                    </div>
-                    <div class="progress" id="progressbarTable" ng-if="progress_bar_for_stock_details_active"
-                         style="margin-top: 200px">
-                        <div class="progress-bar progress-bar-striped active" role="progressbar"
-                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:65%">
+                <div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-left">
+                        Stock Details
+                        <div class="pull-right" style="margin-bottom: 10px;">
+                            <button type="button" class="btn btn-default" style="padding: 4px; height: 30px; width: 30px;">
+                                <span
+                                        class="glyphicon glyphicon-star-empty"
+                                        style="border: thick"></span>
+                            </button>
+                            <button type="button" class="btn btn-default"
+                                    ng-disabled="disable_facebook_button" style="padding: 4px; height: 30px; width: 30px;">
+                                <img style="height: 20px; width: 20px; "
+                                     src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png">
+                            </button>
+                        </div>
+                        <div class="progress" id="progressbarTable" ng-if="progress_bar_for_stock_details_active"
+                             style="margin-top: 200px">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar"
+                                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:65%">
+                            </div>
+                        </div>
+                        <div>
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>Stock Ticker Symbol</th>
+                                    <td>{{ticker_symbol}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Last Price</th>
+                                    <td>{{last_price}}</td>
+                                </tr>
+                                <!--if ($pos_change):-->
+                                <!--<tr><th>Change</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td></tr>-->
+                                <!--else:-->
+                                <tr>
+                                    <th>Change (Change Percent)</th>
+                                    <td style="color: #FF0000;" ng-if="!is_positive_change"><span>{{change}} ({{change_percent}}) <img style="height: 20px; width: 20px;"
+                                                   src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span>
+                                    </td>
+                                    <td style="color: #00FF00;" ng-if="is_positive_change"><span>{{change}} ({{change_percent}})<img style="height: 20px; width: 20px;"
+                                                   src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <td>{{timestamp}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Open</th>
+                                    <td>{{open_value}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Previous Close</th>
+                                    <td>{{prev_close}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Day's Range</th>
+                                    <td>{{day_range}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Volume</th>
+                                    <td>{{volume}}</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
-                    <div>
-                        <table class="table table-striped">
-                            <tr>
-                                <th>Stock Ticker Symbol</th>
-                                <td>{{ticker_symbol}}</td>
-                            </tr>
-                            <tr>
-                                <th>Last Price</th>
-                                <td>{{last_price}}</td>
-                            </tr> <!--Close-->
-                            <!--if ($pos_change):-->
-                            <!--<tr><th>Change</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td></tr>-->
-                            <!--else:-->
-                            <tr>
-                                <th>Change (Change Percent)</th>
-                                <td><span><img style="height: 20px; width: 20px; "
-                                               src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Timestamp</th>
-                                <td>{{timestamp}}</td>
-                            </tr>
-                            <tr>
-                                <th>Open</th>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th>Previous Close</th>
-                                <td>{{prev_close}}</td>
-                            </tr>
-                            <tr>
-                                <th>Day's Range</th>
-                                <td>{{day_range}}</td>
-                            </tr>
-                            <tr>
-                                <th>Volume</th>
-                                <td>{{volume}}</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="class=col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <ul class="nav nav-tabs">
-                        <li ng-class="{active:isSet(1)}"><a href="#" ng-click="clickSetTab(1)">Price</a></li>
-                        <li ng-class="{active:isSet(2)}"><a href="#" ng-click="clickSetTab(2)">SMA</a></li>
-                        <li ng-class="{active:isSet(3)}"><a href="#" ng-click="clickSetTab(3)">EMA</a></li>
-                        <li ng-class="{active:isSet(4)}"><a href="#" ng-click="clickSetTab(4)">STOCH</a></li>
-                        <li ng-class="{active:isSet(5)}"><a href="#" ng-click="clickSetTab(5)">RSI</a></li>
-                        <li ng-class="{active:isSet(6)}"><a href="#" ng-click="clickSetTab(6)">ADX</a></li>
-                        <li ng-class="{active:isSet(7)}"><a href="#" ng-click="clickSetTab(7)">CCI</a></li>
-                        <li ng-class="{active:isSet(8)}"><a href="#" ng-click="clickSetTab(8)">BBANDS</a></li>
-                        <li ng-class="{active:isSet(9)}"><a href="#" ng-click="clickSetTab(9)">MACD</a></li>
-                    </ul>
-                    <div id="container_for_indicators" >
+                    <div class="class=col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <ul class="nav nav-tabs">
+                            <li ng-class="{active:isSet(1)}"><a href="#" ng-click="clickSetTab(1)">Price</a></li>
+                            <li ng-class="{active:isSet(2)}"><a href="#" ng-click="clickSetTab(2)">SMA</a></li>
+                            <li ng-class="{active:isSet(3)}"><a href="#" ng-click="clickSetTab(3)">EMA</a></li>
+                            <li ng-class="{active:isSet(4)}"><a href="#" ng-click="clickSetTab(4)">STOCH</a></li>
+                            <li ng-class="{active:isSet(5)}"><a href="#" ng-click="clickSetTab(5)">RSI</a></li>
+                            <li ng-class="{active:isSet(6)}"><a href="#" ng-click="clickSetTab(6)">ADX</a></li>
+                            <li ng-class="{active:isSet(7)}"><a href="#" ng-click="clickSetTab(7)">CCI</a></li>
+                            <li ng-class="{active:isSet(8)}"><a href="#" ng-click="clickSetTab(8)">BBANDS</a></li>
+                            <li ng-class="{active:isSet(9)}"><a href="#" ng-click="clickSetTab(9)">MACD</a></li>
+                        </ul>
+                        <div id="container_for_indicators">
 
+                        </div>
                     </div>
                 </div>
             </div>
