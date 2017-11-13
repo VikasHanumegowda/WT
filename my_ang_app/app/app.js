@@ -849,15 +849,10 @@ app.controller('myCtrl', function ($scope, $http) {
             params: {"symbol": $scope.symbol, "second": "news"}
         }).then(function successCallback(response) {
             $scope.news = response.data.channel.item;
-            console.log($scope.news[0]);
-
-
-            // angular.forEach($scope.userData, function(entry) {
-            //     entry.isFav = $scope.isStarred(entry.id);
-            // });
-
-
+            console.log("news");
+            console.log($scope.news);
         });
+
         $http({
             method: 'GET',
             url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
@@ -866,10 +861,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.tsd = response.data;
             console.log("tsd");
             console.log($scope.tsd);
-
-            // angular.forEach($scope.pageData, function(entry) {
-            //     entry.isFav = $scope.isStarred(entry.id);
-            // });
 
             obj = $scope.tsd;
             console.log("data");
@@ -889,6 +880,7 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.change = ($scope.prev_close - $scope.last_price).toFixed(2);
             $scope.is_positive_change = $scope.change >= 0;
             $scope.change_percent = ($scope.change * 100 / $scope.prev_close).toFixed(2);
+
             var today = new Date(date);
             var day = today.getDate() + 1;
             var monthIndex = today.getMonth();
@@ -1030,13 +1022,8 @@ app.controller('myCtrl', function ($scope, $http) {
             };
             series = [];
             for (x in obj['Time Series (Daily)']) {
-                // count += 1;
                 var today_date = new Date(x);
                 series.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
-                // volumes.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
-//                            }
-//                 if (count == 185)
-//                     break;
             }
             console.log(series);
             $scope.options_for_highstock.series[0].data = series;
@@ -1050,11 +1037,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.stoch = response.data;
             console.log("stoch");
             console.log($scope.stoch);
-
-            //         angular.forEach($scope.eventData, function(entry) {
-            //             entry.isFav = $scope.isStarred(entry.id);
-            //         });
-            //         //    console.log( response.data );
         });
         $http({
             method: 'GET',
@@ -1064,10 +1046,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.bbands = response.data;
             console.log("bbands");
             console.log($scope.bbands);
-            //             angular.forEach($scope.placeData, function(entry) {
-            //                 entry.isFav = $scope.isStarred(entry.id);
-            //             });
-            //             //   console.log( response.data );
         });
         $http({
             method: 'GET',
@@ -1077,9 +1055,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.sma = response.data;
             console.log("sma");
             console.log($scope.sma);
-            //                 angular.forEach($scope.groupData, function(entry) {
-            //                     entry.isFav = $scope.isStarred(entry.id);
-            //                 });
         });
         $http({
             method: 'GET',
