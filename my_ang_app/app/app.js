@@ -805,6 +805,7 @@ app.controller('myCtrl', function ($scope, $http) {
         symbol = symbol.trim();
         console.log(symbol);
         symbol = escapeHtml(symbol);
+        symbol = symbol.toUpperCase();
         return symbol;
     }
 
@@ -853,6 +854,8 @@ app.controller('myCtrl', function ($scope, $http) {
             console.log($scope.news);
         });
 
+        // TIME SERIES DATA
+
         $http({
             method: 'GET',
             url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
@@ -867,16 +870,19 @@ app.controller('myCtrl', function ($scope, $http) {
             console.log("data");
             console.log(obj);
             date = obj["Meta Data"]["3. Last Refreshed"];
+            console.log(date);
             symbol_for_chart = obj["Meta Data"]["2. Symbol"];
             $scope.ticker_symbol = obj["Meta Data"]["2. Symbol"];
-            $scope.volume = parseInt(obj['Time Series (Daily)'][date]["5. volume"]).toLocaleString();
-            $scope.last_price = parseFloat(obj['Time Series (Daily)'][date]["4. close"]).toFixed(2); //current_close_price
-            $scope.prev_date = moment(date).subtract(1,'day').format('YYYY-MM-DD');
-            $scope.prev_close = parseFloat(obj['Time Series (Daily)'][$scope.prev_date]["4. close"]).toFixed(2);
-            $scope.day_range = "{0} - {1}".format(parseFloat(obj['Time Series (Daily)'][date]["3. low"]).toFixed(2),parseFloat(obj['Time Series (Daily)'][date]["2. high"]).toFixed(2));
-            $scope.open_value = parseFloat(obj['Time Series (Daily)'][date]["1. open"]).toFixed(2);
+            $scope.volume = parseInt(obj["Time Series (Daily)"][date]["5. volume"]).toLocaleString();
+            $scope.last_price = parseFloat(obj["Time Series (Daily)"][date]["4. close"]).toFixed(2); //current_close_price
+            $scope.prev_date = moment(date).subtract(1,"day").format("YYYY-MM-DD");
+            while(!obj["Time Series (Daily)"].hasOwnProperty($scope.prev_date))
+                $scope.prev_date = moment($scope.prev_date).subtract(1,"day").format("YYYY-MM-DD");
+                console.log($scope.prev_date);
             console.log($scope.prev_date);
-
+            $scope.prev_close = parseFloat(obj["Time Series (Daily)"][$scope.prev_date]["4. close"]).toFixed(2);
+            $scope.day_range = "{0} - {1}".format(parseFloat(obj["Time Series (Daily)"][date]["3. low"]).toFixed(2),parseFloat(obj["Time Series (Daily)"][date]["2. high"]).toFixed(2));
+            $scope.open_value = parseFloat(obj['Time Series (Daily)'][date]["1. open"]).toFixed(2);
             $scope.change = ($scope.prev_close - $scope.last_price).toFixed(2);
             $scope.is_positive_change = $scope.change >= 0;
             $scope.change_percent = ($scope.change * 100 / $scope.prev_close).toFixed(2);
@@ -958,18 +964,18 @@ app.controller('myCtrl', function ($scope, $http) {
             series = [];
             volumes = [];
             count = 0;
-            for (x in obj['Time Series (Daily)']) {
+            for (x in obj["Time Series (Daily)"]) {
                 count += 1;
                 var today_date = new Date(x);
-                series.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
-                volumes.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
+                series.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["4. close"])));
+                volumes.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["5. volume"])));
 //                            }
                 if (count == 185)
                     break;
             }
             options.series[0].data = series;
             options.series[1].data = volumes;
-            Highcharts.chart('container_for_indicators', options);
+            Highcharts.chart("container_for_indicators", options);
             $scope.progress_bar_for_stock_details_active = false;
 
             $scope.options_for_highstock = {
@@ -984,7 +990,7 @@ app.controller('myCtrl', function ($scope, $http) {
                 },
 
                 subtitle: {
-                    text: '<a href="https://www.alphavantage.co/">Source: Alpha Vantage</a>'
+                    text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
                 },
 
                 rangeSelector: {
@@ -1021,14 +1027,17 @@ app.controller('myCtrl', function ($scope, $http) {
                 }
             };
             series = [];
-            for (x in obj['Time Series (Daily)']) {
+            for (x in obj["Time Series (Daily)"]) {
                 var today_date = new Date(x);
-                series.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
+                series.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["4. close"])));
             }
             console.log(series);
             $scope.options_for_highstock.series[0].data = series;
 
         });
+
+        //END OF TIME SERIES DATA
+
         $http({
             method: 'GET',
             url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
