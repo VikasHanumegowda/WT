@@ -100,6 +100,9 @@ app.controller('myCtrl', function ($scope, $http) {
             year = today.getFullYear();
             today_str = formatDate(today);
             options = {
+                chart: {
+                    zoomType: 'x'
+                },
                 title: {
                     text: symbol_for_chart + ' Stock Price and Volume'
                 },
@@ -170,8 +173,6 @@ app.controller('myCtrl', function ($scope, $http) {
             for (x in obj['Time Series (Daily)']) {
                 count += 1;
                 var today_date = new Date(x);
-//                            console.log(x,count);
-//                            if (today_date.getDay() !== 6 || today_date.getDay() !== 0) {
                 series.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
                 volumes.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
 //                            }
@@ -184,6 +185,9 @@ app.controller('myCtrl', function ($scope, $http) {
         }
         else if (indicator == "SMA") {
              var options = {
+                 chart: {
+                     zoomType: 'x'
+                 },
                 title: {
                     text: obj["Meta Data"]["2: Indicator"]
                 },
@@ -245,6 +249,9 @@ app.controller('myCtrl', function ($scope, $http) {
         }
         else if (indicator == "EMA") {
             options = {
+                chart: {
+                    zoomType: 'x'
+                },
                 title: {
                     text: obj["Meta Data"]["2: Indicator"]
                 },
@@ -294,7 +301,7 @@ app.controller('myCtrl', function ($scope, $http) {
             for (x in obj["Technical Analysis: EMA"]) {
                 count += 1;
                 series.unshift(parseFloat(obj["Technical Analysis: EMA"][x]["EMA"]));
-                if (count == 184)
+                if (count == 185)
                     break;
             }
             options.series[0].data = series;
@@ -303,7 +310,10 @@ app.controller('myCtrl', function ($scope, $http) {
         }
         else if (indicator == "STOCH") {
             options = {
-                title: {
+                chart: {
+                    zoomType: 'x'
+                },
+                title:  {
                     text: obj["Meta Data"]["2: Indicator"]
                 },
                 subtitle: {
@@ -361,7 +371,7 @@ app.controller('myCtrl', function ($scope, $http) {
                 count += 1;
                 seriesd.unshift(parseFloat(obj["Technical Analysis: STOCH"][x]["SlowD"]));
                 seriesk.unshift(parseFloat(obj["Technical Analysis: STOCH"][x]["SlowK"]));
-                if (count == 184)
+                if (count == 185)
                     break;
             }
             options.series[0].data = seriesd;
@@ -370,6 +380,9 @@ app.controller('myCtrl', function ($scope, $http) {
         }
         else if (indicator == "RSI") {
             options = {
+                chart: {
+                    zoomType: 'x'
+                },
                 title: {
                     text: obj["Meta Data"]["2: Indicator"]
                 },
@@ -419,7 +432,7 @@ app.controller('myCtrl', function ($scope, $http) {
             for (x in obj["Technical Analysis: RSI"]) {
                 count += 1;
                 series.unshift(parseFloat(obj["Technical Analysis: RSI"][x]["RSI"]));
-                if (count == 184)
+                if (count == 185)
                     break;
             }
             options.series[0].data = series;
@@ -427,6 +440,9 @@ app.controller('myCtrl', function ($scope, $http) {
         }
         else if (indicator == "ADX") {
             options = {
+                chart: {
+                    zoomType: 'x'
+                },
                 title: {
                     text: obj["Meta Data"]["2: Indicator"]
                 },
@@ -476,7 +492,7 @@ app.controller('myCtrl', function ($scope, $http) {
             for (x in obj["Technical Analysis: ADX"]) {
                 count += 1;
                 series.unshift(parseFloat(obj["Technical Analysis: ADX"][x]["ADX"]));
-                if (count == 184)
+                if (count == 185)
                     break;
             }
             options.series[0].data = series;
@@ -484,6 +500,9 @@ app.controller('myCtrl', function ($scope, $http) {
         }
         else if (indicator == "CCI") {
             options = {
+                chart: {
+                    zoomType: 'x'
+                },
                 title: {
                     text: obj["Meta Data"]["2: Indicator"]
                 },
@@ -533,7 +552,7 @@ app.controller('myCtrl', function ($scope, $http) {
             for (x in obj["Technical Analysis: CCI"]) {
                 count += 1;
                 series.unshift(parseFloat(obj["Technical Analysis: CCI"][x]["CCI"]));
-                if (count == 184)
+                if (count == 185)
                     break;
             }
             options.series[0].data = series;
@@ -541,6 +560,9 @@ app.controller('myCtrl', function ($scope, $http) {
         }
         else if (indicator == "BBANDS") {
             options = {
+                chart: {
+                    zoomType: 'x'
+                },
                 title: {
                     text: obj["Meta Data"]["2: Indicator"]
                 },
@@ -608,7 +630,7 @@ app.controller('myCtrl', function ($scope, $http) {
                 seriesm.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Middle Band"]));
                 seriesl.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Lower Band"]));
                 seriesu.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Upper Band"]));
-                if (count == 184)
+                if (count == 185)
                     break;
             }
             options.series[0].data = seriesm;
@@ -618,6 +640,9 @@ app.controller('myCtrl', function ($scope, $http) {
         }
         else if (indicator == "MACD") {
             options = {
+                chart: {
+                    zoomType: 'x'
+                },
                 title: {
                     text: obj["Meta Data"]["2: Indicator"]
                 },
@@ -685,7 +710,7 @@ app.controller('myCtrl', function ($scope, $http) {
                 seriesm.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD_Signal"]));
                 seriesl.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD"]));
                 seriesu.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD_Hist"]));
-                if (count == 184)
+                if (count == 185)
                     break;
             }
             options.series[0].data = seriesm;
@@ -720,13 +745,7 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.show_details = true;
     }
 
-    // $scope.querySearch = function (query) {
-    //     return $http.get("http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/?symbol=" + query + "&second=mark")
-    //         .then(function (response) {
-    //             console.log(JSON.parse(response.data));
-    //             return JSON.parse(response.data);
-    //         })
-    // }
+
     $scope.querySearch = function (query) {
         $scope.arr = [];
         console.log("in query search before ajax call");
@@ -783,8 +802,6 @@ app.controller('myCtrl', function ($scope, $http) {
         }
         // $scope.showTableWait();
         $scope.activeProgressbar = true;
-        var lat = $scope.lat;
-        var long = $scope.long;
         $http({
             method: 'GET',
             url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
@@ -825,6 +842,9 @@ app.controller('myCtrl', function ($scope, $http) {
             var year = today.getFullYear();
             var today_str = formatDate(today);
             options = {
+                chart: {
+                    zoomType: 'x'
+                },
                 title: {
                     text: symbol_for_chart + ' Stock Price and Volume'
                 },
@@ -895,8 +915,6 @@ app.controller('myCtrl', function ($scope, $http) {
             for (x in obj['Time Series (Daily)']) {
                 count += 1;
                 var today_date = new Date(x);
-//                            console.log(x,count);
-//                            if (today_date.getDay() !== 6 || today_date.getDay() !== 0) {
                 series.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
                 volumes.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
 //                            }
@@ -955,8 +973,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.ema = response.data;
             console.log("ema");
             console.log($scope.ema);
-            //                 /*Rendering Starts*/
-            //                 $scope.setData($scope.id);
         });
         $http({
             method: 'GET',
@@ -966,8 +982,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.rsi = response.data;
             console.log("rsi");
             console.log($scope.rsi);
-            //                 /*Rendering Starts*/
-            //                 $scope.setData($scope.id);
         });
         $http({
             method: 'GET',
@@ -977,8 +991,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.adx = response.data;
             console.log("adx");
             console.log($scope.adx);
-            //                 /*Rendering Starts*/
-            //                 $scope.setData($scope.id);
         });
         $http({
             method: 'GET',
@@ -988,8 +1000,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.cci = response.data;
             console.log("cci");
             console.log($scope.cci);
-            //                 /*Rendering Starts*/
-            //                 $scope.setData($scope.id);
         });
         $http({
             method: 'GET',
@@ -999,8 +1009,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.macd = response.data;
             console.log("macd");
             console.log($scope.macd);
-            //                 /*Rendering Starts*/
-            //                 $scope.setData($scope.id);
         });
 
 
@@ -1009,6 +1017,5 @@ app.controller('myCtrl', function ($scope, $http) {
     $('#inputSymbol').tooltip('disable');
     $('#inputSymbol').tooltip('hide');
     $scope.symbol_typed = "";
-    // $scope.show_fav =
 })
 ;
