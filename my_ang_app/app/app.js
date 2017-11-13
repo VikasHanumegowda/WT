@@ -38,10 +38,18 @@ app.controller('myCtrl', function ($scope, $http) {
             return false;
     }
 
+
     $scope.clickSetUpperTab = function (id)  //set tab on click
     {
         $scope.id_for_upper_tabs = id;
+        if($scope.id_for_upper_tabs==2)
+            $scope.populate_highstock();
 
+    }
+
+    $scope.populate_highstock = function()
+    {
+        var vhart = Highcharts.stockChart('container_for_highstock', $scope.options_for_highstock);
 
     }
     $scope.isSet = function (id) {       //true or false
@@ -971,6 +979,67 @@ app.controller('myCtrl', function ($scope, $http) {
             options.series[1].data = volumes;
             Highcharts.chart('container_for_indicators', options);
             $scope.progress_bar_for_stock_details_active = false;
+
+            $scope.options_for_highstock = {
+
+                chart: {
+                    height: 400
+                    // width:
+                },
+
+                title: {
+                    text: $scope.symbol+' Stock Value'
+                },
+
+                subtitle: {
+                    text: '<a href="https://www.alphavantage.co/">Source: Alpha Vantage</a>'
+                },
+
+                rangeSelector: {
+                    selected: 1
+                },
+
+                series: [{
+                    name: $scope.symbol+' Stock Price',
+                    data: [],
+                    type: 'area',
+                    threshold: null,
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }],
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            // maxWidth: 500
+                        },
+                        chartOptions: {
+                            chart: {
+                                // height: 300
+                            },
+                            subtitle: {
+                                text: null
+                            },
+                            navigator: {
+                                enabled: false
+                            }
+                        }
+                    }]
+                }
+            };
+            series = [];
+            for (x in obj['Time Series (Daily)']) {
+                // count += 1;
+                var today_date = new Date(x);
+                series.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
+                // volumes.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
+//                            }
+//                 if (count == 185)
+//                     break;
+            }
+            console.log(series);
+            $scope.options_for_highstock.series[0].data = series;
 
         });
         $http({
