@@ -17,6 +17,8 @@
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="app.css">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/moment.min.js"></script>
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
@@ -168,11 +170,11 @@
                         <table class="table table-striped">
                             <tr>
                                 <th>Stock Ticker Symbol</th>
-                                <td></td>
+                                <td>{{ticker_symbol}}</td>
                             </tr>
                             <tr>
                                 <th>Last Price</th>
-                                <td></td>
+                                <td>{{last_price}}</td>
                             </tr> <!--Close-->
                             <!--if ($pos_change):-->
                             <!--<tr><th>Change</th><td><span><img style="height: 20px; width: 20px; " src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td></tr>-->
@@ -185,7 +187,7 @@
                             </tr>
                             <tr>
                                 <th>Timestamp</th>
-                                <td></td>
+                                <td>{{timestamp}}</td>
                             </tr>
                             <tr>
                                 <th>Open</th>
@@ -193,15 +195,15 @@
                             </tr>
                             <tr>
                                 <th>Previous Close</th>
-                                <td></td>
+                                <td>{{prev_close}}</td>
                             </tr>
                             <tr>
                                 <th>Day's Range</th>
-                                <td></td>
+                                <td>{{day_range}}</td>
                             </tr>
                             <tr>
                                 <th>Volume</th>
-                                <td></td>
+                                <td>{{volume}}</td>
                             </tr>
                         </table>
                     </div>
@@ -218,7 +220,7 @@
                         <li ng-class="{active:isSet(8)}"><a href="#" ng-click="clickSetTab(8)">BBANDS</a></li>
                         <li ng-class="{active:isSet(9)}"><a href="#" ng-click="clickSetTab(9)">MACD</a></li>
                     </ul>
-                    <div id="container_for_indicators">
+                    <div id="container_for_indicators" >
 
                     </div>
                 </div>

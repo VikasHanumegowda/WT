@@ -1,7 +1,31 @@
 var app = angular.module('stockApp', ['ngAnimate', 'ngMaterial']);
+String.prototype.format = function() {
+    var formatted = this;
+    for( var arg in arguments ) {
+        formatted = formatted.replace("{" + arg + "}", arguments[arg]);
+    }
+    return formatted;
+};
 
 app.controller('myCtrl', function ($scope, $http) {
 
+
+    $scope.timestamp = moment().add(3, 'hours').format("YYYY-MM-DD HH:mm:ss") + " EST";
+
+    // $scope.timestamp = convertToServerTimeZone() + " EST";
+    $scope.stringToDate = function(_date,_format,_delimiter)
+    {
+        var formatLowerCase=_format.toLowerCase();
+        var formatItems=formatLowerCase.split(_delimiter);
+        var dateItems=_date.split(_delimiter);
+        var monthIndex=formatItems.indexOf("mm");
+        var dayIndex=formatItems.indexOf("dd");
+        var yearIndex=formatItems.indexOf("yyyy");
+        var month=parseInt(dateItems[monthIndex]);
+        month-=1;
+        var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+        return formatedDate;
+    }
     //initializations
     $scope.disable_show_details_button = true;
     $scope.show_fav = true;
@@ -801,7 +825,16 @@ app.controller('myCtrl', function ($scope, $http) {
             $('#inputSymbol').tooltip('disable');
         }
         // $scope.showTableWait();
-        $scope.activeProgressbar = true;
+        $scope.progress_bar_for_stock_details_active = true;
+        $scope.progress_bar_for_sma_active = true;
+        $scope.progress_bar_for_ema_active = true;
+        $scope.progress_bar_for_rsi_active = true;
+        $scope.progress_bar_for_macd_active = true;
+        $scope.progress_bar_for_bbands_active = true;
+        $scope.progress_bar_for_stoch_active = true;
+        $scope.progress_bar_for_adx_active = true;
+        $scope.progress_bar_for_cci_active = true;
+
         $http({
             method: 'GET',
             url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
@@ -836,11 +869,20 @@ app.controller('myCtrl', function ($scope, $http) {
             console.log(obj);
             date = obj["Meta Data"]["3. Last Refreshed"];
             symbol_for_chart = obj["Meta Data"]["2. Symbol"];
+            $scope.ticker_symbol = obj["Meta Data"]["2. Symbol"];
+            $scope.volume = parseInt(obj['Time Series (Daily)'][date]["5. volume"]).toLocaleString();
+            $scope.last_price = parseFloat(obj['Time Series (Daily)'][date]["4. close"]).toFixed(2); //current_close_price
+            $scope.prev_date = moment(date).subtract(1,'day').format('YYYY-MM-DD');
+            $scope.prev_close = parseFloat(obj['Time Series (Daily)'][$scope.prev_date]["4. close"]).toFixed(2);
+            $scope.day_range = "{0} - {1}".format(parseFloat(obj['Time Series (Daily)'][date]["3. low"]).toFixed(2),parseFloat(obj['Time Series (Daily)'][date]["2. high"]).toFixed(2));
+            $scope.open = parseFloat(obj['Time Series (Daily)'][date]["1. open"]).toFixed(2);
+            console.log($scope.prev_date);
             var today = new Date(date);
             var day = today.getDate() + 1;
             var monthIndex = today.getMonth();
             var year = today.getFullYear();
             var today_str = formatDate(today);
+
             options = {
                 chart: {
                     zoomType: 'x'
@@ -924,6 +966,7 @@ app.controller('myCtrl', function ($scope, $http) {
             options.series[0].data = series;
             options.series[1].data = volumes;
             Highcharts.chart('container_for_indicators', options);
+            $scope.progress_bar_for_stock_details_active = false;
 
         });
         $http({
