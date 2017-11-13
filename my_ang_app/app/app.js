@@ -985,8 +985,8 @@ app.controller('myCtrl', function ($scope, $http) {
                 $scope.options_for_highstock = {
 
                     chart: {
-                        height: 400
-                        // width:
+                        height: 400,
+                        width: 900
                     },
 
                     title: {
@@ -1009,26 +1009,28 @@ app.controller('myCtrl', function ($scope, $http) {
                         tooltip: {
                             valueDecimals: 2
                         }
-                    }],
+                    }]
+                    // }],
 
-                    responsive: {
-                        rules: [{
-                            condition: {
-                                // maxWidth: 500
-                            },
-                            chartOptions: {
-                                chart: {
-                                    height: 300
-                                },
-                                subtitle: {
-                                    text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
-                                },
-                                navigator: {
-                                    enabled: true
-                                }
-                            }
-                        }]
-                    }
+                    // responsive: {
+                    //     rules: [{
+                    //         condition: {
+                    //             maxWidth: 500
+                    //         },
+                    //         chartOptions: {
+                    //             chart: {
+                    //                 maxWidth: 500,
+                    //                 minWidth: 200
+                    //             },
+                    //             subtitle: {
+                    //                 text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
+                    //             },
+                    //             navigator: {
+                    //                 enabled: true
+                    //             }
+                    //         }
+                    //     }]
+                    // }
                 };
                 series = [];
                 for (x in obj["Time Series (Daily)"]) {
