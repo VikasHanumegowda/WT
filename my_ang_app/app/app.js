@@ -22,7 +22,14 @@ app.controller('myCtrl', function ($scope, $http) {
             return match;
         }
 
-        $scope.fav_list = angular.fromJson(localStorage.getItem("favouriteList"));
+        $scope.load_fav_list = function() {
+            $scope.fav_list = angular.fromJson(localStorage.getItem("favouriteList"));
+            console.log($scope.fav_list);
+
+        }
+
+        $scope.load_fav_list();
+
         if (!$scope.fav_list)
             $scope.fav_list = [];
         $scope.isfav = false;
@@ -43,19 +50,22 @@ app.controller('myCtrl', function ($scope, $http) {
             }
             list.push(item_to_add);
             localStorage.setItem("favouriteList", JSON.stringify(list));
-            $scope.fav_list = favouriteList;
+            $scope.load_fav_list();
+            $scope.$apply();
         }
 
-        $scope.deleteFav = function () {
-            $scope.isFav = false;
+        $scope.deleteFav = function (item) {
+            if(item.symbol == $scope.ticker_symbol)
+                $scope.isFav = false;
             list = angular.fromJson(localStorage.getItem("favouriteList")); //parsing list
             angular.forEach(list, function (additem, index) {
-                if (additem.symbol == $scope.ticker_symbol) {
+                if (additem.symbol == item.symbol) {
                     list.splice(index, 1);
                 }
             });
             localStorage.setItem("favouriteList", JSON.stringify(list));
-            $scope.fav_list = list;
+            $scope.load_fav_list();
+            $scope.$apply();
         }
 
 
@@ -824,6 +834,7 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.flip_to_fav = function () {
             $scope.show_fav = true;
             $scope.show_details = false;
+            $scope.load_fav_list();
         }
 
         $scope.flip_to_details = function () {
@@ -882,6 +893,7 @@ app.controller('myCtrl', function ($scope, $http) {
 
             console.log("valueis" + $scope.symbol);
             $scope.symbol = test_input(symbol);
+            $scope.isfav = $scope.isStarred();
             if (!symbol) {
                 $('#inputSymbol').tooltip('enable');
                 $('#inputSymbol').tooltip('show');
@@ -929,12 +941,13 @@ app.controller('myCtrl', function ($scope, $http) {
                 console.log("data");
                 // console.log(obj);
                 date = obj["Meta Data"]["3. Last Refreshed"];
-                // console.log(date);
+                date = moment(date).format("YYYY-MM-DD");
+                console.log(date);
                 symbol_for_chart = obj["Meta Data"]["2. Symbol"];
                 $scope.ticker_symbol = obj["Meta Data"]["2. Symbol"];
-                if ($scope.isStarred()) {
-                    $scope.isfav = true;
-                }
+
+
+                console.log(obj["Time Series (Daily)"][date]);
                 $scope.volume = parseInt(obj["Time Series (Daily)"][date]["5. volume"]).toLocaleString();
                 $scope.last_price = parseFloat(obj["Time Series (Daily)"][date]["4. close"]).toFixed(2); //current_close_price
                 $scope.prev_date = moment(date).subtract(1, "day").format("YYYY-MM-DD");
