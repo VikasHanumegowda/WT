@@ -78,9 +78,7 @@
     {
        $url_for_news = "https://seekingalpha.com/api/sa/combined/" . $symbol . ".xml";
        $response_for_news = @file_get_contents($url_for_news);
-       $fileContents = str_replace(array("\n", "\r", "\t"), '', $response_for_news);
-       $fileContents = trim(str_replace('"', "'", $fileContents));
-       $simpleXml = simplexml_load_string($fileContents);
+       $simpleXml = simplexml_load_string($response_for_news);
        $json = json_encode($simpleXml);
        echo $json;
     }

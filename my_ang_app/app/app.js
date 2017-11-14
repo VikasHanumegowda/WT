@@ -10,6 +10,8 @@ String.prototype.format = function () {
 app.controller('myCtrl', function ($scope, $http) {
 
 
+
+
         $scope.timestamp = moment().add(3, 'hours').format("YYYY-MM-DD HH:mm:ss") + " EST";
 
         // $scope.timestamp = convertToServerTimeZone() + " EST";
@@ -137,6 +139,7 @@ app.controller('myCtrl', function ($scope, $http) {
                 today_str = formatDate(today);
                 options = {
                     chart: {
+                        height: (9 / 20 * 100) + '%',
                         zoomType: 'x'
                     },
                     title: {
@@ -853,9 +856,11 @@ app.controller('myCtrl', function ($scope, $http) {
                 url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
                 params: {"symbol": $scope.symbol, "second": "news"}
             }).then(function successCallback(response) {
-                $scope.news = response.data.channel.item;
+                $scope.news=[];
+                for(x = 0; x<5; x++)
+                $scope.news.push(response.data.channel.item[x]);
                 console.log("news");
-                console.log($scope.news);
+                console.log($scope.news[0]);
             });
 
             // TIME SERIES DATA
@@ -986,7 +991,7 @@ app.controller('myCtrl', function ($scope, $http) {
 
                     chart: {
                         height: 400,
-                        width: 900
+                        width: 1200
                     },
 
                     title: {
