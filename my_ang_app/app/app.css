@@ -3,6 +3,7 @@ body
 {
     /*background-image: url('w3css.gif');*/
     background: url("background.png");
+    height: 2000px;
 }
 
 /*.parallax {*/
@@ -36,7 +37,7 @@ label {
 }
 
 html, body{
-    height: 100%;
+    height: 2000px;
 }
 
 #id_for_tabs > li
