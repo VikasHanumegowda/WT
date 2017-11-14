@@ -1182,7 +1182,7 @@ app.controller('myCtrl', function ($scope, $http) {
         $('#inputSymbol').tooltip('hide');
         $scope.symbol_typed = "";
 
-
+        $scope.isfav = false;
     }
 )
 ;

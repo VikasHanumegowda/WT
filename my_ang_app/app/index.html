@@ -123,10 +123,13 @@
                         <td>{{item.symbol}}</td>
                         <td>{{item.stock_price}}</td>
                         <td ng-if="item.change>0"><span
-                                style="color: #0F0;">{{item.change}} ({{item.change_percent}})<img
+                                style="color: #0F0;">{{item.change}} ({{item.change_percent}}%)<img
                                 style="height: 20px; width: 20px;"
-                                src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span></td>
-                        <td ng-if="item.change<=0">{{item.change}} ({{item.change_percent}})</td>
+                                src="http://cs-server.usc.edu:45678/hw/hw8/images/Up.png"/></span></td>
+                        <td ng-if="item.change<=0"><span
+                                style="color: #F00;">{{item.change}} ({{item.change_percent}}%)<img
+                                style="height: 20px; width: 20px;"
+                                src="http://cs-server.usc.edu:45678/hw/hw8/images/Down.png"/></span></td>
                         <td>{{item.volume}}</td>
                         <td>
                             <button type="button" class="btn btn-default" ng-click="deleteFav(item)"><span
@@ -207,13 +210,13 @@
                                 <!--else:-->
                                 <tr>
                                     <th>Change (Change Percent)</th>
-                                    <td style="color: #FF0000;" ng-if="!is_positive_change"><span style="color: #F0F;">{{change}} ({{change_percent}}) <img
+                                    <td style="color: #FF0000;" ng-if="!is_positive_change"><span style="color: #F0F;">{{change}} ({{change_percent}}%) <img
                                             style="height: 20px; width: 20px;"
-                                            src="http://cs-server.usc.edu:45678/hw/hw6/images/Red_Arrow_Down.png"/></span>
+                                            src="http://cs-server.usc.edu:45678/hw/hw8/images/Down.png"/></span>
                                     </td>
-                                    <td style="color: #00FF00;" ng-if="is_positive_change"><span style="color: #0F0;">{{change}} ({{change_percent}})<img
+                                    <td style="color: #00FF00;" ng-if="is_positive_change"><span style="color: #0F0;">{{change}} ({{change_percent}}%)<img
                                             style="height: 20px; width: 20px;"
-                                            src="http://cs-server.usc.edu:45678/hw/hw6/images/Green_Arrow_Up.png"/></span>
+                                            src="http://cs-server.usc.edu:45678/hw/hw8/images/Up.png"/></span>
                                     </td>
                                 </tr>
                                 <tr>
