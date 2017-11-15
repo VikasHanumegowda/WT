@@ -1042,31 +1042,31 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.disable_show_details_button = false;
             $scope.id_for_indicators = 1;
         }
-    $scope.init_bars = function () {
-        $scope.progress_bar_for_stock_details_active = true;
-        $scope.progress_bar_for_sma_active = true;
-        $scope.progress_bar_for_ema_active = true;
-        $scope.progress_bar_for_rsi_active = true;
-        $scope.progress_bar_for_macd_active = true;
-        $scope.progress_bar_for_bbands_active = true;
-        $scope.progress_bar_for_stoch_active = true;
-        $scope.progress_bar_for_adx_active = true;
-        $scope.progress_bar_for_cci_active = true;
-        $scope.progress_bar_for_news_active = true;
+        $scope.init_bars = function () {
+            $scope.progress_bar_for_stock_details_active = true;
+            $scope.progress_bar_for_sma_active = true;
+            $scope.progress_bar_for_ema_active = true;
+            $scope.progress_bar_for_rsi_active = true;
+            $scope.progress_bar_for_macd_active = true;
+            $scope.progress_bar_for_bbands_active = true;
+            $scope.progress_bar_for_stoch_active = true;
+            $scope.progress_bar_for_adx_active = true;
+            $scope.progress_bar_for_cci_active = true;
+            $scope.progress_bar_for_news_active = true;
 
-        $scope.error_bar_for_stock_details_active = false;
-        $scope.error_bar_for_sma_active = false;
-        $scope.error_bar_for_ema_active = false;
-        $scope.error_bar_for_rsi_active = false;
-        $scope.error_bar_for_macd_active = false;
-        $scope.error_bar_for_bbands_active = false;
-        $scope.error_bar_for_stoch_active = false;
-        $scope.error_bar_for_adx_active = false;
-        $scope.error_bar_for_cci_active = false;
-        $scope.error_bar_for_news_active = false;
-        $scope.isFav = false;
-        $scope.stock_data_not_loaded = true;
-    }
+            $scope.error_bar_for_stock_details_active = false;
+            $scope.error_bar_for_sma_active = false;
+            $scope.error_bar_for_ema_active = false;
+            $scope.error_bar_for_rsi_active = false;
+            $scope.error_bar_for_macd_active = false;
+            $scope.error_bar_for_bbands_active = false;
+            $scope.error_bar_for_stoch_active = false;
+            $scope.error_bar_for_adx_active = false;
+            $scope.error_bar_for_cci_active = false;
+            $scope.error_bar_for_news_active = false;
+            $scope.isFav = false;
+            $scope.stock_data_not_loaded = true;
+        }
 
         $scope.querySearch = function (query) {
             $scope.arr = [];
@@ -1285,28 +1285,28 @@ app.controller('myCtrl', function ($scope, $http) {
                             tooltip: {
                                 valueDecimals: 2
                             }
-                        }]
-                        // }],
+                        }],
 
-                        // responsive: {
-                        //     rules: [{
-                        //         condition: {
-                        //             maxWidth: 500
-                        //         },
-                        //         chartOptions: {
-                        //             chart: {
-                        //                 maxWidth: 500,
-                        //                 minWidth: 200
-                        //             },
-                        //             subtitle: {
-                        //                 text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
-                        //             },
-                        //             navigator: {
-                        //                 enabled: true
-                        //             }
-                        //         }
-                        //     }]
-                        // }
+
+                        responsive: {
+                            rules: [{
+                                condition: {
+                                    maxWidth: 500
+                                },
+                                chartOptions: {
+                                    chart: {
+                                        maxWidth: 500,
+                                        minWidth: 200
+                                    },
+                                    subtitle: {
+                                        text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
+                                    },
+                                    navigator: {
+                                        enabled: true
+                                    }
+                                }
+                            }]
+                        }
                     };
                     series = [];
                     count = 0;
