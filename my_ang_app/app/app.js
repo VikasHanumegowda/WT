@@ -13,8 +13,39 @@ String.prototype.replaceAll = function (search, replacement) {
 
 app.controller('myCtrl', function ($scope, $http) {
 
+        //initializations
+        $scope.first_highstock = 1;
+        $scope.disable_show_details_button = true;
+        $scope.show_fav = true;
+        $scope.show_details = false;
+        $scope.id_for_upper_tabs = 1;
+
         $scope.order_by = 'a';
         $scope.sort_selected = 'Default';
+
+        $scope.load_fav_list();
+
+        if (!$scope.fav_list)
+            $scope.fav_list = [];
+        $scope.isfav = false;
+
+        $scope.timestamp = moment().add(3, 'hours').format("YYYY-MM-DD HH:mm:ss") + " EST";
+
+
+        $('#inputSymbol').tooltip('disable');
+        $('#inputSymbol').tooltip('hide');
+        $scope.symbol_typed = "";
+
+        $scope.isfav = false;
+
+        $scope.symbol_typed = "";
+        $scope.symbol = "";
+
+
+        $scope.automatic_refresh = function () {
+
+        }
+
         $scope.sortTable = function () {
             column_name = $scope.sort_selected;
 
@@ -193,11 +224,6 @@ app.controller('myCtrl', function ($scope, $http) {
 
         }
 
-        $scope.load_fav_list();
-
-        if (!$scope.fav_list)
-            $scope.fav_list = [];
-        $scope.isfav = false;
         $scope.addFav = function () {
             var list = [];
             $scope.isFav = true;
@@ -247,9 +273,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.$evalAsync();
         }
 
-
-        $scope.timestamp = moment().add(3, 'hours').format("YYYY-MM-DD HH:mm:ss") + " EST";
-
         // $scope.timestamp = convertToServerTimeZone() + " EST";
         $scope.stringToDate = function (_date, _format, _delimiter) {
             var formatLowerCase = _format.toLowerCase();
@@ -262,18 +285,6 @@ app.controller('myCtrl', function ($scope, $http) {
             month -= 1;
             var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
             return formatedDate;
-        }
-        //initializations
-        $scope.first_highstock = 1;
-        $scope.disable_show_details_button = true;
-        $scope.show_fav = true;
-        $scope.show_details = false;
-        $scope.id_for_upper_tabs = 1;
-        $scope.isSetUpper = function (id) {       //true or false
-            if ($scope.id_for_upper_tabs == id)
-                return true;
-            else
-                return false;
         }
 
 
@@ -293,6 +304,13 @@ app.controller('myCtrl', function ($scope, $http) {
                 $('container_for_highstock').highcharts().destroy();
             var chart = Highcharts.stockChart('container_for_highstock', $scope.options_for_highstock);
 
+        }
+
+        $scope.isSetUpper = function (id) {       //true or false
+            if ($scope.id_for_upper_tabs == id)
+                return true;
+            else
+                return false;
         }
         $scope.isSet = function (id) {       //true or false
             if ($scope.id_for_indicators == id)
@@ -1021,7 +1039,6 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.show_details = true;
         }
 
-
         $scope.querySearch = function (query) {
             $scope.arr = [];
             console.log("in query search before ajax call");
@@ -1034,7 +1051,6 @@ app.controller('myCtrl', function ($scope, $http) {
 
             return $scope.arr;
         }
-
 
         function escapeHtml(text) {
             return text
@@ -1053,13 +1069,12 @@ app.controller('myCtrl', function ($scope, $http) {
             return symbol;
         }
 
-        $scope.symbol_typed = "";
-        $scope.symbol = "";
-
         $scope.clear_reload = function () {
             console.log("clear");
             location.reload(false);
         }
+
+
         $scope.submit = function () {
             // $scope.hide_fav = true;
 
@@ -1288,9 +1303,13 @@ app.controller('myCtrl', function ($scope, $http) {
                     // }
                 };
                 series = [];
+                count = 0;
                 for (x in obj["Time Series (Daily)"]) {
+                    count+=1;
                     var today_date = new Date(x);
                     series.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["4. close"])));
+                    if(count==1000)
+                        break;
                 }
                 console.log(series);
                 $scope.options_for_highstock.series[0].data = series;
@@ -1374,13 +1393,6 @@ app.controller('myCtrl', function ($scope, $http) {
 
 
         }
-
-        $('#inputSymbol').tooltip('disable');
-        $('#inputSymbol').tooltip('hide');
-        $scope.symbol_typed = "";
-
-        $scope.isfav = false;
-
 
     }
 )
