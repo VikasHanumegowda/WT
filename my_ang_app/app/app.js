@@ -1038,7 +1038,35 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.flip_to_details = function () {
             $scope.show_fav = false;
             $scope.show_details = true;
+            $scope.sort_selected = "Default";
+            $scope.disable_show_details_button = false;
+            $scope.id_for_indicators = 1;
         }
+    $scope.init_bars = function () {
+        $scope.progress_bar_for_stock_details_active = true;
+        $scope.progress_bar_for_sma_active = true;
+        $scope.progress_bar_for_ema_active = true;
+        $scope.progress_bar_for_rsi_active = true;
+        $scope.progress_bar_for_macd_active = true;
+        $scope.progress_bar_for_bbands_active = true;
+        $scope.progress_bar_for_stoch_active = true;
+        $scope.progress_bar_for_adx_active = true;
+        $scope.progress_bar_for_cci_active = true;
+        $scope.progress_bar_for_news_active = true;
+
+        $scope.error_bar_for_stock_details_active = false;
+        $scope.error_bar_for_sma_active = false;
+        $scope.error_bar_for_ema_active = false;
+        $scope.error_bar_for_rsi_active = false;
+        $scope.error_bar_for_macd_active = false;
+        $scope.error_bar_for_bbands_active = false;
+        $scope.error_bar_for_stoch_active = false;
+        $scope.error_bar_for_adx_active = false;
+        $scope.error_bar_for_cci_active = false;
+        $scope.error_bar_for_news_active = false;
+        $scope.isFav = false;
+        $scope.stock_data_not_loaded = true;
+    }
 
         $scope.querySearch = function (query) {
             $scope.arr = [];
@@ -1080,11 +1108,8 @@ app.controller('myCtrl', function ($scope, $http) {
             // $scope.hide_fav = true;
 
 
-            $scope.show_fav = false;
-            $scope.disable_show_details_button = false;
-            $scope.id_for_indicators = 1;
-            // $scope.hide_details = false;
-            $scope.show_details = true;
+            $scope.init_bars();
+            $scope.flip_to_details();
             symbol = $("#inputSymbol").val();//value from the input text field
             $scope.symbol = symbol;
             // console.log("valueis Ola!");
@@ -1092,8 +1117,9 @@ app.controller('myCtrl', function ($scope, $http) {
 
             console.log("valueis" + $scope.symbol);
             $scope.symbol = test_input(symbol);
-            $scope.isfav = $scope.isStarred();
+            $scope.ticker_symbol = $scope.symbol;
             $scope.$evalAsync();
+
             if (!symbol) {
                 $('#inputSymbol').tooltip('enable');
                 $('#inputSymbol').tooltip('show');
@@ -1102,28 +1128,6 @@ app.controller('myCtrl', function ($scope, $http) {
             else {
                 $('#inputSymbol').tooltip('disable');
             }
-            // $scope.showTableWait();
-            $scope.progress_bar_for_stock_details_active = true;
-            $scope.progress_bar_for_sma_active = true;
-            $scope.progress_bar_for_ema_active = true;
-            $scope.progress_bar_for_rsi_active = true;
-            $scope.progress_bar_for_macd_active = true;
-            $scope.progress_bar_for_bbands_active = true;
-            $scope.progress_bar_for_stoch_active = true;
-            $scope.progress_bar_for_adx_active = true;
-            $scope.progress_bar_for_cci_active = true;
-
-            $http({
-                method: 'GET',
-                url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
-                params: {"symbol": $scope.symbol, "second": "news"}
-            }).then(function successCallback(response) {
-                $scope.news = [];
-                for (x = 0; x < 5; x++)
-                    $scope.news.push(response.data.channel.item[x]);
-                console.log("news");
-                console.log($scope.news[0]);
-            });
 
             // TIME SERIES DATA
 
@@ -1132,266 +1136,383 @@ app.controller('myCtrl', function ($scope, $http) {
                 url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
                 params: {"symbol": $scope.symbol, "second": "tsd"}
             }).then(function successCallback(response) {
+
                 $scope.tsd = response.data;
-                console.log("tsd");
-                console.log($scope.tsd);
+                hell_data = $scope.tsd;
+                console.log(hell_data.hasOwnProperty("Meta Data"));
+                if (hell_data.hasOwnProperty("Meta Data")) {
+                    console.log("tsd");
+                    console.log($scope.tsd);
+                    obj = $scope.tsd;
+                    console.log("data");
+                    console.log("data");
+                    date = obj["Meta Data"]["3. Last Refreshed"];
+                    date = moment(date).format("YYYY-MM-DD");
+                    console.log(date);
+                    symbol_for_chart = obj["Meta Data"]["2. Symbol"];
 
-                obj = $scope.tsd;
-                console.log("data");
-                console.log("data");
-                // console.log(obj);
-                date = obj["Meta Data"]["3. Last Refreshed"];
-                date = moment(date).format("YYYY-MM-DD");
-                console.log(date);
-                symbol_for_chart = obj["Meta Data"]["2. Symbol"];
-                $scope.ticker_symbol = obj["Meta Data"]["2. Symbol"];
+                    $scope.stock_data_not_loaded = false;
+                    $scope.isfav = $scope.isStarred();
 
+                    console.log(obj["Time Series (Daily)"][date]);
+                    $scope.volume = parseInt(obj["Time Series (Daily)"][date]["5. volume"]).toLocaleString();
+                    $scope.last_price = parseFloat(obj["Time Series (Daily)"][date]["4. close"]).toFixed(2); //current_close_price
+                    $scope.prev_date = moment(date).subtract(1, "day").format("YYYY-MM-DD");
+                    while (!obj["Time Series (Daily)"].hasOwnProperty($scope.prev_date))
+                        $scope.prev_date = moment($scope.prev_date).subtract(1, "day").format("YYYY-MM-DD");
+                    $scope.prev_close = parseFloat(obj["Time Series (Daily)"][$scope.prev_date]["4. close"]).toFixed(2);
+                    $scope.day_range = "{0} - {1}".format(parseFloat(obj["Time Series (Daily)"][date]["3. low"]).toFixed(2), parseFloat(obj["Time Series (Daily)"][date]["2. high"]).toFixed(2));
+                    $scope.open_value = parseFloat(obj['Time Series (Daily)'][date]["1. open"]).toFixed(2);
+                    $scope.change = ($scope.prev_close - $scope.last_price).toFixed(2);
+                    $scope.is_positive_change = $scope.change >= 0;
+                    $scope.change_percent = ($scope.change * 100 / $scope.prev_close).toFixed(2);
 
-                console.log(obj["Time Series (Daily)"][date]);
-                $scope.volume = parseInt(obj["Time Series (Daily)"][date]["5. volume"]).toLocaleString();
-                $scope.last_price = parseFloat(obj["Time Series (Daily)"][date]["4. close"]).toFixed(2); //current_close_price
-                $scope.prev_date = moment(date).subtract(1, "day").format("YYYY-MM-DD");
-                while (!obj["Time Series (Daily)"].hasOwnProperty($scope.prev_date))
-                    $scope.prev_date = moment($scope.prev_date).subtract(1, "day").format("YYYY-MM-DD");
-                // console.log($scope.prev_date);
-                // console.log($scope.prev_date);
-                $scope.prev_close = parseFloat(obj["Time Series (Daily)"][$scope.prev_date]["4. close"]).toFixed(2);
-                $scope.day_range = "{0} - {1}".format(parseFloat(obj["Time Series (Daily)"][date]["3. low"]).toFixed(2), parseFloat(obj["Time Series (Daily)"][date]["2. high"]).toFixed(2));
-                $scope.open_value = parseFloat(obj['Time Series (Daily)'][date]["1. open"]).toFixed(2);
-                $scope.change = ($scope.prev_close - $scope.last_price).toFixed(2);
-                $scope.is_positive_change = $scope.change >= 0;
-                $scope.change_percent = ($scope.change * 100 / $scope.prev_close).toFixed(2);
+                    var today = new Date(date);
+                    var day = today.getDate() + 1;
+                    var monthIndex = today.getMonth();
+                    var year = today.getFullYear();
+                    var today_str = formatDate(today);
 
-                var today = new Date(date);
-                var day = today.getDate() + 1;
-                var monthIndex = today.getMonth();
-                var year = today.getFullYear();
-                var today_str = formatDate(today);
-
-                options = {
-                    chart: {
-                        zoomType: 'x'
-                    },
-                    title: {
-                        text: symbol_for_chart + ' Stock Price and Volume'
-                    },
-                    subtitle: {
-                        text: '<a href=\'https://www.alphavantage.co/\'>Source: Alpha Vantage</a>'
-                    },
-                    xAxis: {
-                        // endOnTick: true,
-                        // startOnTick: true,
-                        showFirstLabel: true,
-                        type: 'datetime',
-                        tickInterval: 7 * 24 * 3600 * 1000,
-                        labels: {
-                            format: '{value: %m/%d}',
-                            rotation: 45,
-                            align: 'middle'
-                        }
-                    },
-                    yAxis: [{
+                    options = {
+                        chart: {
+                            zoomType: 'x'
+                        },
                         title: {
-                            text: 'Stock Price'
+                            text: symbol_for_chart + ' Stock Price and Volume'
                         },
-                        tickAmount: 8,
-                        gridLineWidth: 0
-                    }, {
-                        title: {
-                            text: 'Volume'
+                        subtitle: {
+                            text: '<a href=\'https://www.alphavantage.co/\'>Source: Alpha Vantage</a>'
                         },
-                        max: null,
-                        tickAmount: 8,
-                        gridLineWidth: 0,
-                        opposite: true
-                    }],
-                    tooltip: {
-                        formatter: function () {
-                            return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style=\"color:' + this.series.color + ';\">\u25CF</span>' + this.series.name + ': ' + this.y;
-                        }
-                    },
-                    plotOptions: {
-                        area: {
-                            // threshold: null
+                        xAxis: {
+                            // endOnTick: true,
+                            // startOnTick: true,
+                            showFirstLabel: true,
+                            type: 'datetime',
+                            tickInterval: 7 * 24 * 3600 * 1000,
+                            labels: {
+                                format: '{value: %m/%d}',
+                                rotation: 45,
+                                align: 'middle'
+                            }
                         },
-                        line: {
-                            threshold: null
-                        }
-                    },
-                    series: [{
-                        color: '#FF0000',
-                        type: 'area',
-                        name: symbol,
-                        pointStart: Date.UTC(2017, monthIndex - 6, day),
-                        pointInterval: 24 * 3600 * 1000,
-                        data: []
-                    },
-                        {
-                            color: '#F0F0F0',
-                            type: 'column',
-                            name: symbol + ' Volume',
+                        yAxis: [{
+                            title: {
+                                text: 'Stock Price'
+                            },
+                            tickAmount: 8,
+                            gridLineWidth: 0
+                        }, {
+                            title: {
+                                text: 'Volume'
+                            },
+                            max: null,
+                            tickAmount: 8,
+                            gridLineWidth: 0,
+                            opposite: true
+                        }],
+                        tooltip: {
+                            formatter: function () {
+                                return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style=\"color:' + this.series.color + ';\">\u25CF</span>' + this.series.name + ': ' + this.y;
+                            }
+                        },
+                        plotOptions: {
+                            area: {
+                                // threshold: null
+                            },
+                            line: {
+                                threshold: null
+                            }
+                        },
+                        series: [{
+                            color: '#FF0000',
+                            type: 'area',
+                            name: symbol,
                             pointStart: Date.UTC(2017, monthIndex - 6, day),
                             pointInterval: 24 * 3600 * 1000,
-                            data: [],
-                            yAxis: 1
-                        }]
-                };
-                series = [];
-                volumes = [];
-                count = 0;
-                for (x in obj["Time Series (Daily)"]) {
-                    count += 1;
-                    var today_date = new Date(x);
-                    series.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["4. close"])));
-                    volumes.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["5. volume"])));
+                            data: []
+                        },
+                            {
+                                color: '#F0F0F0',
+                                type: 'column',
+                                name: symbol + ' Volume',
+                                pointStart: Date.UTC(2017, monthIndex - 6, day),
+                                pointInterval: 24 * 3600 * 1000,
+                                data: [],
+                                yAxis: 1
+                            }]
+                    };
+                    series = [];
+                    volumes = [];
+                    count = 0;
+                    for (x in obj["Time Series (Daily)"]) {
+                        count += 1;
+                        var today_date = new Date(x);
+                        series.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["4. close"])));
+                        volumes.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["5. volume"])));
 //                            }
-                    if (count == 185)
-                        break;
+                        if (count == 185)
+                            break;
+                    }
+                    options.series[0].data = series;
+                    options.series[1].data = volumes;
+                    Highcharts.chart("container_for_indicators", options);
+                    $scope.progress_bar_for_stock_details_active = false;
+
+                    $scope.options_for_highstock = {
+
+                        chart: {
+                            height: 400,
+                            width: 1200
+                        },
+
+                        title: {
+                            text: $scope.symbol + ' Stock Value'
+                        },
+
+                        subtitle: {
+                            text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
+                        },
+
+                        rangeSelector: {
+                            selected: 1
+                        },
+
+                        series: [{
+                            name: $scope.symbol + ' Stock Price',
+                            data: [],
+                            type: 'area',
+                            threshold: null,
+                            tooltip: {
+                                valueDecimals: 2
+                            }
+                        }]
+                        // }],
+
+                        // responsive: {
+                        //     rules: [{
+                        //         condition: {
+                        //             maxWidth: 500
+                        //         },
+                        //         chartOptions: {
+                        //             chart: {
+                        //                 maxWidth: 500,
+                        //                 minWidth: 200
+                        //             },
+                        //             subtitle: {
+                        //                 text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
+                        //             },
+                        //             navigator: {
+                        //                 enabled: true
+                        //             }
+                        //         }
+                        //     }]
+                        // }
+                    };
+                    series = [];
+                    count = 0;
+                    for (x in obj["Time Series (Daily)"]) {
+                        count += 1;
+                        var today_date = new Date(x);
+                        series.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["4. close"])));
+                        // if (count == 1000)
+                        //     break;
+                    }
+                    console.log(series);
+                    $scope.options_for_highstock.series[0].data = series;
+                    $scope.progress_bar_for_stock_details_active = false;
+
                 }
-                options.series[0].data = series;
-                options.series[1].data = volumes;
-                Highcharts.chart("container_for_indicators", options);
-                $scope.progress_bar_for_stock_details_active = false;
+                else {
+                    $scope.progress_bar_for_stock_details_active = false;
 
-                $scope.options_for_highstock = {
-
-                    chart: {
-                        height: 400,
-                        width: 1200
-                    },
-
-                    title: {
-                        text: $scope.symbol + ' Stock Value'
-                    },
-
-                    subtitle: {
-                        text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
-                    },
-
-                    rangeSelector: {
-                        selected: 1
-                    },
-
-                    series: [{
-                        name: $scope.symbol + ' Stock Price',
-                        data: [],
-                        type: 'area',
-                        threshold: null,
-                        tooltip: {
-                            valueDecimals: 2
-                        }
-                    }]
-                    // }],
-
-                    // responsive: {
-                    //     rules: [{
-                    //         condition: {
-                    //             maxWidth: 500
-                    //         },
-                    //         chartOptions: {
-                    //             chart: {
-                    //                 maxWidth: 500,
-                    //                 minWidth: 200
-                    //             },
-                    //             subtitle: {
-                    //                 text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
-                    //             },
-                    //             navigator: {
-                    //                 enabled: true
-                    //             }
-                    //         }
-                    //     }]
-                    // }
-                };
-                series = [];
-                count = 0;
-                for (x in obj["Time Series (Daily)"]) {
-                    count += 1;
-                    var today_date = new Date(x);
-                    series.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["4. close"])));
-                    if (count == 1000)
-                        break;
+                    $scope.error_bar_for_stock_details_active = true;
                 }
-                console.log(series);
-                $scope.options_for_highstock.series[0].data = series;
+                $scope.$evalAsync();
+
 
             });
 
             //END OF TIME SERIES DATA
+
+
+            //OTHER DATA FOR INDICATORS
 
             $http({
                 method: 'GET',
                 url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
                 params: {"symbol": $scope.symbol, "second": "stoch"}
             }).then(function successCallback(response) {
-                $scope.stoch = response.data;
-                console.log("stoch");
-                console.log($scope.stoch);
-            });
+                    $scope.stoch = response.data;
+                    hell_data = $scope.stoch;
+                    console.log(hell_data.hasOwnProperty("Meta Data"));
+                    if (hell_data.hasOwnProperty("Meta Data")) {
+                        console.log("stoch");
+                        console.log($scope.stoch);
+                        $scope.progress_bar_for_stoch_active = false;
+                    }
+                    else {
+                        $scope.progress_bar_for_stoch_active = false;
+                        $scope.error_bar_for_stoch_active = true;
+                    }
+                }
+            );
             $http({
                 method: 'GET',
                 url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
                 params: {"symbol": $scope.symbol, "second": "bbands"}
             }).then(function successCallback(response) {
                 $scope.bbands = response.data;
-                console.log("bbands");
-                console.log($scope.bbands);
-            });
+                hell_data = $scope.bbands;
+                console.log(hell_data.hasOwnProperty("Meta Data"));
+                if (hell_data.hasOwnProperty("Meta Data")) {
+                    console.log("bbands");
+                    console.log($scope.bbands);
+                    $scope.progress_bar_for_bbands_active = false;
+                }
+                else {
+                    $scope.progress_bar_for_bbands_active = false;
+                    $scope.error_bar_for_bbands_active = true;
+                }
+            })
+            ;
             $http({
                 method: 'GET',
                 url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
                 params: {"symbol": $scope.symbol, "second": "sma"}
             }).then(function successCallback(response) {
-                $scope.sma = response.data;
-                console.log("sma");
-                console.log($scope.sma);
-            });
+                    $scope.sma = response.data;
+                    hell_data = $scope.sma;
+                    console.log(hell_data.hasOwnProperty("Meta Data"));
+                    if (hell_data.hasOwnProperty("Meta Data")) {
+                        console.log("sma");
+                        console.log($scope.sma);
+                        $scope.progress_bar_for_sma_active = false;
+                    }
+                    else {
+                        $scope.progress_bar_for_sma_active = false;
+                        $scope.error_bar_for_sma_active = true;
+                    }
+                }
+            );
             $http({
                 method: 'GET',
                 url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
                 params: {"symbol": $scope.symbol, "second": "ema"}
             }).then(function successCallback(response) {
-                $scope.ema = response.data;
-                console.log("ema");
-                console.log($scope.ema);
-            });
+                    $scope.ema = response.data;
+                    hell_data = $scope.ema;
+                    console.log(hell_data.hasOwnProperty("Meta Data"));
+
+                    if (hell_data.hasOwnProperty("Meta Data")) {
+                        console.log("ema");
+                        console.log($scope.ema);
+                        $scope.progress_bar_for_ema_active = false;
+                    }
+                    else {
+                        $scope.progress_bar_for_ema_active = false;
+                        $scope.error_bar_for_ema_active = true;
+                    }
+                }
+            );
             $http({
                 method: 'GET',
                 url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
                 params: {"symbol": $scope.symbol, "second": "rsi"}
             }).then(function successCallback(response) {
-                $scope.rsi = response.data;
-                console.log("rsi");
-                console.log($scope.rsi);
-            });
+                    $scope.rsi = response.data;
+                    hell_data = $scope.rsi;
+                    console.log(hell_data.hasOwnProperty("Meta Data"));
+                    if (hell_data.hasOwnProperty("Meta Data")) {
+                        console.log("rsi");
+                        console.log($scope.rsi);
+                        $scope.progress_bar_for_rsi_active = false;
+                    }
+                    else {
+                        $scope.progress_bar_for_rsi_active = false;
+                        $scope.error_bar_for_rsi_active = true;
+                    }
+                }
+            );
             $http({
                 method: 'GET',
                 url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
                 params: {"symbol": $scope.symbol, "second": "adx"}
             }).then(function successCallback(response) {
-                $scope.adx = response.data;
-                console.log("adx");
-                console.log($scope.adx);
-            });
+                    $scope.adx = response.data;
+                    hell_data = $scope.adx;
+                    console.log(hell_data.hasOwnProperty("Meta Data"));
+
+                    if (hell_data.hasOwnProperty("Meta Data")) {
+                        console.log("adx");
+                        console.log($scope.adx);
+                        $scope.progress_bar_for_adx_active = false;
+                    }
+                    else {
+                        $scope.progress_bar_for_adx_active = false;
+                        $scope.error_bar_for_adx_active = true;
+                    }
+                }
+            );
             $http({
                 method: 'GET',
                 url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
                 params: {"symbol": $scope.symbol, "second": "cci"}
             }).then(function successCallback(response) {
-                $scope.cci = response.data;
-                console.log("cci");
-                console.log($scope.cci);
-            });
+                    $scope.cci = response.data;
+                    hell_data = $scope.cci;
+                    console.log(hell_data.hasOwnProperty("Meta Data"));
+
+                    if (hell_data.hasOwnProperty("Meta Data")) {
+                        console.log("cci");
+                        console.log($scope.cci);
+                        $scope.progress_bar_for_cci_active = false;
+                    }
+                    else {
+                        $scope.progress_bar_for_cci_active = false;
+                        $scope.error_bar_for_cci_active = true;
+                    }
+                }
+            );
             $http({
                 method: 'GET',
                 url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
                 params: {"symbol": $scope.symbol, "second": "macd"}
             }).then(function successCallback(response) {
-                $scope.macd = response.data;
-                console.log("macd");
-                console.log($scope.macd);
-            });
-
+                    $scope.macd = response.data;
+                    hell_data = $scope.macd;
+                    console.log(hell_data.hasOwnProperty("Meta Data"));
+                    if (hell_data.hasOwnProperty("Meta Data")) {
+                        console.log("macd");
+                        console.log($scope.macd);
+                        $scope.progress_bar_for_macd_active = false;
+                    }
+                    else {
+                        $scope.progress_bar_for_macd_active = false;
+                        $scope.error_bar_for_macd_active = true;
+                    }
+                }
+            );
+            $http({
+                method: 'GET',
+                url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+                params: {"symbol": $scope.symbol, "second": "news"}
+            }).then(function successCallback(response) {
+                    $scope.news = [];
+                    for (x = 0; x < 5; x++)
+                        $scope.news.push(response.data.channel.item[x]);
+                    hell_data = $scope.news;
+                    console.log(angular.equals(hell_data, []));
+                    if (angular.equals(hell_data, [])) {
+                        console.log("news");
+                        console.log($scope.news[0]);
+                        $scope.progress_bar_for_news_active = false;
+                    }
+                    else {
+                        $scope.progress_bar_for_news_active = false;
+                        $scope.error_bar_for_news_active = true;
+                    }
+                }
+            );
 
         }
 
