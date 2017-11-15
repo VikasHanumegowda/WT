@@ -6,8 +6,173 @@ String.prototype.format = function () {
     }
     return formatted;
 };
+String.prototype.replaceAll = function (search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
 
 app.controller('myCtrl', function ($scope, $http) {
+
+        $scope.order_by = 'a';
+        $scope.sort_selected = 'Default';
+        $scope.sortTable = function () {
+            column_name = $scope.sort_selected;
+
+            order_by = $scope.order_by;
+            console.log(order_by);
+            if (order_by === "a")
+                asc = true;
+            else
+                asc = false;
+            console.log(column_name);
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("fav_table");
+            switching = true;
+            /*Make a loop that will continue until
+            no switching has been done:*/
+            while (switching) {
+                //start by saying: no switching is done:
+                switching = false;
+                rows = table.getElementsByTagName("TR");
+                /*Loop through all table rows (except the
+                first, which contains table headers):*/
+                for (i = 1; i < (rows.length - 1); i++) {
+                    //start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /*Get the two elements you want to compare,
+                    one from current row and one from the next:*/
+                    if (column_name === "Symbol") {
+                        x = rows[i].getElementsByTagName("TD")[0];
+                        y = rows[i + 1].getElementsByTagName("TD")[0];
+                        //check if the two rows should switch place:
+                        if (asc) {
+                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                //if so, mark as a switch and break the loop:
+
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                        else {
+                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                //if so, mark as a switch and break the loop:
+
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                    }
+                    else if (column_name === "Stock Price") {
+                        x = rows[i].getElementsByTagName("TD")[1];
+                        y = rows[i + 1].getElementsByTagName("TD")[1];
+                        //check if the two rows should switch place:
+                        if (asc) {
+                            if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
+                                console.log("true");
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                        else {
+                            if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
+                                console.log("true");
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                    }
+                    else if (column_name === "Change") {
+                        x = rows[i].getElementsByTagName("TD")[0];
+                        y = rows[i + 1].getElementsByTagName("TD")[0];
+                        //check if the two rows should switch place:
+
+                        if (asc) {
+                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                        else {
+                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                    }
+                    else if (column_name === "Change Percent") {
+                        x = rows[i].getElementsByTagName("TD")[0];
+                        y = rows[i + 1].getElementsByTagName("TD")[0];
+                        //check if the two rows should switch place:
+
+                        if (asc) {
+                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                        else {
+                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                    }
+                    else if (column_name === "Volume") {
+                        x = rows[i].getElementsByTagName("TD")[3];
+                        y = rows[i + 1].getElementsByTagName("TD")[3];
+                        //check if the two rows should switch place:
+                        // console.log(x.innerHTML);
+                        // console.log(parseFloat(x.innerHTML));
+
+                        x_inner = x.innerHTML;
+                        y_inner = y.innerHTML;
+
+                        x_inner = x_inner.replaceAll(",", "");
+                        y_inner = y_inner.replaceAll(",", "");
+
+                        console.log(parseInt(x_inner));
+                        console.log(parseInt(y_inner));
+                        if (asc) {
+                            if (parseInt(x_inner) > parseInt(y_inner)) {
+                                console.log("true");
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                        else {
+                            if (parseInt(x_inner) < parseInt(y_inner)) {
+                                console.log("true");
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                    }
+                    else if (column_name === "Default") {
+                        if (asc) {
+                            $scope.load_fav_list();
+                        }
+                        else {
+                            $scope.fav_list = $scope.fav_list.reverse();
+
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    /*If a switch has been marked, make the switch
+                    and mark that a switch has been done:*/
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
 
         $scope.isStarred = function () { //checking starred value on reloading
             var match = false;
@@ -22,7 +187,7 @@ app.controller('myCtrl', function ($scope, $http) {
             return match;
         }
 
-        $scope.load_fav_list = function() {
+        $scope.load_fav_list = function () {
             $scope.fav_list = angular.fromJson(localStorage.getItem("favouriteList"));
             console.log($scope.fav_list);
 
@@ -51,11 +216,25 @@ app.controller('myCtrl', function ($scope, $http) {
             list.push(item_to_add);
             localStorage.setItem("favouriteList", JSON.stringify(list));
             $scope.load_fav_list();
-            $scope.$apply();
+            $scope.$evalAsync();
+        }
+
+        $scope.deleteFav_for_star = function () {
+
+            $scope.isFav = false;
+            list = angular.fromJson(localStorage.getItem("favouriteList")); //parsing list
+            angular.forEach(list, function (additem, index) {
+                if (additem.symbol == $scope.ticker_symbol) {
+                    list.splice(index, 1);
+                }
+            });
+            localStorage.setItem("favouriteList", JSON.stringify(list));
+            $scope.load_fav_list();
+            $scope.$evalAsync();
         }
 
         $scope.deleteFav = function (item) {
-            if(item.symbol == $scope.ticker_symbol)
+            if (item.symbol == $scope.ticker_symbol)
                 $scope.isFav = false;
             list = angular.fromJson(localStorage.getItem("favouriteList")); //parsing list
             angular.forEach(list, function (additem, index) {
@@ -65,7 +244,7 @@ app.controller('myCtrl', function ($scope, $http) {
             });
             localStorage.setItem("favouriteList", JSON.stringify(list));
             $scope.load_fav_list();
-            $scope.$apply();
+            $scope.$evalAsync();
         }
 
 
@@ -877,6 +1056,10 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.symbol_typed = "";
         $scope.symbol = "";
 
+        $scope.clear_reload = function () {
+            console.log("clear");
+            location.reload(false);
+        }
         $scope.submit = function () {
             // $scope.hide_fav = true;
 
@@ -894,6 +1077,7 @@ app.controller('myCtrl', function ($scope, $http) {
             console.log("valueis" + $scope.symbol);
             $scope.symbol = test_input(symbol);
             $scope.isfav = $scope.isStarred();
+            $scope.$evalAsync();
             if (!symbol) {
                 $('#inputSymbol').tooltip('enable');
                 $('#inputSymbol').tooltip('show');
@@ -1196,6 +1380,8 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.symbol_typed = "";
 
         $scope.isfav = false;
+
+
     }
 )
 ;

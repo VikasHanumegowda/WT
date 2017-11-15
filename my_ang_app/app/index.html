@@ -32,7 +32,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/5.0.6/js/highstock.js"></script>
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js "></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js "
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <!--for toggle button-->
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
+    <script src="app.js"></script>
 
 </head>
 <body>
@@ -58,7 +65,7 @@
                         ng-disabled="symbol_typed===''"><span
                         class="glyphicon glyphicon-search" aria-hidden="true"></span> Get Quote
                 </button>
-                <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"
+                <button type="button" class="btn btn-default" ng-click="clear_reload()" ><span class="glyphicon glyphicon-refresh"
                                                                     aria-hidden="true"></span> Clear
                 </button>
             </div>
@@ -94,22 +101,24 @@
                 <div style="display: inline;">
                     <label class="col-xs-12 col-sm-12 col-md-1 col-lg-1" style="margin-right: 5px; font-size: small;"
                            for="sel1"><strong>Sort By</strong></label>
-                    <select class="col-xs-12 col-sm-12 col-md-2 col-lg-2" style="margin-right: 5px;" id="sel1">
-                        <option>Default</option>
-                        <option>Symbol</option>
-                        <option>Stock Price</option>
-                        <option>Change</option>
-                        <option>Change Percent</option>
-                        <option>Volume</option>
+                    <select ng-change="sortTable()" ng-model="sort_selected"
+                            class="col-xs-12 col-sm-12 col-md-2 col-lg-2" style="margin-right: 5px;" id="sel1">
+                        <option value="Default">Default</option>
+                        <option value="Symbol">Symbol</option>
+                        <option value="Stock Price">Stock Price</option>
+                        <option value="Change">Change</option>
+                        <option value="Change Percent">Change Percent</option>
+                        <option value="Volume">Volume</option>
                     </select>
                     <label class="col-xs-12 col-sm-12 col-md-1 col-lg-1" style="margin-right: 5px; font-size: small;"
                            for="sel2"><strong>Order</strong></label>
-                    <select class="col-xs-12 col-sm-12 col-md-2 col-lg-2" style="margin-right: 5px;" id="sel2">
-                        <option>Ascending</option>
-                        <option>Decending</option>
+                    <select ng-change="sortTable()" ng-model="order_by" class="col-xs-12 col-sm-12 col-md-2 col-lg-2" style="margin-right: 5px;"
+                            id="sel2">
+                        <option value="a">Ascending</option>
+                        <option value="d">Decending</option>
                     </select>
                 </div>
-                <table class="table table-hover">
+                <table id="fav_table" class="table table-hover">
                     <thead>
                     <tr>
                         <th>Symbol</th>
@@ -174,26 +183,26 @@
                             <!--class="glyphicon glyphicon-star-empty"-->
                             <!--style="border: thick"></span>-->
                             <!--</button>-->
-                            <button id="favouriteB" ng-if="!isFav == true" type="button"
-                                    class="btn btn-default pull-right" ng-click="addFav()"
-                                    style="padding: 4px; height: 30px; width: 30px;"><span
-                                    class="glyphicon glyphicon-star-empty "></span></button>
-                            <button id="favouriteC" ng-if="isFav == true" type="button"
-                                    class="btn btn-default pull-right" ng-click="deleteFav()"
-                                    style="padding: 4px; height: 30px; width: 30px;"><span
-                                    class="glyphicon glyphicon-star icon-success"></span></button>
                             <button type="button" class="btn btn-default"
                                     ng-disabled="disable_facebook_button"
                                     style="padding: 4px; height: 30px; width: 30px;">
                                 <img style="height: 20px; width: 20px; "
                                      src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png">
                             </button>
+                            <button id="favouriteB" ng-if="!isFav === true" type="button"
+                                    class="btn btn-default pull-right" ng-click="addFav()"
+                                    style="padding: 4px; height: 30px; width: 30px;"><span
+                                    class="glyphicon glyphicon-star-empty "></span></button>
+                            <button id="favouriteC" ng-if="isFav === true" type="button"
+                                    class="btn btn-default pull-right" ng-click="deleteFav_for_star()"
+                                    style="padding: 4px; height: 30px; width: 30px;"><span
+                                    class="glyphicon glyphicon-star icon-success"></span></button>
                         </div>
                         <!--<div class="progress" id="progressbarTable" ng-if="progress_bar_for_stock_details_active"-->
-                             <!--style="margin-top: 200px">-->
-                            <!--<div class="progress-bar progress-bar-striped active" role="progressbar"-->
-                                 <!--aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:65%">-->
-                            <!--</div>-->
+                        <!--style="margin-top: 200px">-->
+                        <!--<div class="progress-bar progress-bar-striped active" role="progressbar"-->
+                        <!--aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:65%">-->
+                        <!--</div>-->
                         <!--</div>-->
                         <div>
                             <table class="table table-striped">
@@ -276,13 +285,6 @@
         </div>
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js "></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js "
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
-<!--for toggle button-->
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-<script src="app.js"></script>
 </body>
 </html>
