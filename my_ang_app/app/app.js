@@ -23,7 +23,6 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.order_by = 'a';
         $scope.sort_selected = 'Default';
 
-        $scope.load_fav_list();
 
         if (!$scope.fav_list)
             $scope.fav_list = [];
@@ -223,6 +222,8 @@ app.controller('myCtrl', function ($scope, $http) {
             console.log($scope.fav_list);
 
         }
+
+        $scope.load_fav_list();
 
         $scope.addFav = function () {
             var list = [];
@@ -1305,10 +1306,10 @@ app.controller('myCtrl', function ($scope, $http) {
                 series = [];
                 count = 0;
                 for (x in obj["Time Series (Daily)"]) {
-                    count+=1;
+                    count += 1;
                     var today_date = new Date(x);
                     series.unshift(Array(today_date, parseFloat(obj["Time Series (Daily)"][x]["4. close"])));
-                    if(count==1000)
+                    if (count == 1000)
                         break;
                 }
                 console.log(series);
