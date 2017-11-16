@@ -1131,8 +1131,10 @@ app.controller('myCtrl', function ($scope, $http) {
         console.log($scope.isFav);
         $scope.init_bars();
         $scope.flip_to_details();
-        if(a)
+        if (a){
             symbol = a;
+            $scope.symbol_typed = a;
+        }
         else
             symbol = $("#inputSymbol").val();//value from the input text field
         $scope.symbol = symbol;
@@ -1615,6 +1617,61 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.submit(a);
     };
 
+    $scope.refresh_once = function () {
+        var list = angular.fromJson(localStorage.getItem("favouriteList"));
+
+        angular.forEach(list, function (entry, index) {
+            $http({
+                method: 'GET',
+                url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+                params: {"symbol": entry.symbol, "second": "tsd"}
+            }).then(function successCallback(response) {
+
+                tsd = response.data;
+                hell_data = tsd;
+                if (hell_data.hasOwnProperty("Meta Data")) {
+                    // console.log(entry.symbol);
+                    // console.log(tsd);
+                    obj = tsd;
+                    // console.log("data");
+                    // console.log("data");
+                    date = obj["Meta Data"]["3. Last Refreshed"];
+                    date = moment(date).format("YYYY-MM-DD");
+                    // console.log(date);
+                    symbol_for_chart = obj["Meta Data"]["2. Symbol"];
+                    volume = parseInt(obj["Time Series (Daily)"][date]["5. volume"]).toLocaleString();
+                    // console.log(volume);
+                    last_price = parseFloat(obj["Time Series (Daily)"][date]["4. close"]).toFixed(2); //current_close_price
+                    // console.log(last_price);
+                    prev_date = moment(date).subtract(1, "day").format("YYYY-MM-DD");
+                    while (!obj["Time Series (Daily)"].hasOwnProperty(prev_date))
+                        prev_date = moment(prev_date).subtract(1, "day").format("YYYY-MM-DD");
+                    prev_close = parseFloat(obj["Time Series (Daily)"][prev_date]["4. close"]).toFixed(2);
+                    change = (last_price - prev_close).toFixed(2);
+                    // console.log(change);
+                    change_percent = (change * 100 / prev_close).toFixed(2);
+                    // console.log(change_percent);
+                    // console.log("");
+                    item_to_add = {
+                        'symbol': symbol_for_chart,
+                        'stock_price': last_price,
+                        'change': change,
+                        'change_percent': change_percent,
+                        'volume': volume
+                    };
+                    list[index] = item_to_add;
+                    localStorage.setItem("favouriteList", JSON.stringify(list));
+                    // $scope.$apply();
+                    // $scope.$evalAsync();
+
+                    console.log(list);
+                }
+                // $scope.$evalAsync();
+
+            });
+        });
+        $scope.load_fav_list();
+    }
 
     //for automatic refresh
     $(function () {
@@ -1655,7 +1712,7 @@ app.controller('myCtrl', function ($scope, $http) {
                                 while (!obj["Time Series (Daily)"].hasOwnProperty(prev_date))
                                     prev_date = moment(prev_date).subtract(1, "day").format("YYYY-MM-DD");
                                 prev_close = parseFloat(obj["Time Series (Daily)"][prev_date]["4. close"]).toFixed(2);
-                                change = (prev_close - last_price).toFixed(2);
+                                change = (last_price - prev_close).toFixed(2);
                                 // console.log(change);
                                 change_percent = (change * 100 / prev_close).toFixed(2);
                                 // console.log(change_percent);
@@ -1671,13 +1728,14 @@ app.controller('myCtrl', function ($scope, $http) {
                                 localStorage.setItem("favouriteList", JSON.stringify(list));
                                 // $scope.$apply();
                                 // $scope.$evalAsync();
-                                $scope.load_fav_list();
                                 console.log(list);
                             }
                             // $scope.$evalAsync();
 
                         });
                     });
+                    $scope.load_fav_list();
+
                     // alert("Hello");
                 }, 5000);
             }
