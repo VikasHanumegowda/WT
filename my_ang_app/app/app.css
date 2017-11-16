@@ -27,17 +27,31 @@ html, body{
 
 
 
-.animate-hide {
-    -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 4s;
-    -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 4s;
-    -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 4s;
-    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 4s;
-    border:1px solid black;
-    background:white;
-    position: absolute;
+.animate-hide-table{
+    -webkit-transition:all cubic-bezier(0.250, 0.250, 0.750, 0.750) 2s;
+    -moz-transition:all cubic-bezier(0.250, 0.250, 0.750, 0.750) 2s;
+    -o-transition:all cubic-bezier(0.250, 0.250, 0.750, 0.750) 2s;
+    transition:all cubic-bezier(0.250, 0.250, 0.750, 0.750) 2s;
     left: 0;
 }
 
-.animate-hide.ng-hide {
+.animate-hide-table.ng-hide {
+    position: relative;
+    left: 100%;
+    padding:5px;
+}
+
+
+.animate-hide-detail{
+    -webkit-transition:all cubic-bezier(0.250, 0.250, 0.750, 0.750) 2s;
+    -moz-transition:all cubic-bezier(0.250, 0.250, 0.750, 0.750) 2s;
+    -o-transition:all cubic-bezier(0.250, 0.250, 0.750, 0.750) 2s;
+    transition:all cubic-bezier(0.250, 0.250, 0.750, 0.750) 2s;
+    left: 0;
+}
+
+.animate-hide-detail.ng-hide {
+    position: relative;
     left: -100%;
+    padding:5px;
 }
