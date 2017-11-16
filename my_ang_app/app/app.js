@@ -26,7 +26,6 @@ app.controller('myCtrl', function ($scope, $http) {
 
         if (!$scope.fav_list)
             $scope.fav_list = [];
-        $scope.isfav = false;
 
         $scope.timestamp = moment().add(3, 'hours').format("YYYY-MM-DD HH:mm:ss") + " EST";
 
@@ -35,7 +34,6 @@ app.controller('myCtrl', function ($scope, $http) {
         $('#inputSymbol').tooltip('hide');
         $scope.symbol_typed = "";
 
-        $scope.isfav = false;
 
         $scope.symbol_typed = "";
         $scope.symbol = "";
@@ -204,17 +202,20 @@ app.controller('myCtrl', function ($scope, $http) {
             }
         }
 
-        $scope.isStarred = function () { //checking starred value on reloading
+        $scope.isStarred = function (id) { //checking starred value on reloading
             var match = false;
             var list = angular.fromJson(localStorage.getItem("favouriteList"));
-            angular.forEach(list, function (entry) {
-                if (entry.symbol === $scope.ticker_symbol) {
+            count = 0;
+            angular.forEach(list, function (entry, index) {
+                if (entry.symbol === id) {
                     console.log("match found");
-                    match = true;
-                    return match;
+                    $scope.isFav = true;
+                    count = 1;
+                    console.log($scope.isFav);
                 }
             });
-            return match;
+            if(count == 0 )
+                $scope.isFav = false;
         }
 
         $scope.load_fav_list = function () {
@@ -1033,6 +1034,7 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.show_fav = true;
             $scope.show_details = false;
             $scope.load_fav_list();
+            $scope.$evalAsync();
         }
 
         $scope.flip_to_details = function () {
@@ -1041,6 +1043,7 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.sort_selected = "Default";
             $scope.disable_show_details_button = false;
             $scope.id_for_indicators = 1;
+            $scope.$evalAsync();
         }
         $scope.init_bars = function () {
             $scope.progress_bar_for_stock_details_active = true;
@@ -1064,8 +1067,8 @@ app.controller('myCtrl', function ($scope, $http) {
             $scope.error_bar_for_adx_active = false;
             $scope.error_bar_for_cci_active = false;
             $scope.error_bar_for_news_active = false;
-            $scope.isFav = false;
             $scope.stock_data_not_loaded = true;
+
         }
 
         $scope.querySearch = function (query) {
@@ -1108,6 +1111,7 @@ app.controller('myCtrl', function ($scope, $http) {
             // $scope.hide_fav = true;
 
 
+            console.log($scope.isFav);
             $scope.init_bars();
             $scope.flip_to_details();
             symbol = $("#inputSymbol").val();//value from the input text field
@@ -1118,7 +1122,10 @@ app.controller('myCtrl', function ($scope, $http) {
             console.log("valueis" + $scope.symbol);
             $scope.symbol = test_input(symbol);
             $scope.ticker_symbol = $scope.symbol;
+            $scope.isStarred(test_input(symbol));
+            console.log($scope.isFav);
             $scope.$evalAsync();
+            console.log($scope.isFav);
 
             if (!symbol) {
                 $('#inputSymbol').tooltip('enable');
@@ -1152,8 +1159,7 @@ app.controller('myCtrl', function ($scope, $http) {
                     symbol_for_chart = obj["Meta Data"]["2. Symbol"];
 
                     $scope.stock_data_not_loaded = false;
-                    $scope.isfav = $scope.isStarred();
-
+                    $scope.$evalAsync();
                     console.log(obj["Time Series (Daily)"][date]);
                     $scope.volume = parseInt(obj["Time Series (Daily)"][date]["5. volume"]).toLocaleString();
                     $scope.last_price = parseFloat(obj["Time Series (Daily)"][date]["4. close"]).toFixed(2); //current_close_price
