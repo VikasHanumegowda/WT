@@ -118,19 +118,32 @@ app.controller('myCtrl', function ($scope, $http) {
                     }
                 }
                 else if (column_name === "Change") {
-                    x = rows[i].getElementsByTagName("TD")[0];
-                    y = rows[i + 1].getElementsByTagName("TD")[0];
+                    x = rows[i].getElementsByTagName("TD")[2];
+                    y = rows[i + 1].getElementsByTagName("TD")[2];
                     //check if the two rows should switch place:
+                    var regex = /[+-]?\d+(\.\d+)?/g;
+                    x_str = x.getElementsByTagName("span")[0].innerHTML;
+                    x_val = x_str.slice(0, x_str.indexOf('<'));
+                    var floats = x_val.match(regex).map(function (v) {
+                        return parseFloat(v);
+                    });
+                    change_val_x = floats[0];
+                    y_str = y.getElementsByTagName("span")[0].innerHTML;
+                    y_val = y_str.slice(0, y_str.indexOf('<'));
+                    floats = y_val.match(regex).map(function (v) {
+                        return parseFloat(v);
+                    });
+                    change_val_y = floats[0];
 
                     if (asc) {
-                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        if (change_val_x > change_val_y) {
                             //if so, mark as a switch and break the loop:
                             shouldSwitch = true;
                             break;
                         }
                     }
                     else {
-                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        if (change_val_x < change_val_y) {
                             //if so, mark as a switch and break the loop:
                             shouldSwitch = true;
                             break;
@@ -138,19 +151,33 @@ app.controller('myCtrl', function ($scope, $http) {
                     }
                 }
                 else if (column_name === "Change Percent") {
-                    x = rows[i].getElementsByTagName("TD")[0];
-                    y = rows[i + 1].getElementsByTagName("TD")[0];
+                    x = rows[i].getElementsByTagName("TD")[2];
+                    y = rows[i + 1].getElementsByTagName("TD")[2];
                     //check if the two rows should switch place:
+                    var regex = /[+-]?\d+(\.\d+)?/g;
+                    x_str = x.getElementsByTagName("span")[0].innerHTML;
+                    x_val = x_str.slice(0, x_str.indexOf('<'));
+                    var floats = x_val.match(regex).map(function (v) {
+                        return parseFloat(v);
+                    });
+                    change_val_x = floats[1];
+
+                    y_str = y.getElementsByTagName("span")[0].innerHTML;
+                    y_val = y_str.slice(0, y_str.indexOf('<'));
+                    floats = y_val.match(regex).map(function (v) {
+                        return parseFloat(v);
+                    });
+                    change_val_y = floats[1];
 
                     if (asc) {
-                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        if (change_val_x > change_val_y) {
                             //if so, mark as a switch and break the loop:
                             shouldSwitch = true;
                             break;
                         }
                     }
                     else {
-                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        if (change_val_x < change_val_y) {
                             //if so, mark as a switch and break the loop:
                             shouldSwitch = true;
                             break;
@@ -1131,7 +1158,7 @@ app.controller('myCtrl', function ($scope, $http) {
         console.log($scope.isFav);
         $scope.init_bars();
         $scope.flip_to_details();
-        if (a){
+        if (a) {
             symbol = a;
             $scope.symbol_typed = a;
         }
@@ -1191,7 +1218,7 @@ app.controller('myCtrl', function ($scope, $http) {
                 $scope.prev_close = parseFloat(obj["Time Series (Daily)"][$scope.prev_date]["4. close"]).toFixed(2);
                 $scope.day_range = "{0} - {1}".format(parseFloat(obj["Time Series (Daily)"][date]["3. low"]).toFixed(2), parseFloat(obj["Time Series (Daily)"][date]["2. high"]).toFixed(2));
                 $scope.open_value = parseFloat(obj['Time Series (Daily)'][date]["1. open"]).toFixed(2);
-                $scope.change = ($scope.last_price - $scope.prev_close).toFixed(2);
+                $scope.change = ($scope.last_price - $scope.prev_close).toFixed(2); // hello_world
                 $scope.is_positive_change = $scope.change >= 0;
                 $scope.change_percent = ($scope.change * 100 / $scope.prev_close).toFixed(2);
 
@@ -1526,11 +1553,11 @@ app.controller('myCtrl', function ($scope, $http) {
             params: {"symbol": $scope.symbol, "second": "news"}
         }).then(function successCallback(response) {
                 $scope.news = [];
-                for (x = 0; x < 5; x++)
-                    $scope.news.push(response.data.channel.item[x]);
-                hell_data = $scope.news;
-                console.log(angular.equals(hell_data, []));
-                if (angular.equals(hell_data, [])) {
+                if (response.data.channel.hasOwnProperty("item")) {
+                    for (x = 0; x < 5; x++)
+                        $scope.news.push(response.data.channel.item[x]);
+                    hell_data = $scope.news;
+                    console.log(angular.equals(hell_data, []));
                     console.log("news");
                     console.log($scope.news[0]);
                     $scope.progress_bar_for_news_active = false;
