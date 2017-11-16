@@ -214,7 +214,7 @@ app.controller('myCtrl', function ($scope, $http) {
                     console.log($scope.isFav);
                 }
             });
-            if(count == 0 )
+            if (count == 0)
                 $scope.isFav = false;
         }
 
