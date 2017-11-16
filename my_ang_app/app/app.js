@@ -19,7 +19,7 @@ app.controller('myCtrl', function ($scope, $http) {
 
     //initializations
     $scope.auto_refresh = false;
-    console.log($scope.auto_refresh,"auto-refresh");
+    console.log($scope.auto_refresh, "auto-refresh");
     $scope.first_highstock = 1;
     $scope.disable_show_details_button = true;
     $scope.show_fav = true;
@@ -1610,24 +1610,10 @@ app.controller('myCtrl', function ($scope, $http) {
         console.log(a);
     };
 
-    function toggle_auto_refresh(a) {
-        console.log(a);
-        $scope.auto_refresh = !$scope.auto_refresh;
-        console.log($scope.auto_refresh);
-        console.log("inside toggle function");
-        if ($scope.auto_refresh) {
-            var my_interval = setInterval(function () {
-                alert("Hello");
-            }, 3000);
-        }
-        else {
-            clearInterval(my_interval);
-        }
-    }
 
     //for automaticc refresh
-    $(function() {
-        $('#toggler').change(function() {
+    $(function () {
+        $('#toggler').change(function () {
             console.log("toggle");
             $scope.auto_refresh = !$scope.auto_refresh;
             console.log($scope.auto_refresh);
@@ -1635,8 +1621,49 @@ app.controller('myCtrl', function ($scope, $http) {
 
             if ($scope.auto_refresh) {
                 $scope.timer = setInterval(function () {
-                    alert("Hello");
-                }, 3000);
+                    var list = angular.fromJson(localStorage.getItem("favouriteList"));
+
+                    angular.forEach(list, function (entry, index) {
+                        $http({
+                            method: 'GET',
+                            url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+                            params: {"symbol": entry.symbol, "second": "tsd"}
+                        }).then(function successCallback(response) {
+
+                            tsd = response.data;
+                            hell_data = tsd;
+                            // console.log(hell_data.hasOwnProperty("Meta Data"));
+                            if (hell_data.hasOwnProperty("Meta Data")) {
+                                // console.log("tsd");
+                                console.log(tsd);
+                                obj = tsd;
+                                console.log("data");
+                                console.log("data");
+                                date = obj["Meta Data"]["3. Last Refreshed"];
+                                date = moment(date).format("YYYY-MM-DD");
+                                // console.log(date);
+                                symbol_for_chart = obj["Meta Data"]["2. Symbol"];
+
+                                stock_data_not_loaded = false;
+                                $scope.$evalAsync();
+                                // console.log(obj["Time Series (Daily)"][date]);
+                                volume = parseInt(obj["Time Series (Daily)"][date]["5. volume"]).toLocaleString();
+                                last_price = parseFloat(obj["Time Series (Daily)"][date]["4. close"]).toFixed(2); //current_close_price
+                                prev_date = moment(date).subtract(1, "day").format("YYYY-MM-DD");
+                                while (!obj["Time Series (Daily)"].hasOwnProperty(prev_date))
+                                    prev_date = moment(prev_date).subtract(1, "day").format("YYYY-MM-DD");
+                                prev_close = parseFloat(obj["Time Series (Daily)"][prev_date]["4. close"]).toFixed(2);
+                                change = (prev_close - last_price).toFixed(2);
+                                change_percent = (change * 100 / prev_close).toFixed(2);
+                                console.log("")
+                            }
+                            $scope.$evalAsync();
+
+
+                        });
+                    });
+                    // alert("Hello");
+                }, 5000);
             }
             else {
                 clearInterval($scope.timer);
