@@ -12,10 +12,6 @@
     {
         $url_for_alphavantage = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $symbol . "&interval=daily&outputsize=full&apikey=OGY0S9LG8J8ADNZW";
         $response_from_alphavantage = file_get_contents($url_for_alphavantage);
-//            if ($response_from_alphavantage === false) {
-//                header('Content-Type: application/json');
-//                echo json_encode(json_decode("{}"));
-//            }
         echo $response_from_alphavantage;
     }
     if($second_symbol=='stoch')
@@ -90,5 +86,11 @@
 //        $fileContents = trim(str_replace('"', "'", $fileContents));
         echo $fileContents;
     }
+    if($second_symbol=='intra')
+        {
+            $url_for_alphavantage = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" . $symbol . "&interval=1min&outputsize=compact&apikey=OGY0S9LG8J8ADNZW";
+            $response_from_alphavantage = file_get_contents($url_for_alphavantage);
+            echo $response_from_alphavantage;
+        }
 
 ?>
