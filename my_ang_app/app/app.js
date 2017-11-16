@@ -1189,7 +1189,7 @@ app.controller('myCtrl', function ($scope, $http) {
                 $scope.prev_close = parseFloat(obj["Time Series (Daily)"][$scope.prev_date]["4. close"]).toFixed(2);
                 $scope.day_range = "{0} - {1}".format(parseFloat(obj["Time Series (Daily)"][date]["3. low"]).toFixed(2), parseFloat(obj["Time Series (Daily)"][date]["2. high"]).toFixed(2));
                 $scope.open_value = parseFloat(obj['Time Series (Daily)'][date]["1. open"]).toFixed(2);
-                $scope.change = ($scope.prev_close - $scope.last_price).toFixed(2);
+                $scope.change = ($scope.last_price - $scope.prev_close).toFixed(2);
                 $scope.is_positive_change = $scope.change >= 0;
                 $scope.change_percent = ($scope.change * 100 / $scope.prev_close).toFixed(2);
 
@@ -1669,9 +1669,9 @@ app.controller('myCtrl', function ($scope, $http) {
                                 };
                                 list[index] = item_to_add;
                                 localStorage.setItem("favouriteList", JSON.stringify(list));
-                                $scope.$apply();
-                                $scope.$evalAsync();
-
+                                // $scope.$apply();
+                                // $scope.$evalAsync();
+                                $scope.load_fav_list();
                                 console.log(list);
                             }
                             // $scope.$evalAsync();
