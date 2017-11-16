@@ -1629,6 +1629,18 @@ app.controller('myCtrl', function ($scope, $http) {
     $(function() {
         $('#toggler').change(function() {
             console.log("toggle");
+            $scope.auto_refresh = !$scope.auto_refresh;
+            console.log($scope.auto_refresh);
+            console.log("inside toggle function");
+
+            if ($scope.auto_refresh) {
+                $scope.timer = setInterval(function () {
+                    alert("Hello");
+                }, 3000);
+            }
+            else {
+                clearInterval($scope.timer);
+            }
         })
     })
 
