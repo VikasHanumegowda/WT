@@ -13,9 +13,9 @@ String.prototype.replaceAll = function (search, replacement) {
     return target.split(search).join(replacement);
 };
 
-app.controller('myCtrl', function ($scope, $http) {
+app.controller('ctrl', function ($scope, $http) {
 
-
+    $scope.options = {};
 
     //initializations
     $scope.auto_refresh = false;
@@ -396,11 +396,12 @@ app.controller('myCtrl', function ($scope, $http) {
                 break;
         }
         console.log($scope.data_symbol, $scope.data_data);
-        $scope.set_data_for_indicators($scope.data_symbol, $scope.data_data);
+        $scope.set_data_for_indicators($scope.data_symbol, $scope.data_data, id);
 
     }
 
-    $scope.set_data_for_indicators = function (indicator, data) {
+
+    $scope.set_data_for_indicators = function (indicator, data, id_of_selected_tab) {
         // var xmlDoc = xhttp.responseText;
         // obj = JSON.parse(xmlDoc);
         // $date1 = $response_from_alphavantage_initial["Meta Data"]["3. Last Refreshed"];
@@ -408,645 +409,690 @@ app.controller('myCtrl', function ($scope, $http) {
         // console.log("data");
         // console.log("data");
         console.log(data);
-        date = obj["Meta Data"]["3: Last Refreshed"];
-        symbol_for_chart = obj["Meta Data"]["1: Symbol"];
 
-        var today = new Date(date);
-        var day = today.getDate() + 1;
-        var monthIndex = today.getMonth();
-        var year = today.getFullYear();
-        var today_str = formatDate(today);
-        //this is for second clicks and will not be called or made use of during the webpage loading from the server
-        //Please go through  the code again aince I parse the whole volume/price json in PHP only
-        if (indicator == 'r') {
-            date = obj["Meta Data"]["3. Last Refreshed"];
-            symbol_for_chart = obj["Meta Data"]["2. Symbol"];
-            today = new Date(date);
-            day = today.getDate() + 1;
-            monthIndex = today.getMonth();
-            year = today.getFullYear();
-            today_str = formatDate(today);
-            options = {
-                chart: {
-                    height: (9 / 20 * 100) + '%',
-                    zoomType: 'x'
-                },
-                title: {
-                    text: symbol_for_chart + ' Stock Price and Volume'
-                },
-                subtitle: {
-                    text: '<a href=\'https://www.alphavantage.co/\'>Source: Alpha Vantage</a>'
-                },
-                xAxis: {
-                    // endOnTick: true,
-                    // startOnTick: true,
-                    showFirstLabel: true,
-                    type: 'datetime',
-                    tickInterval: 7 * 24 * 3600 * 1000,
-                    labels: {
-                        format: '{value: %m/%d}',
-                        rotation: 45,
-                        align: 'middle'
-                    }
-                },
-                yAxis: [{
+        if (obj == null) {
+            switch (id_of_selected_tab) {
+                case 1:
+                    $scope.progress_bar_for_stock_details_active = false;
+                    $scope.error_bar_for_stock_details_active = true;
+                    break;
+                case 2:
+                    $scope.progress_bar_for_sma_active = false;
+                    $scope.error_bar_for_sma_active = true;
+                    break;
+                case 3:
+                    $scope.progress_bar_for_ema_active = false;
+                    $scope.error_bar_for_ema_active = true;
+                    break;
+                case 4:
+                    $scope.progress_bar_for_stoch_active = false;
+                    $scope.error_bar_for_stoch_active = true;
+                    break;
+                case 5:
+                    $scope.progress_bar_for_rsi_active = false;
+                    $scope.error_bar_for_rsi_active = true;
+                    break;
+                case 6:
+                    $scope.progress_bar_for_adx_active = false;
+                    $scope.error_bar_for_adx_active = true;
+                    break;
+                case 7:
+                    $scope.progress_bar_for_cci_active = false;
+                    $scope.error_bar_for_cci_active = true;
+                    break;
+                case 8:
+                    $scope.progress_bar_for_bbands_active = false;
+                    $scope.error_bar_for_bbands_active = true;
+                    break;
+                case 9:
+                    $scope.progress_bar_for_macd_active = false;
+                    $scope.error_bar_for_macd_active = true;
+                    break;
+            }
+        }
+        else {
+            date = obj["Meta Data"]["3: Last Refreshed"];
+            symbol_for_chart = obj["Meta Data"]["1: Symbol"];
+
+            var today = new Date(date);
+            var day = today.getDate() + 1;
+            var monthIndex = today.getMonth();
+            var year = today.getFullYear();
+            var today_str = formatDate(today);
+            //this is for second clicks and will not be called or made use of during the webpage loading from the server
+            //Please go through  the code again aince I parse the whole volume/price json in PHP only
+            if (indicator == 'r') {
+                date = obj["Meta Data"]["3. Last Refreshed"];
+                symbol_for_chart = obj["Meta Data"]["2. Symbol"];
+                today = new Date(date);
+                day = today.getDate() + 1;
+                monthIndex = today.getMonth();
+                year = today.getFullYear();
+                today_str = formatDate(today);
+                $scope.options = {
+                    chart: {
+                        height: (9 / 20 * 100) + '%',
+                        zoomType: 'x'
+                    },
                     title: {
-                        text: 'Stock Price'
+                        text: symbol_for_chart + ' Stock Price and Volume'
                     },
-                    tickAmount: 8,
-                    gridLineWidth: 0
-                }, {
-                    title: {
-                        text: 'Volume'
+                    subtitle: {
+                        text: '<a href=\'https://www.alphavantage.co/\'>Source: Alpha Vantage</a>'
                     },
-                    max: null,
-                    tickAmount: 8,
-                    gridLineWidth: 0,
-                    opposite: true
-                }],
-                tooltip: {
-                    formatter: function () {
-                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style=\"color:' + this.series.color + ';\">\u25CF</span>' + this.series.name + ': ' + this.y;
-                    }
-                },
-                plotOptions: {
-                    area: {
-                        // threshold: null
+                    xAxis: {
+                        // endOnTick: true,
+                        // startOnTick: true,
+                        showFirstLabel: true,
+                        type: 'datetime',
+                        tickInterval: 7 * 24 * 3600 * 1000,
+                        labels: {
+                            format: '{value: %m/%d}',
+                            rotation: 45,
+                            align: 'middle'
+                        }
                     },
-                    line: {
-                        threshold: null
-                    }
-                },
-                series: [{
-                    color: '#FF0000',
-                    type: 'area',
-                    name: symbol_for_chart,
-                    pointStart: Date.UTC(2017, monthIndex - 6, day),
-                    pointInterval: 24 * 3600 * 1000,
-                    data: []
-                },
-                    {
-                        color: '#F0F0F0',
-                        type: 'column',
-                        name: symbol_for_chart + ' Volume',
+                    yAxis: [{
+                        title: {
+                            text: 'Stock Price'
+                        },
+                        tickAmount: 8,
+                        gridLineWidth: 0
+                    }, {
+                        title: {
+                            text: 'Volume'
+                        },
+                        max: null,
+                        tickAmount: 8,
+                        gridLineWidth: 0,
+                        opposite: true
+                    }],
+                    tooltip: {
+                        formatter: function () {
+                            return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style=\"color:' + this.series.color + ';\">\u25CF</span>' + this.series.name + ': ' + this.y;
+                        }
+                    },
+                    plotOptions: {
+                        area: {
+                            // threshold: null
+                        },
+                        line: {
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        color: '#FF0000',
+                        type: 'area',
+                        name: symbol_for_chart,
                         pointStart: Date.UTC(2017, monthIndex - 6, day),
                         pointInterval: 24 * 3600 * 1000,
-                        data: [],
-                        yAxis: 1
-                    }]
-            };
-            series = [];
-            volumes = [];
-            count = 0;
-            for (x in obj['Time Series (Daily)']) {
-                count += 1;
-                var today_date = new Date(x);
-                series.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
-                volumes.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
+                        data: []
+                    },
+                        {
+                            color: '#F0F0F0',
+                            type: 'column',
+                            name: symbol_for_chart + ' Volume',
+                            pointStart: Date.UTC(2017, monthIndex - 6, day),
+                            pointInterval: 24 * 3600 * 1000,
+                            data: [],
+                            yAxis: 1
+                        }]
+                };
+                series = [];
+                volumes = [];
+                count = 0;
+                for (x in obj['Time Series (Daily)']) {
+                    count += 1;
+                    var today_date = new Date(x);
+                    series.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['4. close'])));
+                    volumes.unshift(Array(today_date, parseFloat(obj['Time Series (Daily)'][x]['5. volume'])));
 //                            }
-                if (count == 185)
-                    break;
-            }
-            options.series[0].data = series;
-            options.series[1].data = volumes;
-            $scope.options_for_post = options;
-            Highcharts.chart('container_for_indicators', options);
-        }
-        else if (indicator == "SMA") {
-            var options = {
-                chart: {
-                    zoomType: 'x'
-                },
-                title: {
-                    text: obj["Meta Data"]["2: Indicator"]
-                },
-                subtitle: {
-                    text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
-                },
-                xAxis: {
-                    type: 'datetime',
-                    tickInterval: 7 * 24 * 3600 * 1000,
-                    labels: {
-                        format: '{value: %m/%d}',
-                        rotation: 45,
-                        align: 'middle'
-                    }
-                },
-                yAxis: [{
-                    title: {
-                        text: 'SMA'
-                    },
-                    max: null,
-                    tickAmount: 8,
-                    gridLineWidth: 0
-                }],
-                tooltip: {
-                    formatter: function () {
-                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
-                    }
-                },
-                plotOptions: {
-                    area: {
-                        threshold: null
-                    },
-                    line: {
-                        threshold: null
-                    }
-                },
-                series: [{
-                    color: '#FF0000',
-                    name: symbol_for_chart,
-                    pointStart: Date.UTC(2017, monthIndex - 6, day),
-                    pointInterval: 24 * 3600 * 1000,
-                    data: []
-                }]
-            };
-            series = new Array();
-            count = 0;
-            for (x in obj["Technical Analysis: SMA"]) {
-                count += 1;
-                series.unshift(parseFloat(obj["Technical Analysis: SMA"][x]["SMA"]));
-                if (count == 185)
-                    break;
-            }
-            options.series[0].data = series;
-            // console.log("SMA before charts");
-            console.log(options.series[0].data);
-            Highcharts.chart('container_for_indicators', options);
-            // console.log("SMA after charts");
+                    if (count == 185)
+                        break;
+                }
+                $scope.options.series[0].data = series;
+                $scope.options.series[1].data = volumes;
+                $scope.options_for_post = $scope.options;
 
-        }
-        else if (indicator == "EMA") {
-            options = {
-                chart: {
-                    zoomType: 'x'
-                },
-                title: {
-                    text: obj["Meta Data"]["2: Indicator"]
-                },
-                subtitle: {
-                    text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
-                },
-                xAxis: {
-                    type: 'datetime',
-                    tickInterval: 7 * 24 * 3600 * 1000,
-                    labels: {
-                        format: '{value: %m/%d}',
-                        rotation: 45,
-                        align: 'middle'
-                    }
-                },
-                yAxis: [{
-                    title: {
-                        text: 'EMA'
-                    },
-                    max: null,
-                    tickAmount: 8,
-                    gridLineWidth: 0
-                }],
-                tooltip: {
-                    formatter: function () {
-                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
-                    }
-                },
-                plotOptions: {
-                    area: {
-                        threshold: null
-                    },
-                    line: {
-                        threshold: null
-                    }
-                },
-                series: [{
-                    color: '#FF0000',
-                    name: symbol_for_chart,
-                    pointStart: Date.UTC(2017, monthIndex - 6, day),
-                    pointInterval: 24 * 3600 * 1000,
-                    data: []
-                }]
-            };
-            series = new Array();
-            count = 0;
-            for (x in obj["Technical Analysis: EMA"]) {
-                count += 1;
-                series.unshift(parseFloat(obj["Technical Analysis: EMA"][x]["EMA"]));
-                if (count == 185)
-                    break;
+                Highcharts.chart('container_for_indicators', $scope.options);
             }
-            options.series[0].data = series;
-            console.log("EMA before charts");
-            Highcharts.chart('container_for_indicators', options);
-        }
-        else if (indicator == "STOCH") {
-            options = {
-                chart: {
-                    zoomType: 'x'
-                },
-                title: {
-                    text: obj["Meta Data"]["2: Indicator"]
-                },
-                subtitle: {
-                    text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
-                },
-                xAxis: {
-                    type: 'datetime',
-                    tickInterval: 7 * 24 * 3600 * 1000,
-                    labels: {
-                        format: '{value: %m/%d}',
-                        rotation: 45,
-                        align: 'middle'
-                    }
-                },
-                yAxis: [{
+            else if (indicator == "SMA") {
+                var options = {
+                    chart: {
+                        zoomType: 'x'
+                    },
                     title: {
-                        text: 'STOCH'
+                        text: obj["Meta Data"]["2: Indicator"]
                     },
-                    max: null,
-                    tickAmount: 8,
-                    gridLineWidth: 0
-                }],
-                tooltip: {
-                    formatter: function () {
-                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
-                    }
-                },
-                plotOptions: {
-                    area: {
-                        threshold: null
+                    subtitle: {
+                        text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
                     },
-                    line: {
-                        threshold: null
-                    }
-                },
-                series: [{
-                    color: '#FF0000',
-                    name: symbol_for_chart + ' SlowD',
-                    pointStart: Date.UTC(2017, monthIndex - 6, day),
-                    pointInterval: 24 * 3600 * 1000,
-                    data: []
-                },
-                    {
-                        color: '#00FF00',
-                        name: symbol_for_chart + ' SlowK',
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval: 7 * 24 * 3600 * 1000,
+                        labels: {
+                            format: '{value: %m/%d}',
+                            rotation: 45,
+                            align: 'middle'
+                        }
+                    },
+                    yAxis: [{
+                        title: {
+                            text: 'SMA'
+                        },
+                        max: null,
+                        tickAmount: 8,
+                        gridLineWidth: 0
+                    }],
+                    tooltip: {
+                        formatter: function () {
+                            return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                        }
+                    },
+                    plotOptions: {
+                        area: {
+                            threshold: null
+                        },
+                        line: {
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        color: '#FF0000',
+                        name: symbol_for_chart,
                         pointStart: Date.UTC(2017, monthIndex - 6, day),
                         pointInterval: 24 * 3600 * 1000,
                         data: []
                     }]
-            };
-            seriesd = new Array();
-            seriesk = new Array();
-            count = 0;
-            for (x in obj["Technical Analysis: STOCH"]) {
-                count += 1;
-                seriesd.unshift(parseFloat(obj["Technical Analysis: STOCH"][x]["SlowD"]));
-                seriesk.unshift(parseFloat(obj["Technical Analysis: STOCH"][x]["SlowK"]));
-                if (count == 185)
-                    break;
+                };
+                series = new Array();
+                count = 0;
+                for (x in obj["Technical Analysis: SMA"]) {
+                    count += 1;
+                    series.unshift(parseFloat(obj["Technical Analysis: SMA"][x]["SMA"]));
+                    if (count == 185)
+                        break;
+                }
+                options.series[0].data = series;
+                // console.log("SMA before charts");
+                console.log(options.series[0].data);
+                Highcharts.chart('container_for_indicators', options);
+                // console.log("SMA after charts");
+
             }
-            options.series[0].data = seriesd;
-            options.series[1].data = seriesk;
-            Highcharts.chart('container_for_indicators', options);
-        }
-        else if (indicator == "RSI") {
-            options = {
-                chart: {
-                    zoomType: 'x'
-                },
-                title: {
-                    text: obj["Meta Data"]["2: Indicator"]
-                },
-                subtitle: {
-                    text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
-                },
-                xAxis: {
-                    type: 'datetime',
-                    tickInterval: 7 * 24 * 3600 * 1000,
-                    labels: {
-                        format: '{value: %m/%d}',
-                        rotation: 45,
-                        align: 'middle'
-                    }
-                },
-                yAxis: [{
+            else if (indicator == "EMA") {
+                options = {
+                    chart: {
+                        zoomType: 'x'
+                    },
                     title: {
-                        text: 'RSI'
+                        text: obj["Meta Data"]["2: Indicator"]
                     },
-                    max: null,
-                    tickAmount: 8,
-                    gridLineWidth: 0
-                }],
-                tooltip: {
-                    formatter: function () {
-                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
-                    }
-                },
-                plotOptions: {
-                    area: {
-                        threshold: null
+                    subtitle: {
+                        text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
                     },
-                    line: {
-                        threshold: null
-                    }
-                },
-                series: [{
-                    color: '#FF0000',
-                    name: symbol_for_chart + ' RSI',
-                    pointStart: Date.UTC(2017, monthIndex - 6, day),
-                    pointInterval: 24 * 3600 * 1000,
-                    data: []
-                }]
-            };
-            series = new Array();
-            count = 0;
-            for (x in obj["Technical Analysis: RSI"]) {
-                count += 1;
-                series.unshift(parseFloat(obj["Technical Analysis: RSI"][x]["RSI"]));
-                if (count == 185)
-                    break;
-            }
-            options.series[0].data = series;
-            Highcharts.chart('container_for_indicators', options);
-        }
-        else if (indicator == "ADX") {
-            options = {
-                chart: {
-                    zoomType: 'x'
-                },
-                title: {
-                    text: obj["Meta Data"]["2: Indicator"]
-                },
-                subtitle: {
-                    text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
-                },
-                xAxis: {
-                    type: 'datetime',
-                    tickInterval: 7 * 24 * 3600 * 1000,
-                    labels: {
-                        format: '{value: %m/%d}',
-                        rotation: 45,
-                        align: 'middle'
-                    }
-                },
-                yAxis: [{
-                    title: {
-                        text: 'ADX'
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval: 7 * 24 * 3600 * 1000,
+                        labels: {
+                            format: '{value: %m/%d}',
+                            rotation: 45,
+                            align: 'middle'
+                        }
                     },
-                    max: null,
-                    tickAmount: 8,
-                    gridLineWidth: 0
-                }],
-                tooltip: {
-                    formatter: function () {
-                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
-                    }
-                },
-                plotOptions: {
-                    area: {
-                        threshold: null
+                    yAxis: [{
+                        title: {
+                            text: 'EMA'
+                        },
+                        max: null,
+                        tickAmount: 8,
+                        gridLineWidth: 0
+                    }],
+                    tooltip: {
+                        formatter: function () {
+                            return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                        }
                     },
-                    line: {
-                        threshold: null
-                    }
-                },
-                series: [{
-                    color: '#FF0000',
-                    name: symbol_for_chart + ' ADX',
-                    pointStart: Date.UTC(2017, monthIndex - 6, day),
-                    pointInterval: 24 * 3600 * 1000,
-                    data: []
-                }]
-            };
-            series = new Array();
-            count = 0;
-            for (x in obj["Technical Analysis: ADX"]) {
-                count += 1;
-                series.unshift(parseFloat(obj["Technical Analysis: ADX"][x]["ADX"]));
-                if (count == 185)
-                    break;
-            }
-            options.series[0].data = series;
-            Highcharts.chart('container_for_indicators', options);
-        }
-        else if (indicator == "CCI") {
-            options = {
-                chart: {
-                    zoomType: 'x'
-                },
-                title: {
-                    text: obj["Meta Data"]["2: Indicator"]
-                },
-                subtitle: {
-                    text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
-                },
-                xAxis: {
-                    type: 'datetime',
-                    tickInterval: 7 * 24 * 3600 * 1000,
-                    labels: {
-                        format: '{value: %m/%d}',
-                        rotation: 45,
-                        align: 'middle'
-                    }
-                },
-                yAxis: [{
-                    title: {
-                        text: 'CCI'
+                    plotOptions: {
+                        area: {
+                            threshold: null
+                        },
+                        line: {
+                            threshold: null
+                        }
                     },
-                    max: null,
-                    tickAmount: 8,
-                    gridLineWidth: 0
-                }],
-                tooltip: {
-                    formatter: function () {
-                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
-                    }
-                },
-                plotOptions: {
-                    area: {
-                        threshold: null
-                    },
-                    line: {
-                        threshold: null
-                    }
-                },
-                series: [{
-                    color: '#FF0000',
-                    name: symbol_for_chart + ' CCI',
-                    pointStart: Date.UTC(2017, monthIndex - 6, day),
-                    pointInterval: 24 * 3600 * 1000,
-                    data: []
-                }]
-            };
-            series = new Array();
-            count = 0;
-            for (x in obj["Technical Analysis: CCI"]) {
-                count += 1;
-                series.unshift(parseFloat(obj["Technical Analysis: CCI"][x]["CCI"]));
-                if (count == 185)
-                    break;
-            }
-            options.series[0].data = series;
-            Highcharts.chart('container_for_indicators', options);
-        }
-        else if (indicator == "BBANDS") {
-            options = {
-                chart: {
-                    zoomType: 'x'
-                },
-                title: {
-                    text: obj["Meta Data"]["2: Indicator"]
-                },
-                subtitle: {
-                    text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
-                },
-                xAxis: {
-                    type: 'datetime',
-                    tickInterval: 7 * 24 * 3600 * 1000,
-                    labels: {
-                        format: '{value: %m/%d}',
-                        rotation: 45,
-                        align: 'middle'
-                    }
-                },
-                yAxis: [{
-                    title: {
-                        text: 'BBANDS'
-                    },
-                    max: null,
-                    tickAmount: 8,
-                    gridLineWidth: 0
-                }],
-                tooltip: {
-                    formatter: function () {
-                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
-                    }
-                },
-                plotOptions: {
-                    area: {
-                        threshold: null
-                    },
-                    line: {
-                        threshold: null
-                    }
-                },
-                series: [{
-                    color: '#FF0000',
-                    name: symbol_for_chart + ' Real Middle Band',
-                    pointStart: Date.UTC(2017, monthIndex - 6, day),
-                    pointInterval: 24 * 3600 * 1000,
-                    data: []
-                },
-                    {
-                        color: '#00FF00',
-                        name: symbol_for_chart + ' Real Lower Band',
-                        pointStart: Date.UTC(2017, monthIndex - 6, day),
-                        pointInterval: 24 * 3600 * 1000,
-                        data: []
-                    },
-                    {
-                        color: '#0000FF',
-                        name: symbol_for_chart + ' Real Upper Band',
+                    series: [{
+                        color: '#FF0000',
+                        name: symbol_for_chart,
                         pointStart: Date.UTC(2017, monthIndex - 6, day),
                         pointInterval: 24 * 3600 * 1000,
                         data: []
                     }]
-            };
-            seriesm = new Array();
-            seriesl = new Array();
-            seriesu = new Array();
-            count = 0;
-            for (x in obj["Technical Analysis: BBANDS"]) {
-                count += 1;
-                seriesm.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Middle Band"]));
-                seriesl.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Lower Band"]));
-                seriesu.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Upper Band"]));
-                if (count == 185)
-                    break;
+                };
+                series = new Array();
+                count = 0;
+                for (x in obj["Technical Analysis: EMA"]) {
+                    count += 1;
+                    series.unshift(parseFloat(obj["Technical Analysis: EMA"][x]["EMA"]));
+                    if (count == 185)
+                        break;
+                }
+                options.series[0].data = series;
+                console.log("EMA before charts");
+                Highcharts.chart('container_for_indicators', options);
             }
-            options.series[0].data = seriesm;
-            options.series[1].data = seriesl;
-            options.series[2].data = seriesu;
-            Highcharts.chart('container_for_indicators', options);
-        }
-        else if (indicator == "MACD") {
-            options = {
-                chart: {
-                    zoomType: 'x'
-                },
-                title: {
-                    text: obj["Meta Data"]["2: Indicator"]
-                },
-                subtitle: {
-                    text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
-                },
-                xAxis: {
-                    type: 'datetime',
-                    tickInterval: 7 * 24 * 3600 * 1000,
-                    labels: {
-                        format: '{value: %m/%d}',
-                        rotation: 45,
-                        align: 'middle'
-                    }
-                },
-                yAxis: [{
+            else if (indicator == "STOCH") {
+                options = {
+                    chart: {
+                        zoomType: 'x'
+                    },
                     title: {
-                        text: 'MACD'
+                        text: obj["Meta Data"]["2: Indicator"]
                     },
-                    max: null,
-                    tickAmount: 8,
-                    gridLineWidth: 0
-                }],
-                tooltip: {
-                    formatter: function () {
-                        return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
-                    }
-                },
-                plotOptions: {
-                    area: {
-                        threshold: null
+                    subtitle: {
+                        text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
                     },
-                    line: {
-                        threshold: null
-                    }
-                },
-                series: [{
-                    color: '#FF0000',
-                    name: symbol_for_chart + ' MACD_Signal',
-                    pointStart: Date.UTC(2017, monthIndex - 6, day),
-                    pointInterval: 24 * 3600 * 1000,
-                    data: []
-                },
-                    {
-                        color: '#00FF00',
-                        name: symbol_for_chart + ' MACD',
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval: 7 * 24 * 3600 * 1000,
+                        labels: {
+                            format: '{value: %m/%d}',
+                            rotation: 45,
+                            align: 'middle'
+                        }
+                    },
+                    yAxis: [{
+                        title: {
+                            text: 'STOCH'
+                        },
+                        max: null,
+                        tickAmount: 8,
+                        gridLineWidth: 0
+                    }],
+                    tooltip: {
+                        formatter: function () {
+                            return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                        }
+                    },
+                    plotOptions: {
+                        area: {
+                            threshold: null
+                        },
+                        line: {
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        color: '#FF0000',
+                        name: symbol_for_chart + ' SlowD',
                         pointStart: Date.UTC(2017, monthIndex - 6, day),
                         pointInterval: 24 * 3600 * 1000,
                         data: []
                     },
-                    {
-                        color: '#0000FF',
-                        name: symbol_for_chart + ' MACD_Hist',
+                        {
+                            color: '#00FF00',
+                            name: symbol_for_chart + ' SlowK',
+                            pointStart: Date.UTC(2017, monthIndex - 6, day),
+                            pointInterval: 24 * 3600 * 1000,
+                            data: []
+                        }]
+                };
+                seriesd = new Array();
+                seriesk = new Array();
+                count = 0;
+                for (x in obj["Technical Analysis: STOCH"]) {
+                    count += 1;
+                    seriesd.unshift(parseFloat(obj["Technical Analysis: STOCH"][x]["SlowD"]));
+                    seriesk.unshift(parseFloat(obj["Technical Analysis: STOCH"][x]["SlowK"]));
+                    if (count == 185)
+                        break;
+                }
+                options.series[0].data = seriesd;
+                options.series[1].data = seriesk;
+                Highcharts.chart('container_for_indicators', options);
+            }
+            else if (indicator == "RSI") {
+                options = {
+                    chart: {
+                        zoomType: 'x'
+                    },
+                    title: {
+                        text: obj["Meta Data"]["2: Indicator"]
+                    },
+                    subtitle: {
+                        text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval: 7 * 24 * 3600 * 1000,
+                        labels: {
+                            format: '{value: %m/%d}',
+                            rotation: 45,
+                            align: 'middle'
+                        }
+                    },
+                    yAxis: [{
+                        title: {
+                            text: 'RSI'
+                        },
+                        max: null,
+                        tickAmount: 8,
+                        gridLineWidth: 0
+                    }],
+                    tooltip: {
+                        formatter: function () {
+                            return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                        }
+                    },
+                    plotOptions: {
+                        area: {
+                            threshold: null
+                        },
+                        line: {
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        color: '#FF0000',
+                        name: symbol_for_chart + ' RSI',
                         pointStart: Date.UTC(2017, monthIndex - 6, day),
                         pointInterval: 24 * 3600 * 1000,
                         data: []
                     }]
-            };
-            seriesm = new Array();
-            seriesl = new Array();
-            seriesu = new Array();
-            count = 0;
-            for (x in obj["Technical Analysis: MACD"]) {
-                count += 1;
-                seriesm.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD_Signal"]));
-                seriesl.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD"]));
-                seriesu.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD_Hist"]));
-                if (count == 185)
-                    break;
+                };
+                series = new Array();
+                count = 0;
+                for (x in obj["Technical Analysis: RSI"]) {
+                    count += 1;
+                    series.unshift(parseFloat(obj["Technical Analysis: RSI"][x]["RSI"]));
+                    if (count == 185)
+                        break;
+                }
+                options.series[0].data = series;
+                Highcharts.chart('container_for_indicators', options);
             }
-            options.series[0].data = seriesm;
-            options.series[1].data = seriesl;
-            options.series[2].data = seriesu;
-            Highcharts.chart('container_for_indicators', options);
+            else if (indicator == "ADX") {
+                options = {
+                    chart: {
+                        zoomType: 'x'
+                    },
+                    title: {
+                        text: obj["Meta Data"]["2: Indicator"]
+                    },
+                    subtitle: {
+                        text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval: 7 * 24 * 3600 * 1000,
+                        labels: {
+                            format: '{value: %m/%d}',
+                            rotation: 45,
+                            align: 'middle'
+                        }
+                    },
+                    yAxis: [{
+                        title: {
+                            text: 'ADX'
+                        },
+                        max: null,
+                        tickAmount: 8,
+                        gridLineWidth: 0
+                    }],
+                    tooltip: {
+                        formatter: function () {
+                            return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                        }
+                    },
+                    plotOptions: {
+                        area: {
+                            threshold: null
+                        },
+                        line: {
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        color: '#FF0000',
+                        name: symbol_for_chart + ' ADX',
+                        pointStart: Date.UTC(2017, monthIndex - 6, day),
+                        pointInterval: 24 * 3600 * 1000,
+                        data: []
+                    }]
+                };
+                series = new Array();
+                count = 0;
+                for (x in obj["Technical Analysis: ADX"]) {
+                    count += 1;
+                    series.unshift(parseFloat(obj["Technical Analysis: ADX"][x]["ADX"]));
+                    if (count == 185)
+                        break;
+                }
+                options.series[0].data = series;
+                Highcharts.chart('container_for_indicators', options);
+            }
+            else if (indicator == "CCI") {
+                options = {
+                    chart: {
+                        zoomType: 'x'
+                    },
+                    title: {
+                        text: obj["Meta Data"]["2: Indicator"]
+                    },
+                    subtitle: {
+                        text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval: 7 * 24 * 3600 * 1000,
+                        labels: {
+                            format: '{value: %m/%d}',
+                            rotation: 45,
+                            align: 'middle'
+                        }
+                    },
+                    yAxis: [{
+                        title: {
+                            text: 'CCI'
+                        },
+                        max: null,
+                        tickAmount: 8,
+                        gridLineWidth: 0
+                    }],
+                    tooltip: {
+                        formatter: function () {
+                            return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                        }
+                    },
+                    plotOptions: {
+                        area: {
+                            threshold: null
+                        },
+                        line: {
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        color: '#FF0000',
+                        name: symbol_for_chart + ' CCI',
+                        pointStart: Date.UTC(2017, monthIndex - 6, day),
+                        pointInterval: 24 * 3600 * 1000,
+                        data: []
+                    }]
+                };
+                series = new Array();
+                count = 0;
+                for (x in obj["Technical Analysis: CCI"]) {
+                    count += 1;
+                    series.unshift(parseFloat(obj["Technical Analysis: CCI"][x]["CCI"]));
+                    if (count == 185)
+                        break;
+                }
+                options.series[0].data = series;
+                Highcharts.chart('container_for_indicators', options);
+            }
+            else if (indicator == "BBANDS") {
+                options = {
+                    chart: {
+                        zoomType: 'x'
+                    },
+                    title: {
+                        text: obj["Meta Data"]["2: Indicator"]
+                    },
+                    subtitle: {
+                        text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval: 7 * 24 * 3600 * 1000,
+                        labels: {
+                            format: '{value: %m/%d}',
+                            rotation: 45,
+                            align: 'middle'
+                        }
+                    },
+                    yAxis: [{
+                        title: {
+                            text: 'BBANDS'
+                        },
+                        max: null,
+                        tickAmount: 8,
+                        gridLineWidth: 0
+                    }],
+                    tooltip: {
+                        formatter: function () {
+                            return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                        }
+                    },
+                    plotOptions: {
+                        area: {
+                            threshold: null
+                        },
+                        line: {
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        color: '#FF0000',
+                        name: symbol_for_chart + ' Real Middle Band',
+                        pointStart: Date.UTC(2017, monthIndex - 6, day),
+                        pointInterval: 24 * 3600 * 1000,
+                        data: []
+                    },
+                        {
+                            color: '#00FF00',
+                            name: symbol_for_chart + ' Real Lower Band',
+                            pointStart: Date.UTC(2017, monthIndex - 6, day),
+                            pointInterval: 24 * 3600 * 1000,
+                            data: []
+                        },
+                        {
+                            color: '#0000FF',
+                            name: symbol_for_chart + ' Real Upper Band',
+                            pointStart: Date.UTC(2017, monthIndex - 6, day),
+                            pointInterval: 24 * 3600 * 1000,
+                            data: []
+                        }]
+                };
+                seriesm = new Array();
+                seriesl = new Array();
+                seriesu = new Array();
+                count = 0;
+                for (x in obj["Technical Analysis: BBANDS"]) {
+                    count += 1;
+                    seriesm.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Middle Band"]));
+                    seriesl.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Lower Band"]));
+                    seriesu.unshift(parseFloat(obj["Technical Analysis: BBANDS"][x]["Real Upper Band"]));
+                    if (count == 185)
+                        break;
+                }
+                options.series[0].data = seriesm;
+                options.series[1].data = seriesl;
+                options.series[2].data = seriesu;
+                Highcharts.chart('container_for_indicators', options);
+            }
+            else if (indicator == "MACD") {
+                options = {
+                    chart: {
+                        zoomType: 'x'
+                    },
+                    title: {
+                        text: obj["Meta Data"]["2: Indicator"]
+                    },
+                    subtitle: {
+                        text: "<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>"
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickInterval: 7 * 24 * 3600 * 1000,
+                        labels: {
+                            format: '{value: %m/%d}',
+                            rotation: 45,
+                            align: 'middle'
+                        }
+                    },
+                    yAxis: [{
+                        title: {
+                            text: 'MACD'
+                        },
+                        max: null,
+                        tickAmount: 8,
+                        gridLineWidth: 0
+                    }],
+                    tooltip: {
+                        formatter: function () {
+                            return Highcharts.dateFormat('%m/%d', this.x) + '<br/><span style="color:' + this.series.color + ';">\u25CF</span>' + this.series.name + ': ' + this.y;
+                        }
+                    },
+                    plotOptions: {
+                        area: {
+                            threshold: null
+                        },
+                        line: {
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        color: '#FF0000',
+                        name: symbol_for_chart + ' MACD_Signal',
+                        pointStart: Date.UTC(2017, monthIndex - 6, day),
+                        pointInterval: 24 * 3600 * 1000,
+                        data: []
+                    },
+                        {
+                            color: '#00FF00',
+                            name: symbol_for_chart + ' MACD',
+                            pointStart: Date.UTC(2017, monthIndex - 6, day),
+                            pointInterval: 24 * 3600 * 1000,
+                            data: []
+                        },
+                        {
+                            color: '#0000FF',
+                            name: symbol_for_chart + ' MACD_Hist',
+                            pointStart: Date.UTC(2017, monthIndex - 6, day),
+                            pointInterval: 24 * 3600 * 1000,
+                            data: []
+                        }]
+                };
+                seriesm = new Array();
+                seriesl = new Array();
+                seriesu = new Array();
+                count = 0;
+                for (x in obj["Technical Analysis: MACD"]) {
+                    count += 1;
+                    seriesm.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD_Signal"]));
+                    seriesl.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD"]));
+                    seriesu.unshift(parseFloat(obj["Technical Analysis: MACD"][x]["MACD_Hist"]));
+                    if (count == 185)
+                        break;
+                }
+                options.series[0].data = seriesm;
+                options.series[1].data = seriesl;
+                options.series[2].data = seriesu;
+                Highcharts.chart('container_for_indicators', options);
+            }
         }
+
     }
 
     function formatDate(date) {
@@ -1103,20 +1149,9 @@ app.controller('myCtrl', function ($scope, $http) {
         $scope.error_bar_for_news_active = false;
         $scope.stock_data_not_loaded = true;
 
+        $scope.progress_bar_indicators_active = false;
         $scope.id_for_indicators = 1;
-    }
-
-    $scope.querySearch = function (query) {
-        $scope.arr = [];
-        console.log("in query search before ajax call");
-        $http.get("http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/?symbol=" + query + "&second=mark")
-            .then(function (response) {
-                $scope.arr = response.data;
-                // $scope.arr;
-            });
-        console.log("in query search after ajax call");
-
-        return $scope.arr;
+        $scope.options = {};
     }
 
     function escapeHtml(text) {
@@ -1317,7 +1352,7 @@ app.controller('myCtrl', function ($scope, $http) {
 
                     chart: {
                         height: 400,
-                        width: 1200
+                        width: 900
                     },
 
                     title: {
@@ -1342,22 +1377,46 @@ app.controller('myCtrl', function ($scope, $http) {
                         }
                     }],
 
-
+                    //
+                    // responsive: {
+                    //     rules: [{
+                    //         condition: {
+                    //         },
+                    //         chartOptions: {
+                    //             chart: {
+                    //             },
+                    //             subtitle: {
+                    //                 text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
+                    //             },
+                    //             navigator: {
+                    //                 enabled: true
+                    //             }
+                    //         }
+                    //     }]
+                    // }
                     responsive: {
                         rules: [{
                             condition: {
                                 maxWidth: 500
                             },
                             chartOptions: {
-                                chart: {
-                                    maxWidth: 500,
-                                    minWidth: 200
+                                legend: {
+                                    align: 'center',
+                                    verticalAlign: 'bottom',
+                                    layout: 'horizontal'
                                 },
                                 subtitle: {
                                     text: '<a href=\"https://www.alphavantage.co/\">Source: Alpha Vantage</a>'
                                 },
-                                navigator: {
-                                    enabled: true
+                                yAxis: {
+                                    labels: {
+                                        align: 'left',
+                                        x: 0,
+                                        y: -5
+                                    }
+                                },
+                                credits: {
+                                    enabled: false
                                 }
                             }
                         }]
@@ -1403,11 +1462,11 @@ app.controller('myCtrl', function ($scope, $http) {
                 if (hell_data.hasOwnProperty("Meta Data")) {
                     console.log("stoch");
                     console.log($scope.stoch);
-                    $scope.progress_bar_for_stoch_active = false;
+                    $scope.progress_bar_for_stock_details_active = false;
                 }
                 else {
-                    $scope.progress_bar_for_stoch_active = false;
-                    $scope.error_bar_for_stoch_active = true;
+                    $scope.progress_bar_for_stock_details_active = false;
+                    $scope.error_bar_for_stock_details_active = true;
                 }
             }
         );
@@ -1422,11 +1481,11 @@ app.controller('myCtrl', function ($scope, $http) {
             if (hell_data.hasOwnProperty("Meta Data")) {
                 console.log("bbands");
                 console.log($scope.bbands);
-                $scope.progress_bar_for_bbands_active = false;
+                $scope.progress_bar_for_stock_details_active = false;
             }
             else {
-                $scope.progress_bar_for_bbands_active = false;
-                $scope.error_bar_for_bbands_active = true;
+                $scope.progress_bar_for_stock_details_active = false;
+                $scope.error_bar_for_stock_details_active = true;
             }
         })
         ;
@@ -1441,11 +1500,11 @@ app.controller('myCtrl', function ($scope, $http) {
                 if (hell_data.hasOwnProperty("Meta Data")) {
                     console.log("sma");
                     console.log($scope.sma);
-                    $scope.progress_bar_for_sma_active = false;
+                    $scope.progress_bar_for_stock_details_active = false;
                 }
                 else {
-                    $scope.progress_bar_for_sma_active = false;
-                    $scope.error_bar_for_sma_active = true;
+                    $scope.progress_bar_for_stock_details_active = false;
+                    $scope.error_bar_for_stock_details_active = true;
                 }
             }
         );
@@ -1461,11 +1520,11 @@ app.controller('myCtrl', function ($scope, $http) {
                 if (hell_data.hasOwnProperty("Meta Data")) {
                     console.log("ema");
                     console.log($scope.ema);
-                    $scope.progress_bar_for_ema_active = false;
+                    $scope.progress_bar_for_stock_details_active = false;
                 }
                 else {
-                    $scope.progress_bar_for_ema_active = false;
-                    $scope.error_bar_for_ema_active = true;
+                    $scope.progress_bar_for_stock_details_active = false;
+                    $scope.error_bar_for_stock_details_active = true;
                 }
             }
         );
@@ -1480,11 +1539,11 @@ app.controller('myCtrl', function ($scope, $http) {
                 if (hell_data.hasOwnProperty("Meta Data")) {
                     console.log("rsi");
                     console.log($scope.rsi);
-                    $scope.progress_bar_for_rsi_active = false;
+                    $scope.progress_bar_for_stock_details_active = false;
                 }
                 else {
-                    $scope.progress_bar_for_rsi_active = false;
-                    $scope.error_bar_for_rsi_active = true;
+                    $scope.progress_bar_for_stock_details_active = false;
+                    $scope.error_bar_for_stock_details_active = true;
                 }
             }
         );
@@ -1500,11 +1559,11 @@ app.controller('myCtrl', function ($scope, $http) {
                 if (hell_data.hasOwnProperty("Meta Data")) {
                     console.log("adx");
                     console.log($scope.adx);
-                    $scope.progress_bar_for_adx_active = false;
+                    $scope.progress_bar_for_stock_details_active = false;
                 }
                 else {
-                    $scope.progress_bar_for_adx_active = false;
-                    $scope.error_bar_for_adx_active = true;
+                    $scope.progress_bar_for_stock_details_active = false;
+                    $scope.error_bar_for_stock_details_active = true;
                 }
             }
         );
@@ -1520,11 +1579,11 @@ app.controller('myCtrl', function ($scope, $http) {
                 if (hell_data.hasOwnProperty("Meta Data")) {
                     console.log("cci");
                     console.log($scope.cci);
-                    $scope.progress_bar_for_cci_active = false;
+                    $scope.progress_bar_for_stock_details_active = false;
                 }
                 else {
-                    $scope.progress_bar_for_cci_active = false;
-                    $scope.error_bar_for_cci_active = true;
+                    $scope.progress_bar_for_stock_details_active = false;
+                    $scope.error_bar_for_stock_details_active = true;
                 }
             }
         );
@@ -1539,11 +1598,11 @@ app.controller('myCtrl', function ($scope, $http) {
                 if (hell_data.hasOwnProperty("Meta Data")) {
                     console.log("macd");
                     console.log($scope.macd);
-                    $scope.progress_bar_for_macd_active = false;
+                    $scope.progress_bar_for_stock_details_active = false;
                 }
                 else {
-                    $scope.progress_bar_for_macd_active = false;
-                    $scope.error_bar_for_macd_active = true;
+                    $scope.progress_bar_for_stock_details_active = false;
+                    $scope.error_bar_for_stock_details_active = true;
                 }
             }
         );
@@ -1560,11 +1619,11 @@ app.controller('myCtrl', function ($scope, $http) {
                     console.log(angular.equals(hell_data, []));
                     console.log("news");
                     console.log($scope.news[0]);
-                    $scope.progress_bar_for_news_active = false;
+                    $scope.progress_bar_for_stock_details_active = false;
                 }
                 else {
-                    $scope.progress_bar_for_news_active = false;
-                    $scope.error_bar_for_news_active = true;
+                    $scope.progress_bar_for_stock_details_active = false;
+                    $scope.error_bar_for_stock_details_active = true;
                 }
             }
         );
@@ -1619,10 +1678,12 @@ app.controller('myCtrl', function ($scope, $http) {
     }
 
 
-    $scope.fbClick = function () {
+    $scope.fbClick = function (options) {
         console.log("in fbclick");
+        console.log($scope.options);
+        console.log(options);
         var exportUrl = 'http://export.highcharts.com/';
-        dataString = encodeURI('async=true&type=jpeg&width=400&options=' + $scope.options_for_post);
+        dataString = encodeURI('async=true&type=jpeg&width=400&options=' + $scope.options);
         $.ajax({
             type: 'POST',
             data: dataString,
@@ -1771,5 +1832,34 @@ app.controller('myCtrl', function ($scope, $http) {
             }
         })
     })
+
+    $scope.querySearch = function (query) {
+
+
+        console.log(query);
+        // $http({
+        //     method: 'GET',
+        //     url: "http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/",
+        //     params: {"symbol": query, "second": "mark"}
+        // }).then(function successCallback(response) {
+        //     console.log(response.data);
+        //     $scope.products = response.data;
+        //     return response.data;
+        //     return $scope.products;
+        // });
+
+        // $http.get("http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/?symbol="+query+"second=mark").then(function(response){
+        //     console.log(response.data);
+        //     return response.data; // usually response.data
+        // });
+
+        return $http.get("http://homework8-env.wjdp2sdqus.us-west-2.elasticbeanstalk.com/?symbol="+query+"second=mark")
+            .then(function successCallback(name) {
+                console.log(name.data);
+                return name.data; // usually response.data
+            });
+
+
+    }
 
 });
