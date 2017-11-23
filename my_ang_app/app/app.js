@@ -1188,7 +1188,7 @@ app.controller('ctrl', function ($scope, $http) {
 
     $scope.submit = function (a) {
         // $scope.hide_fav = true;
-
+        $scope.clear_reload();
 
         console.log($scope.isFav);
         $scope.init_bars();
