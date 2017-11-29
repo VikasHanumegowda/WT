@@ -14,29 +14,29 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     
-    var picker1Options : [String]!
+    var pickerOptions : [String]!
     
-    var picker2Options : [String]!
+    var picker1Options : [String]!
     
     @IBOutlet weak var outputlabel: UILabel!
     @IBOutlet weak var symbolIP: UITextField!
     
-    @IBOutlet weak var pickerView: UIPickerView!
     
+    @IBOutlet weak var picker: UIPickerView!
     @IBOutlet weak var pickerV: UIPickerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        picker1Options = ["Option 1","Option 2","Option 3","Option 4","Option 5"]
-        picker2Options = ["Item 1","Item 2"]
+        pickerOptions = ["Default","Symbol","Stock Price","Change","Change%"]
+        picker1Options = ["Ascending","Descending"]
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if (pickerView.tag == 1){
             return picker1Options.count
         }else{
-            return picker2Options.count
+            return pickerOptions.count
         }
         
     }
@@ -47,8 +47,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             
         }
         else{
-            return picker2Options[row]
+            return pickerOptions[row]
         }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat{
+        return 90.0;
     }
     
     override func didReceiveMemoryWarning() {
