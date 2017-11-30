@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding = "10dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
+
+    <TextView
+        android:id="@+id/stockAttribute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textColor="#000"
+        android:text="Stock Symbol Here"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/stockValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stockAttribute"
+        android:text="Stock Name Here "
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_marginTop="5dp"
+        android:textSize="20dp" />
+
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:id="@+id/stockTrendImage"
+        android:layout_below="@+id/stockAttribute"
+        android:layout_toEndOf="@+id/stockValue"
+        android:layout_marginTop="12dp" />
+
+    <View android:layout_width="match_parent"
+        android:layout_below="@+id/stockTrendImage"
+        android:background="#b3b3cb"
+        android:layout_height="1dp" />
+
+
+</RelativeLayout>

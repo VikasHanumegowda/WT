@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">StocksSE</string>
+    <string name="app_header">Stock Market Viewer</string>
+    <string name="stock_name_symbol">Stock Market Search</string>
+    <string name="get_quote">Get Quote</string>
+    <string name="clear">Clear</string>
+    <string name="get_quotes">Get Quotes</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="trendimage">trendimage</string>
+</resources>
